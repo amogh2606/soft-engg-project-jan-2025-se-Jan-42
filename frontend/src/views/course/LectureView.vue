@@ -6,12 +6,11 @@
                 <p class="text-gray-500">This is the introduction to AI</p>
             </div>
             <iframe
-                width="560"
                 height="315"
                 src="https://www.youtube.com/embed/lEMtlAqlJww"
                 title="YouTube video player"
                 frameborder="0"
-                class="rounded"
+                class="rounded w-full max-w-[560px]"
             >
             </iframe>
             <div class="flex flex-wrap gap-4">
