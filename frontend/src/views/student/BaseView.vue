@@ -89,9 +89,18 @@ const isActive = (path) => {
             </div>
 
             <!-- body -->
-            <div class="flex flex-1 flex-col items-center justify-center gap-2 p-2">
-                <img src="../../assets/images/ai.png" alt="ai.png" class="h-12" />
-                <span class="text-lg">AI</span>
+            <div class="flex w-full h-full flex-1 overflow-y-scroll">
+                <div class="flex flex-1 flex-col gap-2 items-center p-2 overflow-y-scroll">
+                    <div class="ms-auto flex w-4/5 rounded-md bg-blue-200 p-2 mt-auto">
+                        <p>What is 2 + 2 ?</p>
+                    </div>
+                    <div class="me-auto flex w-4/5 rounded-md bg-green-200 p-2">
+                        <p>I can't give you the direct answer. But, you could get the answer by solving the expression 6 - 2 = ?.</p>
+                    </div>
+                    <div class="ms-auto flex w-4/5 rounded-md bg-blue-200 p-2">
+                        <p>Got it ! Thanks :)</p>
+                    </div>
+                </div>
             </div>
 
             <!-- footer -->

@@ -14,9 +14,11 @@ const showWeeklyIndex = ref(true);
     <div class="flex h-screen w-screen flex-col">
         <header class="flex flex-wrap items-center justify-between border-b px-4 py-2">
             <RouterLink to="/">
-                <LogoComponent class="h-12 me-6" />
+                <LogoComponent class="me-6 h-12" />
             </RouterLink>
-            <p class="bg-gray-100 p-2 rounded border font-semibold me-auto">Jan 2025 - Software Engineering</p>
+            <p class="me-auto rounded border bg-gray-100 p-2 font-semibold">
+                Jan 2025 - Software Engineering
+            </p>
             <div class="flex space-x-2">
                 <RouterLink to="/auth/login">
                     <img
@@ -32,7 +34,7 @@ const showWeeklyIndex = ref(true);
             <div class="flex h-full flex-col items-center gap-2 overflow-y-scroll border-e">
                 <button
                     @click="showWeeklyIndex = !showWeeklyIndex"
-                    class="flex w-full flex-col items-center justify-center p-2 bg-gray-300 hover:bg-gray-300"
+                    class="flex w-full flex-col items-center justify-center bg-gray-300 p-2 hover:bg-gray-300"
                 >
                     <img src="../../assets/images/modules.svg" alt="modules.svg" class="h-8" />
                     <span class="text-sm">Modules</span>
@@ -78,9 +80,18 @@ const showWeeklyIndex = ref(true);
             </div>
 
             <!-- body -->
-            <div class="flex flex-1 flex-col items-center justify-center gap-2 p-2">
-                <img src="../../assets/images/ai.png" alt="ai.png" class="h-12" />
-                <span class="text-lg">AI</span>
+            <div class="flex w-full h-full flex-1 overflow-y-scroll">
+                <div class="flex flex-1 flex-col gap-2 items-center p-2 overflow-y-scroll">
+                    <div class="ms-auto flex w-4/5 rounded-md bg-blue-200 p-2 mt-auto">
+                        <p>What is 2 + 2 ?</p>
+                    </div>
+                    <div class="me-auto flex w-4/5 rounded-md bg-green-200 p-2">
+                        <p>I can't give you the direct answer. But, you could get the answer by solving the expression 6 - 2 = ?.</p>
+                    </div>
+                    <div class="ms-auto flex w-4/5 rounded-md bg-blue-200 p-2">
+                        <p>Got it ! Thanks :)</p>
+                    </div>
+                </div>
             </div>
 
             <!-- footer -->
