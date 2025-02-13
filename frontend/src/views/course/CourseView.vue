@@ -7,8 +7,8 @@ import Accordion from '@/components/ui/accordion/AccordionWrapper.vue';
 import { computed, ref } from 'vue';
 import ActivityQuestions from './ActivityQuestions.vue';
 import BaseView from './BaseView.vue';
-import LectureView from './LectureView.vue';
 import CourseOverview from './CourseOverview.vue';
+import LectureView from './LectureView.vue';
 
 const content = ref([
     {
@@ -60,9 +60,22 @@ const contentView = ref(null); // lecture or activity_questions
 
 <template>
     <BaseView>
-        <template #main-slot>
+        <template v-slot:main-slot="{ showWeeklyIndex }">
             <!-- left side for week content index -->
-            <div class="flex h-full flex-col items-center overflow-y-scroll border-e">
+            <div
+                class="flex h-full flex-col items-center overflow-y-scroll border-e"
+                v-show="showWeeklyIndex"
+            >
+                <!-- About Course Button -->
+                <button
+                    class="flex w-full items-center gap-2 border-b border-gray-200 px-6 py-4 hover:bg-gray-100"
+                    :class="contentView === null ? 'bg-gray-100' : ''"
+                    @click="contentView = null"
+                >
+                    <img src="../../assets/images/ring.svg" alt="ring.svg" class="h-4" />
+                    <p class="capitalize">About Course</p>
+                </button>
+
                 <Accordion :allowMultiple="false" class="!w-56">
                     <AccordionItem
                         v-for="(week, index) in courseData"
@@ -107,10 +120,9 @@ const contentView = ref(null); // lecture or activity_questions
             </div>
 
             <!-- right side for actual content -->
-            <LectureView v-if="contentView === 'lecture'"/>
-            <ActivityQuestions v-else-if="contentView === 'activity_questions'"/>
-            <CourseOverview v-else/>
-
+            <LectureView v-if="contentView === 'lecture'" />
+            <ActivityQuestions v-else-if="contentView === 'activity_questions'" />
+            <CourseOverview v-else />
         </template>
     </BaseView>
 </template>

@@ -1,18 +1,13 @@
 <script setup>
 import LogoComponent from '@/components/icons/LogoComponent.vue';
 import { ref } from 'vue';
-import { RouterLink, useRoute } from 'vue-router';
+import { RouterLink } from 'vue-router';
 
-const currentPath = useRoute().path;
 const drawerOpen = ref(false);
 const toggleDrawer = () => {
     drawerOpen.value = !drawerOpen.value;
 };
-
-const isActive = (path) => {
-    console.log(path);
-    return true;
-};
+const showWeeklyIndex = ref(true);
 </script>
 
 <template>
@@ -32,18 +27,18 @@ const isActive = (path) => {
                 </RouterLink>
             </div>
         </header>
+
         <div class="flex flex-1 overflow-y-hidden">
             <div class="flex h-full flex-col items-center gap-2 overflow-y-scroll border-e">
-                <RouterLink
-                    :to="currentPath"
-                    class="flex w-full flex-col items-center justify-center p-2 hover:bg-gray-300"
-                    :class="{ 'bg-gray-300': isActive('/course') }"
+                <button
+                    @click="showWeeklyIndex = !showWeeklyIndex"
+                    class="flex w-full flex-col items-center justify-center p-2 bg-gray-300 hover:bg-gray-300"
                 >
                     <img src="../../assets/images/modules.svg" alt="modules.svg" class="h-8" />
                     <span class="text-sm">Modules</span>
-                </RouterLink>
+                </button>
             </div>
-            <slot name="main-slot"></slot>
+            <slot name="main-slot" :showWeeklyIndex="showWeeklyIndex" />
         </div>
 
         <!-- Todo: Create Separate Component for Drawer -->
