@@ -32,7 +32,7 @@ const isActive = (path) => {
             </div>
         </header>
         <div class="flex flex-1 overflow-y-hidden">
-            <div class="flex h-full flex-col items-center gap-2 overflow-y-scroll border-e pt-2">
+            <div class="flex h-full flex-col items-center gap-2 overflow-y-scroll border-e">
                 <RouterLink
                     :to="currentPath"
                     class="flex w-full flex-col items-center justify-center p-2 hover:bg-gray-300"
@@ -42,8 +42,7 @@ const isActive = (path) => {
                     <span class="text-sm">Modules</span>
                 </RouterLink>
             </div>
-            <slot name="left-slot"></slot>
-            <slot name="right-slot"></slot>
+            <slot name="main-slot"></slot>
         </div>
 
         <!-- Todo: Create Separate Component for Drawer -->
