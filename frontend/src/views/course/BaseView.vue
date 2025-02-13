@@ -19,8 +19,9 @@ const isActive = (path) => {
     <div class="flex h-screen w-screen flex-col">
         <header class="flex flex-wrap items-center justify-between border-b px-4 py-2">
             <RouterLink to="/">
-                <LogoComponent class="h-12" />
+                <LogoComponent class="h-12 me-6" />
             </RouterLink>
+            <p class="bg-gray-100 p-2 rounded border font-semibold me-auto">Jan 2025 - Software Engineering</p>
             <div class="flex space-x-2">
                 <RouterLink to="/auth/login">
                     <img
