@@ -30,7 +30,9 @@ const isActive = (path) => {
             </div>
         </header>
         <div class="flex flex-1 overflow-y-hidden">
-            <div class="flex h-full flex-col items-center gap-2 overflow-y-scroll border-e pt-2">
+            <div
+                class="flex h-full shrink-0 flex-col items-center gap-2 overflow-y-scroll border-e pt-2"
+            >
                 <RouterLink
                     to="/instructor/faqs"
                     class="flex w-full flex-col items-center justify-center p-2 hover:bg-gray-300"
@@ -97,13 +99,16 @@ const isActive = (path) => {
             </div>
 
             <!-- body -->
-            <div class="flex w-full h-full flex-1 overflow-y-scroll">
-                <div class="flex flex-1 flex-col gap-2 items-center p-2 overflow-y-scroll">
-                    <div class="ms-auto flex w-4/5 rounded-md bg-blue-200 p-2 mt-auto">
+            <div class="flex h-full w-full flex-1 overflow-y-scroll">
+                <div class="flex flex-1 flex-col items-center gap-2 overflow-y-scroll p-2">
+                    <div class="ms-auto mt-auto flex w-4/5 rounded-md bg-blue-200 p-2">
                         <p>What is 2 + 2 ?</p>
                     </div>
                     <div class="me-auto flex w-4/5 rounded-md bg-green-200 p-2">
-                        <p>I can't give you the direct answer. But, you could get the answer by solving the expression 6 - 2 = ?.</p>
+                        <p>
+                            I can't give you the direct answer. But, you could get the answer by
+                            solving the expression 6 - 2 = ?.
+                        </p>
                     </div>
                     <div class="ms-auto flex w-4/5 rounded-md bg-blue-200 p-2">
                         <p>Got it ! Thanks :)</p>

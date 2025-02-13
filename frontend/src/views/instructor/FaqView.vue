@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 import BaseView from './BaseView.vue';
 
-const chats = ref([
+const faqs = ref([
     {
         id: 1,
         question: 'Software Eng...',
@@ -119,25 +119,74 @@ const chats = ref([
         category: 'category...',
     },
 ]);
-const filteredChats = computed(() => {
-    return chats.value;
+const filteredFaqs = computed(() => {
+    return faqs.value;
 });
 </script>
 <template>
     <BaseView>
         <template #main-slot>
-            <div class="flex flex-1 flex-col pt-4">
+            <div class="flex flex-1 flex-col overflow-hidden pt-4">
                 <h1 class="p-3 text-center text-2xl font-semibold md:mx-10 md:px-8">
                     Frequently Asked Questions
                 </h1>
+
                 <div
-                    class="mx-2 mb-2 flex flex-col overflow-y-hidden rounded border bg-gray-50 shadow md:mx-10 md:mb-10"
+                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded border bg-gray-50 shadow md:mx-10 md:mb-10"
                 >
-                    <div v-if="filteredChats.length === 0" class="p-3 text-center">
-                        No chats available !
+                    <!-- search box -->
+                    <div class="flex justify-between gap-2 p-3">
+                        <input
+                            type="text"
+                            class="w-full rounded border p-2"
+                            placeholder="Search..."
+                        />
+                        <button class="rounded bg-gray-500 p-2 text-white hover:bg-gray-600">
+                            Search
+                        </button>
                     </div>
 
-
+                    <!-- Wrap the table in a scrollable container -->
+                    <div class="overflow-y-auto">
+                        <table class="w-full divide-y">
+                            <thead class="sticky top-0 bg-yellow-50 shadow">
+                                <tr class="divide-x">
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                                    >
+                                        Question
+                                    </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                                    >
+                                        Category
+                                    </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                                    >
+                                        Created At
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y bg-white">
+                                <tr
+                                    v-for="faq in filteredFaqs"
+                                    :key="faq.id"
+                                    class="divide-x even:bg-gray-50"
+                                >
+                                    <td class="whitespace-nowrap px-6 py-4">
+                                        <div class="text-sm text-gray-900">{{ faq.question }}</div>
+                                    </td>
+                                    <td class="whitespace-nowrap px-6 py-4">
+                                        <div class="text-sm text-gray-900">{{ faq.category }}</div>
+                                    </td>
+                                    <td class="whitespace-nowrap px-6 py-4">
+                                        <div class="text-sm text-gray-900">{{ faq.createdAt }}</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </template>
