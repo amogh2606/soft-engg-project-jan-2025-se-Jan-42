@@ -1,11 +1,22 @@
 <script setup>
-import { RouterLink } from 'vue-router';
-import BaseView from '@/views/auth/BaseView.vue';
 import router from '@/router';
+import BaseView from '@/views/auth/BaseView.vue';
+import { RouterLink } from 'vue-router';
 
-function submit() {
+function submit(event) {
     console.log('Login form submitted');
-    router.push('/student/courses');
+
+    // Prevent the form from submitting
+    event.preventDefault();
+    const userType = event.target.user.value;
+
+    if (userType === 'student') {
+        router.push('/student/courses');
+    } else if (userType === 'instructor') {
+        router.push('/instructor/faqs');
+    } else if (userType === 'admin') {
+        router.push('/admin/faqs');
+    }
 }
 </script>
 
@@ -22,7 +33,7 @@ function submit() {
                                 type="email"
                                 id="email"
                                 name="email"
-                                class="mt-2 w-full rounded border border-gray-400 px-4 py-2 focus:ring-2 focus:ring-gray-400 focus:outline-none"
+                                class="mt-2 w-full rounded border border-gray-400 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
                             />
                         </div>
                         <div class="mb-4">
@@ -31,9 +42,25 @@ function submit() {
                                 type="password"
                                 id="password"
                                 name="password"
-                                class="mt-2 w-full rounded border border-gray-400 px-4 py-2 focus:ring-2 focus:ring-gray-400 focus:outline-none"
+                                class="mt-2 w-full rounded border border-gray-400 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
                             />
                         </div>
+
+                        <!-- TODO: Remove it later -->
+                        <!-- selection input for user selection -->
+                        <div class="mb-4">
+                            <label class="block text-gray-700" for="user">User</label>
+                            <select
+                                id="user"
+                                name="user"
+                                class="mt-2 w-full rounded border border-gray-400 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                            >
+                                <option value="student">Student</option>
+                                <option value="instructor">Instructor</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+
                         <button
                             type="submit"
                             class="w-full cursor-pointer rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-700"
