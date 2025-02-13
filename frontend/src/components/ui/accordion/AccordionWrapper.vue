@@ -39,7 +39,7 @@ provide('accordionContext', {
 </script>
 
 <template>
-    <div class="w-full divide-y divide-gray-200" :class="props.class">
+    <div class="w-full divide-y divide-gray-200 last:border-b" :class="props.class">
         <ErrorBoundary>
             <slot></slot>
         </ErrorBoundary>

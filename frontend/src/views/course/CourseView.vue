@@ -87,7 +87,7 @@ const courseData = computed(() => {
                                         :src="
                                             item.type === 'activity_questions'
                                                 ? '../../src/assets/images/clock.svg'
-                                                : '../../src/assets/images/ring.svg'
+                                                : '../../src/assets/images/video.svg'
                                         "
                                         alt="ring.svg"
                                         class="h-4"
