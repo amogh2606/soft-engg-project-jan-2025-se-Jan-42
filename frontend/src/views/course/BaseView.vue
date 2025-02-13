@@ -1,5 +1,5 @@
 <script setup>
-import LogoComponent from '@/components/LogoComponent.vue';
+import LogoComponent from '@/components/icons/LogoComponent.vue';
 import { ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 

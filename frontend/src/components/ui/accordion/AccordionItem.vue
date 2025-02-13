@@ -1,37 +1,47 @@
-<template>
-    <div class="border min-w-52" :class="{ 'bg-gray-100': isOpen }">
-        <div class="flex items-center justify-between p-2 cursor-pointer" @click="handleToggle">
-            <slot name="header" />
-            <slot name="icon-open" v-if="isOpen">
-                <img src="../../../assets/images/arrow-down.svg" alt="arrow-down.svg" class="h-6 rotate-180" />
-            </slot>
-            <slot name="icon-close" v-if="!isOpen">
-                <img src="../../../assets/images/arrow-down.svg" alt="arrow-down.svg" class="h-6" />
-            </slot>
-        </div>
-        <div class="p-2 px-4" v-if="isOpen">
-            <slot name="body" />
-        </div>
-    </div>
-</template>
-
 <script setup>
-import { computed, inject } from 'vue';
+import { computed, inject, onMounted, provide, useSlots } from 'vue';
 
-// Expect an index prop to identify this item.
 const props = defineProps({
-    index: {
-        type: Number,
+    id: {
+        type: String,
         required: true,
     },
 });
 
-const toggleItem = inject('toggleItem');
-const openItems = inject('openItems');
+const slots = useSlots();
 
-const isOpen = computed(() => openItems.value.includes(props.index));
+onMounted(() => {
+    const children = slots.default?.();
 
-const handleToggle = () => {
-    toggleItem(props.index);
-};
+    if (!children) {
+        throw new Error(
+            'AccordionItem must contain both AccordionHeader and AccordionContent components',
+        );
+    }
+
+    const hasHeader = children.some((child) => child.type?.name === 'AccordionHeader');
+    const hasContent = children.some((child) => child.type?.name === 'AccordionContent');
+
+    if (!hasHeader || !hasContent) {
+        throw new Error(
+            `AccordionItem requires both AccordionHeader and AccordionContent components. ${
+                !hasHeader ? 'Missing AccordionHeader. ' : ''
+            }${!hasContent ? 'Missing AccordionContent. ' : ''}`,
+        );
+    }
+});
+
+const accordionContext = inject('accordionContext');
+const isOpen = computed(() => accordionContext.openPanels.value.has(props.id));
+
+provide('accordionItemContext', {
+    id: props.id,
+    isOpen,
+});
 </script>
+
+<template>
+    <div class="border-b border-gray-200 last:border-b-0">
+        <slot></slot>
+    </div>
+</template>

@@ -33,7 +33,7 @@ const router = createRouter({
             path: '/course/:id',
             name: 'course-CourseView',
             component: () => import('../views/course/CourseView.vue'),
-        }
+        },
     ],
 });
 

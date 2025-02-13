@@ -1,6 +1,9 @@
 <script setup>
+import AccordionContent from '@/components/ui/accordion/AccordionContent.vue';
+import AccordionHeader from '@/components/ui/accordion/AccordionHeader.vue';
 import AccordionItem from '@/components/ui/accordion/AccordionItem.vue';
-import AccordionWrapper from '@/components/ui/accordion/AccordionWrapper.vue';
+import Accordion from '@/components/ui/accordion/AccordionWrapper.vue';
+
 import { computed, ref } from 'vue';
 import BaseView from './BaseView.vue';
 
@@ -48,9 +51,6 @@ const courseData = computed(() => {
         };
     });
 });
-
-// Local state to track which accordion is open
-const openAccordions = ref([0]);
 </script>
 
 <template>
@@ -59,14 +59,13 @@ const openAccordions = ref([0]);
             <!-- left side for week content index -->
             <div class="flex h-full flex-col items-center overflow-y-scroll border-e">
                 <!-- use accordion -->
-                <AccordionWrapper
-                    :allowMultiple="false"
-                    :defaultExpanded="openAccordions"
-                    @update:openItems="openAccordions = $event"
-                    className="w-full"
-                >
-                    <AccordionItem v-for="(week, index) in courseData" :key="index" :index="index">
-                        <template #header>
+                <Accordion :allowMultiple="false" class="!w-56">
+                    <AccordionItem
+                        v-for="(week, index) in courseData"
+                        :key="index"
+                        :id="index.toString()"
+                    >
+                        <AccordionHeader>
                             <div class="flex items-center gap-2">
                                 <img
                                     src="../../assets/images/ring.svg"
@@ -75,9 +74,9 @@ const openAccordions = ref([0]);
                                 />
                                 <p class="capitalize">{{ week.title }}</p>
                             </div>
-                        </template>
+                        </AccordionHeader>
 
-                        <template #body>
+                        <AccordionContent>
                             <div class="flex flex-col gap-2">
                                 <div
                                     v-for="(item, i) in week.content"
@@ -85,23 +84,20 @@ const openAccordions = ref([0]);
                                     class="flex cursor-pointer items-center gap-2 rounded border bg-white p-2 shadow hover:bg-yellow-100"
                                 >
                                     <img
-                                        v-if="item.type === 'activity_questions'"
-                                        src="../../assets/images/clock.svg"
-                                        alt="ring.svg"
-                                        class="h-4"
-                                    />
-                                    <img
-                                        v-else
-                                        src="../../assets/images/ring.svg"
+                                        :src="
+                                            item.type === 'activity_questions'
+                                                ? '../../src/assets/images/clock.svg'
+                                                : '../../src/assets/images/ring.svg'
+                                        "
                                         alt="ring.svg"
                                         class="h-4"
                                     />
                                     <p class="capitalize">{{ item.title }}</p>
                                 </div>
                             </div>
-                        </template>
+                        </AccordionContent>
                     </AccordionItem>
-                </AccordionWrapper>
+                </Accordion>
             </div>
 
             <!-- right side for actual content -->
