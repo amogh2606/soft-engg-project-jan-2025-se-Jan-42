@@ -20,6 +20,11 @@ const router = createRouter({
             component: () => import('../views/auth/SignupView.vue'),
         },
         {
+            path: '/course/:id',
+            name: 'course-CourseView',
+            component: () => import('../views/course/CourseView.vue'),
+        },
+        {
             path: '/student/courses',
             name: 'student-CoursesListView',
             component: () => import('../views/student/CoursesListView.vue'),
@@ -30,9 +35,19 @@ const router = createRouter({
             component: () => import('../views/student/ChatsView.vue'),
         },
         {
-            path: '/course/:id',
-            name: 'course-CourseView',
-            component: () => import('../views/course/CourseView.vue'),
+            path: '/instructor/faqs',
+            name: 'instructor-FaqView',
+            component: () => import('../views/instructor/FaqView.vue'),
+        },
+        {
+            path: '/instructor/feedbacks',
+            name: 'instructor-FeedbackView',
+            component: () => import('../views/instructor/FeedbackView.vue'),
+        },
+        {
+            path: '/instructor/kstack',
+            name: 'instructor-KnowledgeStackView',
+            component: () => import('../views/instructor/KnowledgeStackView.vue'),
         },
     ],
 });
