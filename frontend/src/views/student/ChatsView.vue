@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import BaseView from './BaseView.vue';
+import Button from '@/components/ui/buttons/Button.vue';
 
 const chats = ref([
     { id: 1, title: 'Software Eng...', createdAt: '2021-09-01 12:00:00', isBookmarked: true },
@@ -49,22 +50,20 @@ const filteredChats = computed(() => {
                                 class="w-full rounded border p-2"
                                 placeholder="Search..."
                             />
-                            <button class="rounded bg-gray-500 p-2 text-white hover:bg-gray-600">
-                                Search
-                            </button>
+                            <Button varient="primary">Search</Button>
                         </div>
 
                         <label for="toggle" class="flex cursor-pointer items-center space-x-3">
                             <div class="relative">
                                 <input type="checkbox" id="toggle" class="peer sr-only" v-model="bookmarkOnly" />
                                 <div
-                                    class="block h-6 w-12 rounded-full bg-gray-300 transition-all peer-checked:bg-black dark:bg-gray-700"
+                                    class="block h-6 w-12 rounded-full bg-gray-300 transition-all peer-checked:bg-black "
                                 ></div>
                                 <div
                                     class="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-all peer-checked:left-7"
                                 ></div>
                             </div>
-                            <span class="text-gray-700 dark:text-gray-300"
+                            <span class="text-gray-700 "
                                 >Bookmark Only</span
                             >
                         </label>
