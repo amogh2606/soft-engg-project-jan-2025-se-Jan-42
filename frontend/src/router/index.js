@@ -49,6 +49,30 @@ const router = createRouter({
             name: 'instructor-KnowledgeStackView',
             component: () => import('../views/instructor/KnowledgeStackView.vue'),
         },
+        // /admin/courses - ../views/admin/CoursesListView.vue
+        // /admin/kstack?courseId=1 - ../views/admin/KnowledgeStackView.vue
+        // /admin/enrollments?courseId=1 - ../views/admin/EnrollmentsView.vue
+        // /admin/chats - ../views/admin/ChatsView.vue
+        {
+            path: '/admin/courses',
+            name: 'admin-CoursesListView',
+            component: () => import('../views/admin/CoursesListView.vue'),
+        },
+        {
+            path: '/admin/kstack',
+            name: 'admin-KnowledgeStackView',
+            component: () => import('../views/admin/KnowledgeStackView.vue'),
+        },
+        {
+            path: '/admin/enrollments',
+            name: 'admin-EnrollmentsView',
+            component: () => import('../views/admin/EnrollmentsView.vue'),
+        },
+        {
+            path: '/admin/chats',
+            name: 'admin-ChatsView',
+            component: () => import('../views/admin/ChatsView.vue'),
+        }
     ],
 });
 
