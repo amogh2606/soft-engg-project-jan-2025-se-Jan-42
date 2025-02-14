@@ -1,7 +1,8 @@
 <script setup>
-import { RouterLink } from 'vue-router';
-import BaseView from '@/views/auth/BaseView.vue';
+import Button from '@/components/ui/buttons/Button.vue';
 import router from '@/router';
+import BaseView from '@/views/auth/BaseView.vue';
+import { RouterLink } from 'vue-router';
 
 function submit() {
     console.log('Signup form submitted');
@@ -22,7 +23,7 @@ function submit() {
                                 type="text"
                                 id="name"
                                 name="name"
-                                class="mt-2 w-full rounded border border-gray-400 px-4 py-2 focus:ring-2 focus:ring-gray-400 focus:outline-none"
+                                class="mt-2 w-full rounded border border-gray-400 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
                             />
                         </div>
                         <div class="mb-4">
@@ -31,7 +32,7 @@ function submit() {
                                 type="email"
                                 id="email"
                                 name="email"
-                                class="mt-2 w-full rounded border border-gray-400 px-4 py-2 focus:ring-2 focus:ring-gray-400 focus:outline-none"
+                                class="mt-2 w-full rounded border border-gray-400 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
                             />
                         </div>
                         <div class="mb-4">
@@ -40,15 +41,10 @@ function submit() {
                                 type="password"
                                 id="password"
                                 name="password"
-                                class="mt-2 w-full rounded border border-gray-400 px-4 py-2 focus:ring-2 focus:ring-gray-400 focus:outline-none"
+                                class="mt-2 w-full rounded border border-gray-400 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
                             />
                         </div>
-                        <button
-                            type="submit"
-                            class="w-full cursor-pointer rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-700"
-                        >
-                            Signup
-                        </button>
+                        <Button type="submit" class="w-full">Signup</Button>
                     </form>
                     <p class="mt-4 text-center text-sm">
                         Already have an account?

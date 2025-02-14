@@ -2,6 +2,7 @@
 import router from '@/router';
 import BaseView from '@/views/auth/BaseView.vue';
 import { RouterLink } from 'vue-router';
+import Button from '@/components/ui/buttons/Button.vue';
 
 function submit(event) {
     console.log('Login form submitted');
@@ -60,13 +61,7 @@ function submit(event) {
                                 <option value="admin">Admin</option>
                             </select>
                         </div>
-
-                        <button
-                            type="submit"
-                            class="w-full cursor-pointer rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-700"
-                        >
-                            Login
-                        </button>
+                        <Button type="submit" class="w-full">Login</Button>
                     </form>
                     <p class="mt-4 text-center text-sm">
                         Don't have an account?
