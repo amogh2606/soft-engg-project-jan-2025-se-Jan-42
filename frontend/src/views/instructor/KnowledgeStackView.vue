@@ -1,4 +1,5 @@
 <script setup>
+import Button from '@/components/ui/buttons/Button.vue';
 import { computed, ref } from 'vue';
 import BaseView from './BaseView.vue';
 
@@ -126,13 +127,8 @@ const filteredFiles = computed(() => {
                             class="w-full rounded border p-2"
                             placeholder="Search..."
                         />
-                        <button class="rounded bg-gray-500 p-2 text-white hover:bg-gray-600">
-                            Search
-                        </button>
-
-                        <button class="rounded bg-gray-500 p-2 px-3 text-white hover:bg-gray-600">
-                            <img src="../../assets/images/add.svg" alt="add.svg" class="h-6 invert scale-125" />
-                        </button>
+                        <Button varient="primary">Search</Button>
+                        <Button varient="primary">+</Button>
                     </div>
 
                     <!-- Wrap the table in a scrollable container -->
@@ -175,16 +171,12 @@ const filteredFiles = computed(() => {
                                         <div class="text-sm text-gray-900">{{ file.fileName }}</div>
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ file.createdAt }}</div>
+                                        <div class="text-sm text-gray-900">
+                                            {{ file.createdAt }}
+                                        </div>
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4">
-                                        <button class="rounded border p-1 hover:bg-gray-100">
-                                            <img
-                                                src="../../assets/images/delete.svg"
-                                                alt="delete.svg"
-                                                class="h-6"
-                                            />
-                                        </button>
+                                        <Button varient="outlineRed"> Delete </Button>
                                     </td>
                                 </tr>
                             </tbody>

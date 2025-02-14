@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import BaseView from './BaseView.vue';
+import Button from '@/components/ui/buttons/Button.vue';
 
 const faqs = ref([
     {
@@ -141,9 +142,7 @@ const filteredFaqs = computed(() => {
                             class="w-full rounded border p-2"
                             placeholder="Search..."
                         />
-                        <button class="rounded bg-gray-500 p-2 text-white hover:bg-gray-600">
-                            Search
-                        </button>
+                        <Button varient="primary">Search</Button>
                     </div>
 
                     <!-- Wrap the table in a scrollable container -->
