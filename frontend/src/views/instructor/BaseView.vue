@@ -55,8 +55,7 @@ const isActive = (path) => {
                     :class="{ 'bg-gray-300': isActive('/instructor/kstack') }"
                 >
                     <img src="../../assets/images/stack.svg" alt="stack.svg" class="h-8" />
-                    <span class="text-sm">Knowledge</span>
-                    <span class="text-sm">Stack</span>
+                    <span class="text-sm">KStack</span>
                 </RouterLink>
             </div>
             <slot name="main-slot"></slot>
