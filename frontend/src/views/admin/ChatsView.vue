@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import BaseView from './BaseView.vue';
+import Button from '@/components/ui/buttons/Button.vue';
 
 const chats = ref([
     { id: 1, query: 'Your Query ...?', response: 'Bot Response Here ...' },
@@ -33,17 +34,15 @@ const chats = ref([
                             class="w-full rounded border p-2"
                             placeholder="Search..."
                         />
-                        <button class="rounded bg-gray-500 p-2 text-white hover:bg-gray-600">
-                            Search
-                        </button>
+                        <Button varient="primary">Search</Button>
 
-                        <button class="rounded bg-gray-500 p-2 px-3 text-white hover:bg-gray-600">
+                        <Button varient="primary">
                             <img
                                 src="../../assets/images/export.svg"
                                 alt="export.svg"
                                 class="h-6 scale-125 invert"
                             />
-                        </button>
+                        </Button>
                     </div>
 
                     <!-- Wrap the table in a scrollable container -->

@@ -1,4 +1,5 @@
 <script setup>
+import Button from '@/components/ui/buttons/Button.vue';
 import { ref } from 'vue';
 import BaseView from './BaseView.vue';
 
@@ -31,17 +32,8 @@ const courses = ref([
                             class="w-full rounded border p-2"
                             placeholder="Search..."
                         />
-                        <button class="rounded bg-gray-500 p-2 text-white hover:bg-gray-600">
-                            Search
-                        </button>
-
-                        <button class="rounded bg-gray-500 p-2 px-3 text-white hover:bg-gray-600">
-                            <img
-                                src="../../assets/images/add.svg"
-                                alt="add.svg"
-                                class="h-6 scale-125 invert"
-                            />
-                        </button>
+                        <Button varient="primary">Search</Button>
+                        <Button varient="primary">+</Button>
                     </div>
 
                     <!-- Wrap the table in a scrollable container -->
@@ -81,34 +73,35 @@ const courses = ref([
                                     <td class="whitespace-nowrap px-6 py-4">
                                         <div class="flex gap-2">
                                             <RouterLink
-                                                class="rounded border p-1 px-2 hover:bg-gray-100"
                                                 :to="`/admin/enrollments?course_id=${course.id}`"
                                             >
-                                                <img
-                                                    src="../../assets/images/student.svg"
-                                                    alt="student.svg"
-                                                    class="h-6"
-                                                />
+                                                <Button varient="light">
+                                                    <img
+                                                        src="../../assets/images/student.svg"
+                                                        alt="student.svg"
+                                                        class="h-6"
+                                                    />
+                                                </Button>
                                             </RouterLink>
                                             <RouterLink
-                                                class="rounded border p-1 px-2 hover:bg-gray-100"
                                                 :to="`/admin/kstack?course_id=${course.id}`"
                                             >
-                                                <img
-                                                    src="../../assets/images/stack.svg"
-                                                    alt="stack.svg"
-                                                    class="h-6"
-                                                />
+                                                <Button varient="light">
+                                                    <img
+                                                        src="../../assets/images/stack.svg"
+                                                        alt="stack.svg"
+                                                        class="h-6"
+                                                    />
+                                                </Button>
                                             </RouterLink>
-                                            <RouterLink
-                                                class="rounded border p-1 px-2 hover:bg-gray-100"
-                                                :to="`/course/${course.id}`"
-                                            >
-                                                <img
-                                                    src="../../assets/images/view.png"
-                                                    alt="view.png"
-                                                    class="h-6"
-                                                />
+                                            <RouterLink :to="`/course/${course.id}`">
+                                                <Button varient="light">
+                                                    <img
+                                                        src="../../assets/images/view.png"
+                                                        alt="view.png"
+                                                        class="h-6"
+                                                    />
+                                                </Button>
                                             </RouterLink>
                                         </div>
                                     </td>

@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import BaseView from './BaseView.vue';
+import Button from '@/components/ui/buttons/Button.vue';
 
 const files = ref([
     {
@@ -126,13 +127,8 @@ const filteredFiles = computed(() => {
                             class="w-full rounded border p-2"
                             placeholder="Search..."
                         />
-                        <button class="rounded bg-gray-500 p-2 text-white hover:bg-gray-600">
-                            Search
-                        </button>
-
-                        <button class="rounded bg-gray-500 p-2 px-3 text-white hover:bg-gray-600">
-                            <img src="../../assets/images/add.svg" alt="add.svg" class="h-6 invert scale-125" />
-                        </button>
+                        <Button varient="primary">Search</Button>
+                        <Button varient="primary">+</Button>
                     </div>
 
                     <!-- Wrap the table in a scrollable container -->

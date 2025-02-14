@@ -1,3 +1,7 @@
+<script setup>
+import Button from '@/components/ui/buttons/Button.vue';
+</script>
+
 <template>
     <div class="flex-1 overflow-y-scroll bg-gray-50">
         <div class="flex flex-col gap-4 p-4">
@@ -54,9 +58,7 @@
                 </div>
             </div>
             <div class="flex justify-start">
-                <button class="rounded bg-black px-8 py-2 text-white hover:opacity-80">
-                    Submit
-                </button>
+                <Button varient="secondary">Submit</Button>
             </div>
         </div>
     </div>
