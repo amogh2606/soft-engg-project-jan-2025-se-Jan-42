@@ -1,6 +1,7 @@
 <script setup>
-import BaseView from './BaseView.vue';
+import Button from '@/components/ui/buttons/Button.vue';
 import { ref } from 'vue';
+import BaseView from './BaseView.vue';
 const courses = ref([
     { id: 1, name: 'Software Engineering' },
     { id: 2, name: 'Data Structures and Algorithms' },
@@ -26,16 +27,16 @@ const courses = ref([
                     <div
                         v-for="course in courses"
                         :key="course.id"
-                        class="custom flex aspect-square w-52 flex-col items-center justify-between rounded border border-gray-300 text-center hover:bg-gray-300"
+                        class="custom flex aspect-square w-52 flex-col items-center justify-between rounded border border-gray-300 text-center hover:bg-gray-300 hover:shadow"
                     >
                         <p class="my-auto px-2 text-xl font-semibold text-white">
                             {{ course.name }}
                         </p>
-                        <RouterLink
-                            :to="'/course/' + course.id"
-                            class="mt-2 w-full cursor-pointer bg-white px-4 py-2 text-black hover:bg-gray-200"
-                        >
-                            View Course
+
+                        <RouterLink :to="'/course/' + course.id" class="w-full">
+                            <Button class="mt-2 w-full rounded-none" varient="light"
+                                >View Course</Button
+                            >
                         </RouterLink>
                     </div>
                 </div>
