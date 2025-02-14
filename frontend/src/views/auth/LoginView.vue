@@ -15,7 +15,7 @@ function submit(event) {
     } else if (userType === 'instructor') {
         router.push('/instructor/faqs');
     } else if (userType === 'admin') {
-        router.push('/admin/faqs');
+        router.push('/admin/courses');
     }
 }
 </script>
