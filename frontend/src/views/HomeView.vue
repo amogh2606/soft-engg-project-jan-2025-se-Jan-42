@@ -1,5 +1,6 @@
 <script setup>
 import LogoComponent from '@/components/icons/LogoComponent.vue';
+import Button from '@/components/ui/buttons/Button.vue';
 import { RouterLink } from 'vue-router';
 </script>
 <template>
@@ -8,16 +9,12 @@ import { RouterLink } from 'vue-router';
             <LogoComponent class="h-12" />
         </RouterLink>
         <div class="flex space-x-2">
-            <RouterLink
-                to="/auth/login"
-                class="rounded border px-4 py-1.5 transition-colors hover:bg-black hover:text-white"
-                >Login</RouterLink
-            >
-            <RouterLink
-                to="/auth/signup"
-                class="rounded border px-4 py-1.5 transition-colors hover:bg-black hover:text-white"
-                >Signup</RouterLink
-            >
+            <RouterLink to="/auth/login">
+                <Button varient="primary">Login</Button>
+            </RouterLink>
+            <RouterLink to="/auth/signup">
+                <Button varient="primary">Signup</Button>
+            </RouterLink>
         </div>
     </header>
     <main class="p-4 text-center">
