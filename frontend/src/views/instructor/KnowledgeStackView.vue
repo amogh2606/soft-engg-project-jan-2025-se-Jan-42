@@ -121,7 +121,7 @@ const filteredFiles = computed(() => {
                     class="mx-2 mb-2 flex flex-col overflow-hidden rounded-lg border bg-white shadow md:mx-10 md:mb-10"
                 >
                     <!-- search box -->
-                    <div class="flex justify-between gap-2 p-3">
+                    <div class="flex justify-between gap-2 border-b p-3">
                         <input
                             type="text"
                             class="w-full rounded border p-2"
