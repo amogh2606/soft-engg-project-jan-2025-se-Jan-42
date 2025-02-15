@@ -49,10 +49,6 @@ const router = createRouter({
             name: 'instructor-KnowledgeStackView',
             component: () => import('../views/instructor/KnowledgeStackView.vue'),
         },
-        // /admin/courses - ../views/admin/CoursesListView.vue
-        // /admin/kstack?courseId=1 - ../views/admin/KnowledgeStackView.vue
-        // /admin/enrollments?courseId=1 - ../views/admin/EnrollmentsView.vue
-        // /admin/chats - ../views/admin/ChatsView.vue
         {
             path: '/admin/courses',
             name: 'admin-CoursesListView',

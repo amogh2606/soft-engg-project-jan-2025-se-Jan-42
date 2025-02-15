@@ -9,6 +9,7 @@ import IITMLogoIcon from '@/components/icons/IITMLogoIcon.vue';
 import SendIcon from '@/components/icons/SendIcon.vue';
 import UserIcon from '@/components/icons/UserIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
+import BookmarkIcon from '@/components/icons/BookmarkIcon.vue';
 import { ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 
