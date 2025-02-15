@@ -41,7 +41,7 @@ const showWeeklyIndex = ref(true);
             <div class="flex h-full flex-col items-center gap-2 overflow-y-scroll border-r bg-white">
                 <button
                     @click="showWeeklyIndex = !showWeeklyIndex"
-                    class="flex w-full flex-col items-center justify-center bg-gray-300 p-2 hover:bg-gray-300"
+                    class="flex w-full flex-col items-center justify-center bg-gray-300 p-2 transition-colors hover:bg-gray-300"
                 >
                     <ModulesIcon class="h-8 w-full" />
                     <span class="text-sm">Modules</span>

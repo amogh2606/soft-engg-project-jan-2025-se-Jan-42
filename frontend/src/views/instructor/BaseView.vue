@@ -44,7 +44,7 @@ const isActive = (path) => {
             >
                 <RouterLink
                     to="/instructor/faqs"
-                    class="flex w-full flex-col items-center justify-center p-2 hover:bg-gray-300"
+                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-300"
                     :class="{ 'bg-gray-300': isActive('/instructor/faqs') }"
                 >
                     <FaqIcon class="h-8 w-auto" :is-solid="isActive('/instructor/faqs')" />
@@ -52,7 +52,7 @@ const isActive = (path) => {
                 </RouterLink>
                 <RouterLink
                     to="/instructor/feedbacks"
-                    class="flex w-full flex-col items-center justify-center p-2 hover:bg-gray-300"
+                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-300"
                     :class="{ 'bg-gray-300': isActive('/instructor/feedbacks') }"
                 >
                     <FeedbackIcon
@@ -63,7 +63,7 @@ const isActive = (path) => {
                 </RouterLink>
                 <RouterLink
                     to="/instructor/kstack"
-                    class="flex w-full flex-col items-center justify-center p-2 hover:bg-gray-300"
+                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-300"
                     :class="{ 'bg-gray-300': isActive('/instructor/kstack') }"
                 >
                     <StackIcon class="h-9 w-auto" :is-solid="isActive('/instructor/kstack')" />

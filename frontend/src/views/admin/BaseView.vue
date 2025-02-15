@@ -43,7 +43,7 @@ const isActive = (paths) => {
             >
                 <RouterLink
                     to="/admin/courses"
-                    class="flex w-full flex-col items-center justify-center p-2 hover:bg-gray-300"
+                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-300"
                     :class="{
                         'bg-gray-300': isActive([
                             '/admin/courses',
@@ -62,7 +62,7 @@ const isActive = (paths) => {
                 </RouterLink>
                 <RouterLink
                     to="/admin/chats"
-                    class="flex w-full flex-col items-center justify-center p-2 hover:bg-gray-300"
+                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-300"
                     :class="{ 'bg-gray-300': isActive(['/admin/chats']) }"
                 >
                     <ChatIcon :is-solid="isActive(['/admin/chats'])" class="h-8" />
