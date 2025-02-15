@@ -1,5 +1,15 @@
 <script setup>
-import LogoComponent from '@/components/icons/LogoComponent.vue';
+import AttachmentIcon from '@/components/icons/AttachmentIcon.vue';
+import BookIcon from '@/components/icons/BookIcon.vue';
+import BookMarkIcon from '@/components/icons/BookmarkIcon.vue';
+import ChatbotIcon from '@/components/icons/ChatbotIcon.vue';
+import ChatIcon from '@/components/icons/ChatIcon.vue';
+import CrossIcon from '@/components/icons/CrossIcon.vue';
+import EditIcon from '@/components/icons/EditIcon.vue';
+import IITMLogoIcon from '@/components/icons/IITMLogoIcon.vue';
+import SendIcon from '@/components/icons/SendIcon.vue';
+import UserIcon from '@/components/icons/UserIcon.vue';
+import Button from '@/components/ui/buttons/Button.vue';
 import { ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 
@@ -17,15 +27,13 @@ const isActive = (path) => {
     <div class="flex h-screen w-screen flex-col">
         <header class="flex flex-wrap items-center justify-between border-b px-4 py-2">
             <RouterLink to="/">
-                <LogoComponent class="h-12" />
+                <IITMLogoIcon class="h-12" />
             </RouterLink>
             <div class="flex space-x-2">
                 <RouterLink to="/auth/login">
-                    <img
-                        src="../../assets/images/profile-user.png"
-                        alt="profile-user.png"
-                        class="h-7 hover:opacity-70"
-                    />
+                    <Button varient="light" class="!rounded-full !p-1.5">
+                        <UserIcon :is-solid="false" :with-border="false" class="h-7 w-full" />
+                    </Button>
                 </RouterLink>
             </div>
         </header>
@@ -36,7 +44,7 @@ const isActive = (path) => {
                     class="flex w-full flex-col items-center justify-center p-2 hover:bg-gray-300"
                     :class="{ 'bg-gray-300': isActive('/student/courses') }"
                 >
-                    <img src="../../assets/images/open-book.png" alt="open-book.png" class="h-8" />
+                    <BookIcon :is-solid="isActive('/student/courses')" class="h-8 w-auto" />
                     <span class="text-sm">Courses</span>
                 </RouterLink>
                 <RouterLink
@@ -44,7 +52,7 @@ const isActive = (path) => {
                     class="flex w-full flex-col items-center justify-center p-2 hover:bg-gray-300"
                     :class="{ 'bg-gray-300': isActive('/student/chats') }"
                 >
-                    <img src="../../assets/images/chat.png" alt="chat.png" class="h-8" />
+                    <ChatIcon :is-solid="isActive('/student/chats')" class="h-8" />
                     <span class="text-sm">Chats</span>
                 </RouterLink>
             </div>
@@ -55,7 +63,7 @@ const isActive = (path) => {
         <!-- Todo: Create Separate Component for Drawer -->
         <!-- drawer toggle -->
         <button class="absolute bottom-6 right-6" @click="toggleDrawer">
-            <img src="../../assets/images/ai.png" alt="ai.png" class="ai-btn h-12 cursor-pointer" />
+            <ChatbotIcon class="ai-btn h-12 w-auto" />
         </button>
 
         <!-- drawer component -->
@@ -74,28 +82,31 @@ const isActive = (path) => {
                 <p class="text-lg">Chat Title Here ...</p>
                 <div class="flex gap-2">
                     <button class="rounded border border-black p-1 hover:bg-gray-100">
-                        <img src="../../assets/images/edit.svg" alt="cross.svg" class="h-6" />
+                        <EditIcon class="h-6 w-auto" />
                     </button>
                     <button class="rounded border border-black p-1 hover:bg-gray-100">
-                        <img src="../../assets/images/bookmark.svg" alt="cross.svg" class="h-6" />
+                        <BookMarkIcon class="h-6 w-auto" />
                     </button>
                     <button
                         class="rounded border border-black p-1 hover:bg-gray-100"
                         @click="toggleDrawer"
                     >
-                        <img src="../../assets/images/cross.svg" alt="cross.svg" class="h-6" />
+                        <CrossIcon class="h-6 w-auto" />
                     </button>
                 </div>
             </div>
 
             <!-- body -->
-            <div class="flex w-full h-full flex-1 overflow-y-scroll">
-                <div class="flex flex-1 flex-col gap-2 items-center p-2 overflow-y-scroll">
-                    <div class="ms-auto flex w-4/5 rounded-md bg-blue-200 p-2 mt-auto">
+            <div class="flex h-full w-full flex-1 overflow-y-scroll">
+                <div class="flex flex-1 flex-col items-center gap-2 overflow-y-scroll p-2">
+                    <div class="ms-auto mt-auto flex w-4/5 rounded-md bg-blue-200 p-2">
                         <p>What is 2 + 2 ?</p>
                     </div>
                     <div class="me-auto flex w-4/5 rounded-md bg-green-200 p-2">
-                        <p>I can't give you the direct answer. But, you could get the answer by solving the expression 6 - 2 = ?.</p>
+                        <p>
+                            I can't give you the direct answer. But, you could get the answer by
+                            solving the expression 6 - 2 = ?.
+                        </p>
                     </div>
                     <div class="ms-auto flex w-4/5 rounded-md bg-blue-200 p-2">
                         <p>Got it ! Thanks :)</p>
@@ -112,17 +123,13 @@ const isActive = (path) => {
                 ></textarea>
                 <div class="flex items-center justify-between p-2">
                     <button
-                        class="flex items-center justify-center rounded-md border p-1 px-2 hover:bg-gray-100"
+                        class="flex items-center justify-center gap-1 rounded-md border p-1 px-2 hover:bg-gray-100"
                     >
-                        <img src="../../assets/images/attach.svg" alt="cross.svg" class="h-6" />
+                        <AttachmentIcon class="h-5 w-auto" />
                         <span class="text-sm">Context</span>
                     </button>
                     <button class="rounded-md border p-1.5 hover:bg-gray-100">
-                        <img
-                            src="../../assets/images/right-arrow.svg"
-                            alt="cross.svg"
-                            class="h-6"
-                        />
+                        <SendIcon :is-solid="true" class="h-6 w-6" />
                     </button>
                 </div>
             </div>

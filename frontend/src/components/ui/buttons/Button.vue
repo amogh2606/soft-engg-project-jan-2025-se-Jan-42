@@ -21,7 +21,9 @@ defineProps({
         type: String,
         default: 'primary',
         validator: (value) =>
-            ['primary', 'secondary', 'light', 'outlineBlack', 'outlineBlue'].includes(value),
+            ['primary', 'secondary', 'light', 'outlineBlack', 'outlineBlue', 'outlineRed'].includes(
+                value
+            ),
     },
 });
 </script>

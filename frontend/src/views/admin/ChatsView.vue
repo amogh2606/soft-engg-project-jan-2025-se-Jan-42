@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import BaseView from './BaseView.vue';
 import Button from '@/components/ui/buttons/Button.vue';
+import ExportIcon from '@/components/icons/ExportIcon.vue';
 
 const chats = ref([
     { id: 1, query: 'Your Query ...?', response: 'Bot Response Here ...' },
@@ -37,11 +38,7 @@ const chats = ref([
                         <Button varient="primary">Search</Button>
 
                         <Button varient="primary">
-                            <img
-                                src="../../assets/images/export.svg"
-                                alt="export.svg"
-                                class="h-6 scale-125 invert"
-                            />
+                            <ExportIcon :is-solid="false" class="h-6 w-auto" />
                         </Button>
                     </div>
 

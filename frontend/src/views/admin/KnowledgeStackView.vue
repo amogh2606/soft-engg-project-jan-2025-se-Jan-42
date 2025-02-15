@@ -1,7 +1,9 @@
 <script setup>
+import DeleteIcon from '@/components/icons/DeleteIcon.vue';
+import Button from '@/components/ui/buttons/Button.vue';
 import { computed, ref } from 'vue';
 import BaseView from './BaseView.vue';
-import Button from '@/components/ui/buttons/Button.vue';
+import PlusIcon from '@/components/icons/PlusIcon.vue';
 
 const files = ref([
     {
@@ -128,7 +130,9 @@ const filteredFiles = computed(() => {
                             placeholder="Search..."
                         />
                         <Button varient="primary">Search</Button>
-                        <Button varient="primary">+</Button>
+                        <Button varient="primary">
+                            <PlusIcon class="h-6 w-auto" />
+                        </Button>
                     </div>
 
                     <!-- Wrap the table in a scrollable container -->
@@ -171,15 +175,13 @@ const filteredFiles = computed(() => {
                                         <div class="text-sm text-gray-900">{{ file.fileName }}</div>
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ file.createdAt }}</div>
+                                        <div class="text-sm text-gray-900">
+                                            {{ file.createdAt }}
+                                        </div>
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4">
                                         <button class="rounded border p-1 hover:bg-gray-100">
-                                            <img
-                                                src="../../assets/images/delete.svg"
-                                                alt="delete.svg"
-                                                class="h-6"
-                                            />
+                                            <DeleteIcon :is-solid="false" class="h-6 w-auto" />
                                         </button>
                                     </td>
                                 </tr>

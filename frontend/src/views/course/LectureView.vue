@@ -10,28 +10,9 @@
                 src="https://www.youtube.com/embed/lEMtlAqlJww"
                 title="YouTube video player"
                 frameborder="0"
-                class="w-full max-w-[560px] rounded mx-auto"
+                class="mx-auto w-full max-w-[560px] rounded"
             >
             </iframe>
-            <div class="flex hidden">
-                <div class="flex flex-wrap gap-4 mx-auto">
-                    <button
-                        class="rounded border border-black bg-white px-8 py-2 hover:bg-gray-600"
-                    >
-                        <img src="../../assets/images/ai.png" alt="ai" class="h-6" />
-                    </button>
-                    <button
-                        class="rounded border border-black bg-white px-8 py-2 hover:bg-gray-600"
-                    >
-                        <img src="../../assets/images/ai.png" alt="ai" class="h-6" />
-                    </button>
-                    <button
-                        class="rounded border border-black bg-white px-8 py-2 hover:bg-gray-600"
-                    >
-                        <img src="../../assets/images/ai.png" alt="ai" class="h-6" />
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 </template>

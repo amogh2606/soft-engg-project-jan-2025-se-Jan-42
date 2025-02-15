@@ -4,6 +4,9 @@ import AccordionHeader from '@/components/ui/accordion/AccordionHeader.vue';
 import AccordionItem from '@/components/ui/accordion/AccordionItem.vue';
 import Accordion from '@/components/ui/accordion/AccordionWrapper.vue';
 
+import ClockIcon from '@/components/icons/ClockIcon.vue';
+import VideoIcon from '@/components/icons/VideoIcon.vue';
+import RingIcon from '@/components/icons/RingIcon.vue';
 import { computed, ref } from 'vue';
 import ActivityQuestions from './ActivityQuestions.vue';
 import BaseView from './BaseView.vue';
@@ -72,7 +75,7 @@ const contentView = ref(null); // lecture or activity_questions
                     :class="contentView === null ? 'bg-gray-100' : ''"
                     @click="contentView = null"
                 >
-                    <img src="../../assets/images/ring.svg" alt="ring.svg" class="h-4" />
+                    <RingIcon class="h-4 w-4" />
                     <p class="capitalize">About Course</p>
                 </button>
 
@@ -84,11 +87,7 @@ const contentView = ref(null); // lecture or activity_questions
                     >
                         <AccordionHeader>
                             <div class="flex items-center gap-2">
-                                <img
-                                    src="../../assets/images/ring.svg"
-                                    alt="ring.svg"
-                                    class="h-4"
-                                />
+                                <RingIcon class="h-4 w-4" />
                                 <p class="capitalize">{{ week.title }}</p>
                             </div>
                         </AccordionHeader>
@@ -102,14 +101,13 @@ const contentView = ref(null); // lecture or activity_questions
                                     :class="contentView === item.type ? 'bg-yellow-100' : ''"
                                     @click="contentView = item.type"
                                 >
-                                    <img
-                                        :src="
+                                    <component
+                                        :is="
                                             item.type === 'activity_questions'
-                                                ? '../../src/assets/images/clock.svg'
-                                                : '../../src/assets/images/video.svg'
+                                                ? ClockIcon
+                                                : VideoIcon
                                         "
-                                        alt="ring.svg"
-                                        class="h-4"
+                                        class="h-4 w-4 shrink-0"
                                     />
                                     <p class="capitalize">{{ item.title }}</p>
                                 </button>

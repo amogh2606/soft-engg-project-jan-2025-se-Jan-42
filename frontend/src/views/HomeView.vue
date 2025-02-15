@@ -1,12 +1,12 @@
 <script setup>
-import LogoComponent from '@/components/icons/LogoComponent.vue';
+import IITMLogoIcon from '@/components/icons/IITMLogoIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import { RouterLink } from 'vue-router';
 </script>
 <template>
     <header class="flex flex-wrap items-center justify-between border-b px-4 py-2">
         <RouterLink to="/">
-            <LogoComponent class="h-12" />
+            <IITMLogoIcon class="h-12" />
         </RouterLink>
         <div class="flex space-x-2">
             <RouterLink to="/auth/login">

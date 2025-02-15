@@ -1,7 +1,11 @@
 <script setup>
+import EyeIcon from '@/components/icons/EyeIcon.vue';
+import StackIcon from '@/components/icons/StackIcon.vue';
+import StudentIcon from '@/components/icons/StudentIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import { ref } from 'vue';
 import BaseView from './BaseView.vue';
+import PlusIcon from '@/components/icons/PlusIcon.vue';
 
 const courses = ref([
     { id: 1, name: 'Software Engineering' },
@@ -33,7 +37,9 @@ const courses = ref([
                             placeholder="Search..."
                         />
                         <Button varient="primary">Search</Button>
-                        <Button varient="primary">+</Button>
+                        <Button varient="primary">
+                            <PlusIcon class="h-6 w-auto" />
+                        </Button>
                     </div>
 
                     <!-- Wrap the table in a scrollable container -->
@@ -76,31 +82,19 @@ const courses = ref([
                                                 :to="`/admin/enrollments?course_id=${course.id}`"
                                             >
                                                 <Button varient="light">
-                                                    <img
-                                                        src="../../assets/images/student.svg"
-                                                        alt="student.svg"
-                                                        class="h-6"
-                                                    />
+                                                    <StudentIcon class="h-6 w-6" />
                                                 </Button>
                                             </RouterLink>
                                             <RouterLink
                                                 :to="`/admin/kstack?course_id=${course.id}`"
                                             >
                                                 <Button varient="light">
-                                                    <img
-                                                        src="../../assets/images/stack.svg"
-                                                        alt="stack.svg"
-                                                        class="h-6"
-                                                    />
+                                                    <StackIcon class="h-6 w-6" />
                                                 </Button>
                                             </RouterLink>
                                             <RouterLink :to="`/course/${course.id}`">
                                                 <Button varient="light">
-                                                    <img
-                                                        src="../../assets/images/view.png"
-                                                        alt="view.png"
-                                                        class="h-6"
-                                                    />
+                                                    <EyeIcon class="h-6 w-6" />
                                                 </Button>
                                             </RouterLink>
                                         </div>
