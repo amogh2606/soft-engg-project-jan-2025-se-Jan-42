@@ -25,7 +25,7 @@ const showWeeklyIndex = ref(true);
             <RouterLink to="/">
                 <IITMLogoIcon class="me-6 h-12" />
             </RouterLink>
-            <p class="me-auto rounded border bg-gray-100 p-2 font-semibold">
+            <p class="me-auto rounded border bg-gray-50 p-2 font-semibold">
                 Jan 2025 - Software Engineering
             </p>
             <div class="flex space-x-2">

@@ -66,7 +66,7 @@ const contentView = ref(null); // lecture or activity_questions
         <template v-slot:main-slot="{ showWeeklyIndex }">
             <!-- left side for week content index -->
             <div
-                class="flex h-full flex-col items-center overflow-y-scroll border-e"
+                class="flex h-full flex-col items-center overflow-y-scroll border-r bg-white"
                 v-show="showWeeklyIndex"
             >
                 <!-- About Course Button -->
