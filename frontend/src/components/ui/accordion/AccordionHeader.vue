@@ -28,8 +28,8 @@ const handleKeyDown = (event) => {
 
 <template>
     <button
-        class="flex w-full items-center justify-between gap-2 px-6 py-4 text-left transition-colors hover:bg-gray-100 focus:outline-none"
-        :class="{ 'bg-gray-100': isOpen }"
+        class="flex w-full items-center justify-between gap-2 px-6 py-4 text-left transition-colors hover:bg-gray-50 focus:outline-none"
+        :class="{ 'bg-gray-50': isOpen }"
         @click="accordionContext.togglePanel(id)"
         @keydown="handleKeyDown"
         :aria-expanded="isOpen"
