@@ -1,8 +1,8 @@
 <script setup>
+import Button from '@/components/ui/buttons/Button.vue';
 import router from '@/router';
 import BaseView from '@/views/auth/BaseView.vue';
 import { RouterLink } from 'vue-router';
-import Button from '@/components/ui/buttons/Button.vue';
 
 function submit(event) {
     console.log('Login form submitted');
@@ -25,7 +25,7 @@ function submit(event) {
     <BaseView>
         <template #main-slot>
             <div class="flex h-full items-center justify-center">
-                <div class="w-full max-w-md rounded bg-white p-6 shadow">
+                <div class="mx-2 w-full max-w-md rounded-lg border bg-white p-6 shadow-md">
                     <h2 class="mb-6 text-center text-2xl font-bold text-gray-800">Login</h2>
                     <form @submit.prevent="submit">
                         <div class="mb-4">

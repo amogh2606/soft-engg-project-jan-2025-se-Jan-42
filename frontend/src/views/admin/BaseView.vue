@@ -25,14 +25,14 @@ const isActive = (paths) => {
 
 <template>
     <div class="flex h-screen w-screen flex-col">
-        <header class="flex flex-wrap items-center justify-between border-b px-4 py-2">
+        <header class="flex flex-wrap items-center justify-between border-b bg-white px-4 py-2">
             <RouterLink to="/">
                 <IITMLogoIcon class="h-12" />
             </RouterLink>
             <div class="flex space-x-2">
                 <RouterLink to="/auth/login">
                     <Button varient="light" class="!rounded-full !p-1.5">
-                        <UserIcon :is-solid="false" :with-border="false" class="h-7 w-full" />
+                        <UserIcon :is-solid="false" :with-border="false" class="h-6 w-full" />
                     </Button>
                 </RouterLink>
             </div>
