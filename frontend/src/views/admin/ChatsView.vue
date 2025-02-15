@@ -1,8 +1,8 @@
 <script setup>
+import ExportIcon from '@/components/icons/ExportIcon.vue';
+import Button from '@/components/ui/buttons/Button.vue';
 import { ref } from 'vue';
 import BaseView from './BaseView.vue';
-import Button from '@/components/ui/buttons/Button.vue';
-import ExportIcon from '@/components/icons/ExportIcon.vue';
 
 const chats = ref([
     { id: 1, query: 'Your Query ...?', response: 'Bot Response Here ...' },
@@ -26,7 +26,7 @@ const chats = ref([
                 </h1>
 
                 <div
-                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded border bg-gray-50 shadow md:mx-10 md:mb-10"
+                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded-lg border bg-white shadow md:mx-10 md:mb-10"
                 >
                     <!-- search box -->
                     <div class="flex justify-between gap-2 p-3">

@@ -1,9 +1,9 @@
 <script setup>
-import { computed, ref } from 'vue';
-import BaseView from './BaseView.vue';
-import Button from '@/components/ui/buttons/Button.vue';
 import DeleteIcon from '@/components/icons/DeleteIcon.vue';
 import PlusIcon from '@/components/icons/PlusIcon.vue';
+import Button from '@/components/ui/buttons/Button.vue';
+import { computed, ref } from 'vue';
+import BaseView from './BaseView.vue';
 
 const students = ref([
     {
@@ -120,7 +120,7 @@ const filteredStudents = computed(() => {
                 </h1>
 
                 <div
-                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded border bg-gray-50 shadow md:mx-10 md:mb-10"
+                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded-lg border bg-white shadow md:mx-10 md:mb-10"
                 >
                     <!-- search box -->
                     <div class="flex justify-between gap-2 p-3">
@@ -175,7 +175,9 @@ const filteredStudents = computed(() => {
                                         <div class="text-sm text-gray-900">{{ student.name }}</div>
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ student.createdAt }}</div>
+                                        <div class="text-sm text-gray-900">
+                                            {{ student.createdAt }}
+                                        </div>
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4">
                                         <button class="rounded border p-1 hover:bg-gray-100">

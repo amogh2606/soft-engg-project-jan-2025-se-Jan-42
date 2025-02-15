@@ -41,7 +41,7 @@ const filteredChats = computed(() => {
                 </h1>
 
                 <div
-                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded border bg-gray-50 shadow md:mx-10 md:mb-10"
+                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded-lg border bg-white shadow md:mx-10 md:mb-10"
                 >
                     <div class="flex flex-wrap justify-between gap-2 border-b p-3">
                         <div class="flex items-center gap-2">

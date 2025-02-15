@@ -1,11 +1,11 @@
 <script setup>
 import EyeIcon from '@/components/icons/EyeIcon.vue';
+import PlusIcon from '@/components/icons/PlusIcon.vue';
 import StackIcon from '@/components/icons/StackIcon.vue';
 import StudentIcon from '@/components/icons/StudentIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import { ref } from 'vue';
 import BaseView from './BaseView.vue';
-import PlusIcon from '@/components/icons/PlusIcon.vue';
 
 const courses = ref([
     { id: 1, name: 'Software Engineering' },
@@ -27,7 +27,7 @@ const courses = ref([
                 <h1 class="p-3 text-center text-2xl font-semibold md:mx-10 md:px-8">Courses</h1>
 
                 <div
-                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded border bg-gray-50 shadow md:mx-10 md:mb-10"
+                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded-lg border bg-white shadow md:mx-10 md:mb-10"
                 >
                     <!-- search box -->
                     <div class="flex justify-between gap-2 p-3">

@@ -1,7 +1,7 @@
 <script setup>
+import Button from '@/components/ui/buttons/Button.vue';
 import { computed, ref } from 'vue';
 import BaseView from './BaseView.vue';
-import Button from '@/components/ui/buttons/Button.vue';
 
 const feedbacks = ref([
     {
@@ -113,12 +113,10 @@ const filteredFeedbacks = computed(() => {
     <BaseView>
         <template #main-slot>
             <div class="flex flex-1 flex-col overflow-hidden pt-4">
-                <h1 class="p-3 text-center text-2xl font-semibold md:mx-10 md:px-8">
-                    Feedbacks
-                </h1>
+                <h1 class="p-3 text-center text-2xl font-semibold md:mx-10 md:px-8">Feedbacks</h1>
 
                 <div
-                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded border bg-gray-50 shadow md:mx-10 md:mb-10"
+                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded-lg border bg-white shadow md:mx-10 md:mb-10"
                 >
                     <!-- search box -->
                     <div class="flex justify-between gap-2 p-3">
@@ -162,10 +160,14 @@ const filteredFeedbacks = computed(() => {
                                         <div class="text-sm text-gray-900">{{ feedback.id }}</div>
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ feedback.feedback }}</div>
+                                        <div class="text-sm text-gray-900">
+                                            {{ feedback.feedback }}
+                                        </div>
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ feedback.createdAt }}</div>
+                                        <div class="text-sm text-gray-900">
+                                            {{ feedback.createdAt }}
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>

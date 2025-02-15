@@ -1,9 +1,9 @@
 <script setup>
 import DeleteIcon from '@/components/icons/DeleteIcon.vue';
+import PlusIcon from '@/components/icons/PlusIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import { computed, ref } from 'vue';
 import BaseView from './BaseView.vue';
-import PlusIcon from '@/components/icons/PlusIcon.vue';
 
 const files = ref([
     {
@@ -120,7 +120,7 @@ const filteredFiles = computed(() => {
                 </h1>
 
                 <div
-                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded border bg-gray-50 shadow md:mx-10 md:mb-10"
+                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded-lg border bg-white shadow md:mx-10 md:mb-10"
                 >
                     <!-- search box -->
                     <div class="flex justify-between gap-2 p-3">
