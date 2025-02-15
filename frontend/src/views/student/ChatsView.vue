@@ -1,7 +1,7 @@
 <script setup>
+import Button from '@/components/ui/buttons/Button.vue';
 import { computed, ref } from 'vue';
 import BaseView from './BaseView.vue';
-import Button from '@/components/ui/buttons/Button.vue';
 
 const chats = ref([
     { id: 1, title: 'Software Eng...', createdAt: '2021-09-01 12:00:00', isBookmarked: true },
@@ -34,7 +34,7 @@ const filteredChats = computed(() => {
 
 <template>
     <BaseView>
-        <template #right-slot>
+        <template #main-slot>
             <div class="flex flex-1 flex-col overflow-hidden pt-4">
                 <h1 class="p-3 text-center text-2xl font-semibold md:mx-10 md:px-8">
                     ChatBot Conversations
@@ -43,7 +43,7 @@ const filteredChats = computed(() => {
                 <div
                     class="mx-2 mb-2 flex flex-col overflow-hidden rounded border bg-gray-50 shadow md:mx-10 md:mb-10"
                 >
-                    <div class="flex flex-wrap justify-between gap-2 p-3 border-b">
+                    <div class="flex flex-wrap justify-between gap-2 border-b p-3">
                         <div class="flex items-center gap-2">
                             <input
                                 type="text"
@@ -55,17 +55,20 @@ const filteredChats = computed(() => {
 
                         <label for="toggle" class="flex cursor-pointer items-center space-x-3">
                             <div class="relative">
-                                <input type="checkbox" id="toggle" class="peer sr-only" v-model="bookmarkOnly" />
+                                <input
+                                    type="checkbox"
+                                    id="toggle"
+                                    class="peer sr-only"
+                                    v-model="bookmarkOnly"
+                                />
                                 <div
-                                    class="block h-6 w-12 rounded-full bg-gray-300 transition-all peer-checked:bg-black "
+                                    class="block h-6 w-12 rounded-full bg-gray-300 transition-all peer-checked:bg-black"
                                 ></div>
                                 <div
                                     class="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-all peer-checked:left-7"
                                 ></div>
                             </div>
-                            <span class="text-gray-700 "
-                                >Bookmark Only</span
-                            >
+                            <span class="text-gray-700">Bookmark Only</span>
                         </label>
                     </div>
 

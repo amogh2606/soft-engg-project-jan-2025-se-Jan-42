@@ -17,7 +17,7 @@ const courses = ref([
 </script>
 <template>
     <BaseView>
-        <template #right-slot>
+        <template #main-slot>
             <div class="flex h-full flex-1 flex-col items-center justify-center gap-4">
                 <h1 class="mt-4 text-2xl font-bold">Enrolled Courses</h1>
                 <div v-if="courses.length === 0" class="text-xl text-gray-600">
