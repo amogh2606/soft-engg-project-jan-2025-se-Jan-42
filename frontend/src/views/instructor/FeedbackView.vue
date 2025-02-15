@@ -154,7 +154,7 @@ const filteredFeedbacks = computed(() => {
                                 <tr
                                     v-for="feedback in filteredFeedbacks"
                                     :key="feedback.id"
-                                    class="divide-x even:bg-gray-50"
+                                    class="cursor-pointer divide-x hover:bg-gray-50"
                                 >
                                     <td class="whitespace-nowrap px-6 py-4">
                                         <div class="text-sm text-gray-900">{{ feedback.id }}</div>

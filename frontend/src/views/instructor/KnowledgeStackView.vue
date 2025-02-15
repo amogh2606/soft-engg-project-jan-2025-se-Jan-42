@@ -162,7 +162,7 @@ const filteredFiles = computed(() => {
                                 <tr
                                     v-for="file in filteredFiles"
                                     :key="file.id"
-                                    class="divide-x even:bg-gray-50"
+                                    class="cursor-pointer divide-x hover:bg-gray-50"
                                 >
                                     <td class="whitespace-nowrap px-6 py-4">
                                         <div class="text-sm text-gray-900">{{ file.id }}</div>

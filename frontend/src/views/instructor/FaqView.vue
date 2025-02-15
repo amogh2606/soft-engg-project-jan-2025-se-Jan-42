@@ -171,7 +171,7 @@ const filteredFaqs = computed(() => {
                                 <tr
                                     v-for="faq in filteredFaqs"
                                     :key="faq.id"
-                                    class="divide-x even:bg-gray-50"
+                                    class="cursor-pointer divide-x hover:bg-gray-50"
                                 >
                                     <td class="whitespace-nowrap px-6 py-4">
                                         <div class="text-sm text-gray-900">{{ faq.question }}</div>

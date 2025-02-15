@@ -68,7 +68,7 @@ const courses = ref([
                                 <tr
                                     v-for="course in courses"
                                     :key="course.id"
-                                    class="divide-x even:bg-gray-50"
+                                    class="cursor-pointer divide-x hover:bg-gray-50"
                                 >
                                     <td class="whitespace-nowrap px-6 py-4">
                                         <div class="text-sm text-gray-900">{{ course.id }}</div>
