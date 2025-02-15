@@ -1,7 +1,6 @@
 <script setup>
 import AttachmentIcon from '@/components/icons/AttachmentIcon.vue';
 import BookIcon from '@/components/icons/BookIcon.vue';
-import BookMarkIcon from '@/components/icons/BookmarkIcon.vue';
 import ChatbotIcon from '@/components/icons/ChatbotIcon.vue';
 import ChatIcon from '@/components/icons/ChatIcon.vue';
 import CrossIcon from '@/components/icons/CrossIcon.vue';
@@ -117,7 +116,7 @@ const isActive = (path) => {
             </div>
 
             <!-- footer -->
-            <div class="m-2 flex flex-col rounded-md border border-black">
+            <div class="m-2 flex flex-col rounded-md border border-gray-400">
                 <textarea
                     type="text"
                     class="w-full resize-none rounded p-2 outline-none"
