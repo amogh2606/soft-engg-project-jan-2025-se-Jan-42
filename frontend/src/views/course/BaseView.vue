@@ -68,21 +68,18 @@ const showWeeklyIndex = ref(true);
             id="drawer"
         >
             <!-- header -->
-            <div class="flex items-center justify-between border-b border-black bg-slate-200 p-2">
+            <div class="flex items-center justify-between border-b bg-gray-50 p-2">
                 <p class="text-lg">Chat Title Here ...</p>
                 <div class="flex gap-2">
-                    <button class="rounded border border-black p-1 hover:bg-gray-100">
+                    <Button varient="light" class="rounded-full !p-1.5">
                         <EditIcon class="h-6 w-auto" />
-                    </button>
-                    <button class="rounded border border-black p-1 hover:bg-gray-100">
+                    </Button>
+                    <Button varient="light" class="rounded-full !p-1.5">
                         <BookmarkIcon class="h-6 w-auto" />
-                    </button>
-                    <button
-                        class="rounded border border-black p-1 hover:bg-gray-100"
-                        @click="toggleDrawer"
-                    >
+                    </Button>
+                    <Button varient="light" class="rounded-full !p-1.5" @click="toggleDrawer">
                         <CrossIcon class="h-6 w-auto" />
-                    </button>
+                    </Button>
                 </div>
             </div>
 
