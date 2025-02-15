@@ -39,7 +39,7 @@ const isActive = (paths) => {
         </header>
         <div class="flex flex-1 overflow-y-hidden">
             <div
-                class="flex h-full flex-col items-center gap-2 overflow-y-scroll border-e bg-white"
+                class="flex h-full flex-col items-center gap-2 overflow-y-scroll border-r bg-white"
             >
                 <RouterLink
                     to="/admin/courses"
