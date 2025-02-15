@@ -71,8 +71,8 @@ const contentView = ref(null); // lecture or activity_questions
             >
                 <!-- About Course Button -->
                 <button
-                    class="flex w-full items-center gap-2 border-b border-gray-200 px-6 py-4 hover:bg-gray-100"
-                    :class="contentView === null ? 'bg-gray-100' : ''"
+                    class="flex w-full items-center gap-2 border-b border-gray-200 px-6 py-4 hover:bg-yellow-50"
+                    :class="contentView === null ? 'bg-yellow-50' : ''"
                     @click="contentView = null"
                 >
                     <RingIcon class="h-4 w-4" />
@@ -97,8 +97,8 @@ const contentView = ref(null); // lecture or activity_questions
                                 <button
                                     v-for="(item, i) in week.content"
                                     :key="i"
-                                    class="flex items-center gap-2 rounded border bg-white p-2 shadow hover:bg-yellow-100"
-                                    :class="contentView === item.type ? 'bg-yellow-100' : ''"
+                                    class="flex items-center gap-2 rounded border bg-white p-2 shadow hover:bg-yellow-50"
+                                    :class="contentView === item.type ? 'bg-yellow-50' : ''"
                                     @click="contentView = item.type"
                                 >
                                     <component
