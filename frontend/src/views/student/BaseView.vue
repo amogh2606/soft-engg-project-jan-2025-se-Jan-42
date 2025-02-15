@@ -38,21 +38,25 @@ const isActive = (path) => {
             </div>
         </header>
         <div class="flex flex-1 overflow-y-hidden">
-            <div
-                class="flex h-full flex-col items-center gap-2 overflow-y-scroll border-r bg-white"
-            >
+            <div class="flex h-full flex-col items-center overflow-y-scroll border-r bg-white">
                 <RouterLink
                     to="/student/courses"
-                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-300"
-                    :class="{ 'bg-gray-300': isActive('/student/courses') }"
+                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-100"
+                    :class="{
+                        'bg-gray-300': isActive('/student/courses'),
+                        'hover:bg-gray-300': isActive('/student/courses'),
+                    }"
                 >
                     <BookIcon :is-solid="isActive('/student/courses')" class="h-8 w-auto" />
                     <span class="text-sm">Courses</span>
                 </RouterLink>
                 <RouterLink
                     to="/student/chats"
-                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-300"
-                    :class="{ 'bg-gray-300': isActive('/student/chats') }"
+                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-100"
+                    :class="{
+                        'bg-gray-300': isActive('/student/chats'),
+                        'hover:bg-gray-300': isActive('/student/chats'),
+                    }"
                 >
                     <ChatIcon :is-solid="isActive('/student/chats')" class="h-8" />
                     <span class="text-sm">Chats</span>

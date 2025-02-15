@@ -38,7 +38,7 @@ const showWeeklyIndex = ref(true);
         </header>
 
         <div class="flex flex-1 overflow-y-hidden">
-            <div class="flex h-full flex-col items-center gap-2 overflow-y-scroll border-r bg-white">
+            <div class="flex h-full flex-col items-center overflow-y-scroll border-r bg-white">
                 <button
                     @click="showWeeklyIndex = !showWeeklyIndex"
                     class="flex w-full flex-col items-center justify-center bg-gray-300 p-2 transition-colors hover:bg-gray-300"

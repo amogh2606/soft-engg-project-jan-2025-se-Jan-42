@@ -38,14 +38,17 @@ const isActive = (paths) => {
             </div>
         </header>
         <div class="flex flex-1 overflow-y-hidden">
-            <div
-                class="flex h-full flex-col items-center gap-2 overflow-y-scroll border-r bg-white"
-            >
+            <div class="flex h-full flex-col items-center overflow-y-scroll border-r bg-white">
                 <RouterLink
                     to="/admin/courses"
-                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-300"
+                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-100"
                     :class="{
                         'bg-gray-300': isActive([
+                            '/admin/courses',
+                            '/admin/enrollments',
+                            '/admin/kstack',
+                        ]),
+                        'hover:bg-gray-300': isActive([
                             '/admin/courses',
                             '/admin/enrollments',
                             '/admin/kstack',
@@ -62,8 +65,11 @@ const isActive = (paths) => {
                 </RouterLink>
                 <RouterLink
                     to="/admin/chats"
-                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-300"
-                    :class="{ 'bg-gray-300': isActive(['/admin/chats']) }"
+                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-100"
+                    :class="{
+                        'bg-gray-300': isActive(['/admin/chats']),
+                        'hover:bg-gray-300': isActive(['/admin/chats']),
+                    }"
                 >
                     <ChatIcon :is-solid="isActive(['/admin/chats'])" class="h-8" />
                     <span class="text-sm">Chats</span>

@@ -39,21 +39,25 @@ const isActive = (path) => {
             </div>
         </header>
         <div class="flex flex-1 overflow-y-hidden">
-            <div
-                class="flex h-full flex-col items-center gap-2 overflow-y-scroll border-r bg-white"
-            >
+            <div class="flex h-full flex-col items-center overflow-y-scroll border-r bg-white">
                 <RouterLink
                     to="/instructor/faqs"
-                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-300"
-                    :class="{ 'bg-gray-300': isActive('/instructor/faqs') }"
+                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-100"
+                    :class="{
+                        'bg-gray-300': isActive('/instructor/faqs'),
+                        'hover:bg-gray-300': isActive('/instructor/faqs'),
+                    }"
                 >
                     <FaqIcon class="h-8 w-auto" :is-solid="isActive('/instructor/faqs')" />
                     <span class="text-sm">Faqs</span>
                 </RouterLink>
                 <RouterLink
                     to="/instructor/feedbacks"
-                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-300"
-                    :class="{ 'bg-gray-300': isActive('/instructor/feedbacks') }"
+                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-100"
+                    :class="{
+                        'bg-gray-300': isActive('/instructor/feedbacks'),
+                        'hover:bg-gray-300': isActive('/instructor/feedbacks'),
+                    }"
                 >
                     <FeedbackIcon
                         class="h-8 w-auto"
@@ -63,8 +67,11 @@ const isActive = (path) => {
                 </RouterLink>
                 <RouterLink
                     to="/instructor/kstack"
-                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-300"
-                    :class="{ 'bg-gray-300': isActive('/instructor/kstack') }"
+                    class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-100"
+                    :class="{
+                        'bg-gray-300': isActive('/instructor/kstack'),
+                        'hover:bg-gray-300': isActive('/instructor/kstack'),
+                    }"
                 >
                     <StackIcon class="h-9 w-auto" :is-solid="isActive('/instructor/kstack')" />
                     <span class="text-sm">KStack</span>
