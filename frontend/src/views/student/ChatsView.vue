@@ -36,84 +36,86 @@ const filteredChats = computed(() => {
     <BaseView>
         <template #main-slot>
             <div class="flex flex-1 flex-col overflow-hidden pt-4">
-                <h1 class="p-3 text-center text-2xl font-semibold md:mx-10 md:px-8">
-                    ChatBot Conversations
-                </h1>
 
-                <div
-                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded-lg border bg-white shadow md:mx-10 md:mb-10"
-                >
-                    <div class="flex flex-wrap justify-between gap-2 border-b p-3">
-                        <div class="flex items-center gap-2">
-                            <input
-                                type="text"
-                                class="w-full rounded border p-2"
-                                placeholder="Search..."
-                            />
-                            <Button varient="primary">Search</Button>
+                <div class="flex flex-col mx-2 mb-2 rounded-lg border bg-white p-4 overflow-hidden  shadow md:mx-10 md:mb-10">
+                    <h1 class="p-3 pb-7 text-center text-2xl font-semibold md:mx-10 md:px-8">
+                        ChatBot Conversations
+                    </h1>
+                    <div class="flex flex-col overflow-hidden rounded-lg border bg-white shadow">
+                        <div class="flex flex-wrap justify-between gap-2 border-b p-3">
+                            <div class="flex items-center gap-2">
+                                <input
+                                    type="text"
+                                    class="w-full rounded border p-2"
+                                    placeholder="Search..."
+                                />
+                                <Button varient="primary">Search</Button>
+                            </div>
+
+                            <label for="toggle" class="flex cursor-pointer items-center space-x-3">
+                                <div class="relative">
+                                    <input
+                                        type="checkbox"
+                                        id="toggle"
+                                        class="peer sr-only"
+                                        v-model="bookmarkOnly"
+                                    />
+                                    <div
+                                        class="block h-6 w-12 rounded-full bg-gray-300 transition-all peer-checked:bg-black"
+                                    ></div>
+                                    <div
+                                        class="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-all peer-checked:left-7"
+                                    ></div>
+                                </div>
+                                <span class="text-gray-700">Bookmark Only</span>
+                            </label>
                         </div>
 
-                        <label for="toggle" class="flex cursor-pointer items-center space-x-3">
-                            <div class="relative">
-                                <input
-                                    type="checkbox"
-                                    id="toggle"
-                                    class="peer sr-only"
-                                    v-model="bookmarkOnly"
-                                />
-                                <div
-                                    class="block h-6 w-12 rounded-full bg-gray-300 transition-all peer-checked:bg-black"
-                                ></div>
-                                <div
-                                    class="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-all peer-checked:left-7"
-                                ></div>
-                            </div>
-                            <span class="text-gray-700">Bookmark Only</span>
-                        </label>
-                    </div>
-
-                    <!-- Wrap the table in a scrollable container -->
-                    <div class="overflow-y-auto">
-                        <table class="w-full divide-y">
-                            <thead class="sticky top-0 bg-yellow-50 shadow">
-                                <tr class="divide-x">
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        <!-- Wrap the table in a scrollable container -->
+                        <div class="overflow-y-auto">
+                            <table class="w-full divide-y">
+                                <thead class="sticky top-0 bg-gray-300 shadow">
+                                    <tr class="divide-x">
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                                        >
+                                            Id
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                                        >
+                                            Title
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                                        >
+                                            Created At
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y bg-white">
+                                    <tr
+                                        v-for="chat in filteredChats"
+                                        :key="chat.id"
+                                        class="cursor-pointer divide-x hover:bg-gray-50"
                                     >
-                                        Id
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                                    >
-                                        Title
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                                    >
-                                        Created At
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y bg-white">
-                                <tr
-                                    v-for="chat in filteredChats"
-                                    :key="chat.id"
-                                    class="cursor-pointer divide-x hover:bg-gray-50"
-                                >
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ chat.id }}</div>
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ chat.title }}</div>
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">
-                                            {{ chat.createdAt }}
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                        <td class="whitespace-nowrap px-6 py-4">
+                                            <div class="text-sm text-gray-900">{{ chat.id }}</div>
+                                        </td>
+                                        <td class="whitespace-nowrap px-6 py-4">
+                                            <div class="text-sm text-gray-900">
+                                                {{ chat.title }}
+                                            </div>
+                                        </td>
+                                        <td class="whitespace-nowrap px-6 py-4">
+                                            <div class="text-sm text-gray-900">
+                                                {{ chat.createdAt }}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
