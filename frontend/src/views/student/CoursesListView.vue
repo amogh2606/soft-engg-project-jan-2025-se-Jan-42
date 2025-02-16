@@ -23,18 +23,18 @@ const courses = ref([
                 <div v-if="courses.length === 0" class="text-xl text-gray-600">
                     No courses available !
                 </div>
-                <div v-else class="my-4 flex flex-wrap justify-center gap-4 overflow-y-scroll">
+                <div v-else class="mx-2 mb-2 flex flex-wrap justify-center gap-4 overflow-y-scroll scroll-smooth bg-white shadow-md border md:mx-10 md:mb-10 p-4 sm:p-8 w-auto rounded-lg">
                     <div
                         v-for="course in courses"
                         :key="course.id"
-                        class="custom flex aspect-square w-52 flex-col items-center justify-between rounded border border-gray-300 text-center hover:bg-gray-300 hover:shadow"
+                        class="custom flex aspect-square w-52 flex-col items-center justify-between rounded-lg border border-gray-300 text-center hover:bg-gray-300 shadow hover:shadow-md"
                     >
                         <p class="my-auto px-2 text-xl font-semibold text-white">
                             {{ course.name }}
                         </p>
 
                         <RouterLink :to="'/course/' + course.id" class="w-full">
-                            <Button class="mt-2 w-full rounded-none" varient="light"
+                            <Button class="mt-2 w-full rounded-b-lg" varient="light"
                                 >View Course</Button
                             >
                         </RouterLink>
