@@ -68,7 +68,12 @@ const router = createRouter({
             path: '/admin/chats',
             name: 'admin-ChatsView',
             component: () => import('../views/admin/ChatsView.vue'),
-        }
+        },
+        {
+            path: '/:pathMatch(.*)*',
+            name: 'not-found',
+            component: () => import('../views/NotFoundView.vue'),
+        },
     ],
 });
 
