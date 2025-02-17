@@ -29,7 +29,7 @@ import { RouterLink } from 'vue-router';
                     <h1 class="m-4 text-2xl font-medium tracking-widest text-indigo-500">
                         Indian Institute of Technology,Madras
                     </h1>
-                    <p class="mx-auto text-base leading-relaxed lg:w-2/3">
+                    <p class="mx-auto text-sm leading-relaxed font-light lg:w-2/3">
                         IIT Madras, India's top technical institute, welcomes you to the world's
                         first 4-year Bachelor of Science (BS) Degree in Data Science and
                         Applications with options to exit earlier in the foundation, diploma or BSc
@@ -43,7 +43,7 @@ import { RouterLink } from 'vue-router';
                         <h2 class="title-font mb-2 text-lg font-medium text-gray-900 sm:text-xl">
                             Best Online Program
                         </h2>
-                        <p class="mb-4 text-base leading-relaxed">
+                        <p class="mb-4 text-sm leading-relaxed font-light">
                             Awarded by QS Reimagine Education & The Wharton School, University of
                             Pennsylvania
                         </p>
@@ -54,7 +54,7 @@ import { RouterLink } from 'vue-router';
                         <h2 class="title-font mb-2 text-lg font-medium text-gray-900 sm:text-xl">
                             Scholarship
                         </h2>
-                        <p class="mb-4 text-base leading-relaxed">
+                        <p class="mb-4 text-sm leading-relaxed font-light">
                             Learners from < 5LPA eligible for up to 75% fee waivers. 2000+ students
                             study for free
                         </p>
@@ -65,7 +65,7 @@ import { RouterLink } from 'vue-router';
                         <h2 class="title-font mb-2 text-lg font-medium text-gray-900 sm:text-xl">
                             No Age Limit
                         </h2>
-                        <p class="mb-4 text-base leading-relaxed">
+                        <p class="mb-4 text-sm leading-relaxed font-light">
                             Learners from any age and any where in the world can study in this
                             program. Current age of learners : 17 to 81 years.
                         </p>
@@ -76,7 +76,7 @@ import { RouterLink } from 'vue-router';
                         <h2 class="title-font mb-2 text-lg font-medium text-gray-900 sm:text-xl">
                             Mode of Study
                         </h2>
-                        <p class="mb-4 text-base leading-relaxed">
+                        <p class="mb-4 text-sm leading-relaxed font-light">
                             Pre-recorded and synchronous sessions, Weekly Online Assignments,
                             In-person quizzes
                         </p>
