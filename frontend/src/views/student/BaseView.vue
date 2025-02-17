@@ -10,6 +10,7 @@ import SendIcon from '@/components/icons/SendIcon.vue';
 import UserIcon from '@/components/icons/UserIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import Dropdown from '@/components/ui/dropdown/Dropdown.vue';
+import Modal from '@/components/ui/modal/Modal.vue';
 import { ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 
@@ -27,6 +28,18 @@ const selectedContext = ref(null);
 const isBookmarked = ref(false);
 const toggleBookmark = () => {
     isBookmarked.value = !isBookmarked.value;
+};
+
+const chatTitle = ref('Chat Title Here ...');
+const _chatTitle = ref(chatTitle.value);
+const isModalOpen = ref(false);
+const updateChatTitle = () => {
+    chatTitle.value = _chatTitle.value;
+    isModalOpen.value = false;
+};
+const toggleModal = () => {
+    isModalOpen.value = !isModalOpen.value;
+    _chatTitle.value = chatTitle.value;
 };
 </script>
 
@@ -91,9 +104,9 @@ const toggleBookmark = () => {
         >
             <!-- header -->
             <div class="flex items-center justify-between border-b bg-gray-50 p-2">
-                <p class="text-lg">Chat Title Here ...</p>
+                <p class="text-lg">{{ chatTitle }}</p>
                 <div class="flex gap-2">
-                    <Button varient="light" class="rounded-full !p-1.5">
+                    <Button varient="light" class="rounded-full !p-1.5" @click="toggleModal">
                         <EditIcon class="h-6 w-auto" />
                     </Button>
                     <Button varient="light" class="rounded-full !p-1.5" @click="toggleBookmark">
@@ -138,6 +151,15 @@ const toggleBookmark = () => {
                 </div>
             </div>
         </div>
+        <Modal v-model="isModalOpen" :show-close-button="false">
+            <div class="flex flex-col gap-2">
+                <input type="text" v-model="_chatTitle" class="w-full rounded-md border p-2" />
+                <div class="flex items-center justify-end gap-2">
+                    <Button varient="secondary" @click="toggleModal"> Cancel </Button>
+                    <Button varient="primary" @click="updateChatTitle"> Save </Button>
+                </div>
+            </div>
+        </Modal>
     </div>
 </template>
 
