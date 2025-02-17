@@ -20,7 +20,7 @@ import { RouterLink } from 'vue-router';
     <main class="flex h-full flex-col overflow-y-scroll scroll-smooth">
         <section class="body-font pb-8 text-gray-600">
             <div class="container mx-auto px-5 py-8">
-                <div class="mb-8 flex w-full flex-col rounded-lg bg-white p-8 text-center shadow">
+                <div class="mb-8 flex w-full flex-col rounded-lg bg-white p-8 text-center border">
                     <img
                         class="mx-auto h-48 w-auto"
                         src="https://doe.iitm.ac.in/wp-content/uploads/2021/06/245-2451831_iit-madras-logo.png"
@@ -36,7 +36,7 @@ import { RouterLink } from 'vue-router';
                         degree level.
                     </p>
                 </div>
-                <div class="!mb-8 flex flex-wrap rounded-lg bg-white py-8 shadow">
+                <div class="!mb-8 flex flex-wrap rounded-lg bg-white py-8 border">
                     <div
                         class="border-l-2 border-gray-200 border-opacity-60 px-8 py-6 md:w-full lg:w-1/2 xl:w-1/4"
                     >
