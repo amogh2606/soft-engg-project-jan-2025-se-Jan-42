@@ -18,7 +18,7 @@ const toggleDrawer = () => {
 };
 const showWeeklyIndex = ref(true);
 const contextList = ['Current Page', 'General FAQs', 'Coding', 'Lecture'];
-const selectedContext = ref(contextList[0]);
+const selectedContext = ref(null);
 </script>
 
 <template>
