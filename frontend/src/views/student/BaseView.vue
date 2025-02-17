@@ -1,6 +1,6 @@
 <script setup>
-import AttachmentIcon from '@/components/icons/AttachmentIcon.vue';
 import BookIcon from '@/components/icons/BookIcon.vue';
+import BookmarkIcon from '@/components/icons/BookmarkIcon.vue';
 import ChatbotIcon from '@/components/icons/ChatbotIcon.vue';
 import ChatIcon from '@/components/icons/ChatIcon.vue';
 import CrossIcon from '@/components/icons/CrossIcon.vue';
@@ -9,7 +9,7 @@ import IITMLogoIcon from '@/components/icons/IITMLogoIcon.vue';
 import SendIcon from '@/components/icons/SendIcon.vue';
 import UserIcon from '@/components/icons/UserIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
-import BookmarkIcon from '@/components/icons/BookmarkIcon.vue';
+import Dropdown from '@/components/ui/dropdown/Dropdown.vue';
 import { ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 
@@ -21,6 +21,9 @@ const toggleDrawer = () => {
 const isActive = (path) => {
     return useRoute().path === path;
 };
+
+const contextList = ['Current Page', 'General FAQs', 'Coding', 'Lecture'];
+const selectedContext = ref(contextList[0]);
 </script>
 
 <template>
@@ -124,12 +127,7 @@ const isActive = (path) => {
                     placeholder="Type a message ..."
                 ></textarea>
                 <div class="flex items-center justify-between p-2">
-                    <button
-                        class="flex items-center justify-center gap-1 rounded-md border p-1 px-2 hover:bg-gray-100"
-                    >
-                        <AttachmentIcon class="h-5 w-auto" />
-                        <span class="text-sm">Context</span>
-                    </button>
+                    <Dropdown :options="contextList" v-model="selectedContext" />
                     <button class="rounded-md border p-1.5 hover:bg-gray-100">
                         <SendIcon :is-solid="true" class="h-6 w-6" />
                     </button>
