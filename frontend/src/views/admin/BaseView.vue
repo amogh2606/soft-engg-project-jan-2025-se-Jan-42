@@ -24,6 +24,10 @@ const isActive = (paths) => {
 
 const contextList = ['Current Page', 'General FAQs', 'Coding', 'Lecture'];
 const selectedContext = ref(null);
+const isBookmarked = ref(false);
+const toggleBookmark = () => {
+    isBookmarked.value = !isBookmarked.value;
+};
 </script>
 
 <template>
@@ -105,9 +109,10 @@ const selectedContext = ref(null);
                     <Button varient="light" class="rounded-full !p-1.5">
                         <EditIcon class="h-6 w-auto" />
                     </Button>
-                    <Button varient="light" class="rounded-full !p-1.5">
-                        <BookmarkIcon class="h-6 w-auto" />
+                    <Button varient="light" class="rounded-full !p-1.5" @click="toggleBookmark">
+                        <BookmarkIcon :is-solid="isBookmarked" class="h-6 w-auto" />
                     </Button>
+
                     <Button varient="light" class="rounded-full !p-1.5" @click="toggleDrawer">
                         <CrossIcon class="h-6 w-auto" />
                     </Button>
