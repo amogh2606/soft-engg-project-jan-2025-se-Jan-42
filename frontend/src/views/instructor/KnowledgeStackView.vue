@@ -1,5 +1,6 @@
 <script setup>
 import DeleteIcon from '@/components/icons/DeleteIcon.vue';
+import PlusIcon from '@/components/icons/PlusIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import { computed, ref } from 'vue';
 import BaseView from './BaseView.vue';
@@ -129,7 +130,9 @@ const filteredFiles = computed(() => {
                             placeholder="Search..."
                         />
                         <Button varient="primary">Search</Button>
-                        <Button varient="primary">+</Button>
+                        <Button varient="primary">
+                            <PlusIcon class="h-6 w-auto" />
+                        </Button>
                     </div>
 
                     <!-- Wrap the table in a scrollable container -->
