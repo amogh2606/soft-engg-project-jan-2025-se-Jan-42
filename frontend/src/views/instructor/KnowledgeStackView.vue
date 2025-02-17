@@ -1,4 +1,5 @@
 <script setup>
+import DeleteIcon from '@/components/icons/DeleteIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import { computed, ref } from 'vue';
 import BaseView from './BaseView.vue';
@@ -176,7 +177,9 @@ const filteredFiles = computed(() => {
                                         </div>
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4">
-                                        <Button varient="outlineRed"> Delete </Button>
+                                        <Button varient="outlineRed" class="rounded-full !p-1.5">
+                                            <DeleteIcon :is-solid="false" class="h-6 w-auto" />
+                                        </Button>
                                     </td>
                                 </tr>
                             </tbody>

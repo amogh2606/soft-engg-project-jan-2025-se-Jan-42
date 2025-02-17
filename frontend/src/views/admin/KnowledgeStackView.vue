@@ -180,9 +180,9 @@ const filteredFiles = computed(() => {
                                         </div>
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4">
-                                        <button class="rounded border p-1 hover:bg-gray-100">
+                                        <Button varient="outlineRed" class="rounded-full !p-1.5">
                                             <DeleteIcon :is-solid="false" class="h-6 w-auto" />
-                                        </button>
+                                        </Button>
                                     </td>
                                 </tr>
                             </tbody>
