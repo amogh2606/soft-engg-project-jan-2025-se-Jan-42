@@ -142,7 +142,12 @@ const copyMessage = (message) => {
     <!-- edit modal -->
     <Modal v-model="isEditModalOpen" :show-close-button="false">
         <div class="flex flex-col gap-2">
-            <input type="text" v-model="_chatTitle" class="w-full rounded-md border p-2" />
+            <p class="text-lg font-semibold tracking-wide">Edit Chat Title</p>
+            <input
+                type="text"
+                v-model="_chatTitle"
+                class="text-md w-full rounded-md border border-gray-300 px-4 py-2 text-gray-700 shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
+            />
             <div class="flex items-center justify-end gap-2">
                 <Button varient="secondary" @click="toggleEditModal"> Cancel </Button>
                 <Button varient="primary" @click="updateChatTitle"> Save </Button>
