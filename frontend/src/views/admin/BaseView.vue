@@ -3,6 +3,7 @@ import BookIcon from '@/components/icons/BookIcon.vue';
 import BookmarkIcon from '@/components/icons/BookmarkIcon.vue';
 import ChatbotIcon from '@/components/icons/ChatbotIcon.vue';
 import ChatIcon from '@/components/icons/ChatIcon.vue';
+import CopyIcon from '@/components/icons/CopyIcon.vue';
 import CrossIcon from '@/components/icons/CrossIcon.vue';
 import EditIcon from '@/components/icons/EditIcon.vue';
 import IITMLogoIcon from '@/components/icons/IITMLogoIcon.vue';
@@ -11,6 +12,7 @@ import UserIcon from '@/components/icons/UserIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import Dropdown from '@/components/ui/dropdown/Dropdown.vue';
 import Modal from '@/components/ui/modal/Modal.vue';
+import { useClipboard } from '@vueuse/core';
 import { ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 
@@ -41,6 +43,8 @@ const toggleModal = () => {
     isModalOpen.value = !isModalOpen.value;
     _chatTitle.value = chatTitle.value;
 };
+
+const { copy } = useClipboard();
 </script>
 
 <template>
@@ -137,15 +141,33 @@ const toggleModal = () => {
                 <div class="flex flex-1 flex-col items-center gap-2 overflow-y-scroll p-2">
                     <div class="ms-auto mt-auto flex w-4/5 rounded-md bg-blue-200 p-2">
                         <p>What is 2 + 2 ?</p>
+                        <button
+                            class="ms-auto mt-auto opacity-50 transition-opacity hover:opacity-100"
+                            @click="copy('copy message')"
+                        >
+                            <CopyIcon class="h-4 w-4" />
+                        </button>
                     </div>
                     <div class="me-auto flex w-4/5 rounded-md bg-green-200 p-2">
                         <p>
                             I can't give you the direct answer. But, you could get the answer by
                             solving the expression 6 - 2 = ?.
                         </p>
+                        <button
+                            class="ms-auto mt-auto opacity-50 transition-opacity hover:opacity-100"
+                            @click="copy('copy message')"
+                        >
+                            <CopyIcon class="h-4 w-4" />
+                        </button>
                     </div>
                     <div class="ms-auto flex w-4/5 rounded-md bg-blue-200 p-2">
                         <p>Got it ! Thanks :)</p>
+                        <button
+                            class="ms-auto mt-auto opacity-50 transition-opacity hover:opacity-100"
+                            @click="copy('copy message')"
+                        >
+                            <CopyIcon class="h-4 w-4" />
+                        </button>
                     </div>
                 </div>
             </div>
