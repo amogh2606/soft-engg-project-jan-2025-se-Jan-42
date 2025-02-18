@@ -2,11 +2,16 @@
 import Button from '@/components/ui/buttons/Button.vue';
 import router from '@/router';
 import BaseView from '@/views/auth/BaseView.vue';
+import { push } from 'notivue';
 import { RouterLink } from 'vue-router';
 
 function submit() {
     console.log('Signup form submitted');
     router.push('/auth/login');
+
+    push.success({
+        message: 'Signup successful',
+    });
 }
 </script>
 

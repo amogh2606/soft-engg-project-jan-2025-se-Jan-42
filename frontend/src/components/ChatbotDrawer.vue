@@ -8,6 +8,7 @@ import Button from '@/components/ui/buttons/Button.vue';
 import Dropdown from '@/components/ui/dropdown/Dropdown.vue';
 import Modal from '@/components/ui/modal/Modal.vue';
 import { useClipboard } from '@vueuse/core';
+import { push } from 'notivue';
 import { ref } from 'vue';
 
 defineProps({
@@ -26,6 +27,9 @@ const selectedContext = ref(null);
 const isBookmarked = ref(false);
 const toggleBookmark = () => {
     isBookmarked.value = !isBookmarked.value;
+    push.success({
+        message: isBookmarked.value ? 'Bookmark added' : 'Bookmark removed',
+    });
 };
 
 const chatTitle = ref('Chat Title Here ...');
@@ -34,6 +38,9 @@ const isEditModalOpen = ref(false);
 const updateChatTitle = () => {
     chatTitle.value = _chatTitle.value;
     isEditModalOpen.value = false;
+    push.success({
+        message: 'Chat title updated',
+    });
 };
 const toggleEditModal = () => {
     isEditModalOpen.value = !isEditModalOpen.value;
@@ -41,6 +48,12 @@ const toggleEditModal = () => {
 };
 
 const { copy } = useClipboard();
+const copyMessage = (message) => {
+    copy(message);
+    push.success({
+        message: 'Message copied',
+    });
+};
 </script>
 <template>
     <!-- drawer component -->
@@ -80,7 +93,7 @@ const { copy } = useClipboard();
                         <p>What is 2 + 2 ?</p>
                         <button
                             class="ms-auto mt-auto opacity-50 transition-opacity hover:opacity-100"
-                            @click="copy('copy message')"
+                            @click="copyMessage('copy message')"
                         >
                             <CopyIcon class="h-4 w-4" />
                         </button>
@@ -92,7 +105,7 @@ const { copy } = useClipboard();
                         </p>
                         <button
                             class="ms-auto mt-auto opacity-50 transition-opacity hover:opacity-100"
-                            @click="copy('copy message')"
+                            @click="copyMessage('copy message')"
                         >
                             <CopyIcon class="h-4 w-4" />
                         </button>
@@ -101,7 +114,7 @@ const { copy } = useClipboard();
                         <p>Got it ! Thanks :)</p>
                         <button
                             class="ms-auto mt-auto opacity-50 transition-opacity hover:opacity-100"
-                            @click="copy('copy message')"
+                            @click="copyMessage('copy message')"
                         >
                             <CopyIcon class="h-4 w-4" />
                         </button>

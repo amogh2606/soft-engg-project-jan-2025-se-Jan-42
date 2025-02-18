@@ -2,6 +2,7 @@
 import Button from '@/components/ui/buttons/Button.vue';
 import router from '@/router';
 import BaseView from '@/views/auth/BaseView.vue';
+import { push } from 'notivue';
 import { RouterLink } from 'vue-router';
 
 function submit(event) {
@@ -18,6 +19,10 @@ function submit(event) {
     } else if (userType === 'admin') {
         router.push('/admin/courses');
     }
+
+    push.success({
+        message: 'Login successful',
+    });
 }
 </script>
 
