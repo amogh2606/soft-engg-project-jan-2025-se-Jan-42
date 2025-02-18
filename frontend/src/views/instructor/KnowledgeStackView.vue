@@ -4,6 +4,7 @@ import PlusIcon from '@/components/icons/PlusIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import { computed, ref } from 'vue';
 import BaseView from './BaseView.vue';
+import FileUploadModal from '@/components/ui/modal/FileUploadModal.vue';
 
 const files = ref([
     {
@@ -110,6 +111,11 @@ const files = ref([
 const filteredFiles = computed(() => {
     return files.value;
 });
+
+const isFileUploadModalOpen = ref(false);
+const toggleFileUploadModal = () => {
+    isFileUploadModalOpen.value = !isFileUploadModalOpen.value;
+};
 </script>
 <template>
     <BaseView>
@@ -130,7 +136,7 @@ const filteredFiles = computed(() => {
                             placeholder="Search..."
                         />
                         <Button varient="primary">Search</Button>
-                        <Button varient="primary">
+                        <Button varient="primary" @click="toggleFileUploadModal">
                             <PlusIcon class="h-6 w-auto" />
                         </Button>
                     </div>
@@ -190,6 +196,7 @@ const filteredFiles = computed(() => {
                     </div>
                 </div>
             </div>
+            <FileUploadModal v-model="isFileUploadModalOpen" />
         </template>
     </BaseView>
 </template>
