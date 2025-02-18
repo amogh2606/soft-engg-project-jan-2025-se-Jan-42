@@ -23,11 +23,14 @@ const courses = ref([
                 <div v-if="courses.length === 0" class="text-xl text-gray-600">
                     No courses available !
                 </div>
-                <div v-else class="mx-2 mb-2 flex flex-wrap justify-center gap-4 overflow-y-scroll scroll-smooth bg-white shadow-md border md:mx-10 md:mb-10 p-4 sm:p-8 w-auto rounded-lg">
+                <div
+                    v-else
+                    class="mx-2 mb-2 flex w-auto flex-wrap justify-center gap-4 overflow-y-scroll scroll-smooth rounded-lg border bg-white p-4 shadow-md sm:p-8 md:mx-10 md:mb-10"
+                >
                     <div
                         v-for="course in courses"
                         :key="course.id"
-                        class="custom flex aspect-square w-52 flex-col items-center justify-between rounded-lg border border-gray-300 text-center hover:bg-gray-300 shadow hover:shadow-md"
+                        class="custom flex aspect-square w-52 flex-col items-center justify-between rounded-lg border border-gray-300 text-center shadow hover:bg-gray-300 hover:shadow-md"
                     >
                         <p class="my-auto px-2 text-xl font-semibold text-white">
                             {{ course.name }}
@@ -48,5 +51,11 @@ const courses = ref([
 <style scoped>
 .custom {
     background-image: url('../../assets/images/course-thumbnail.svg');
+    background-color: #e7e7ef;
+    opacity: 0.8;
+    background-image:
+        repeating-radial-gradient(circle at 0 0, transparent 0, #e7e7ef 10px),
+        repeating-linear-gradient(#444cf755, #444cf7);
+    background-blend-mode: multiply;
 }
 </style>
