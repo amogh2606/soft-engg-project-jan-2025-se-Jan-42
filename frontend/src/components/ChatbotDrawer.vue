@@ -149,13 +149,19 @@ const { copy } = useClipboard();
     opacity: 0;
 }
 
-.slide-enter-active,
-.slide-leave-active {
+.slide-enter-active {
     transition: transform 0.3s ease;
 }
 
-.slide-enter-from,
-.slide-leave-to {
+.slide-enter-from {
     transform: translateX(100%);
+}
+
+.slide-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.slide-leave-to {
+    opacity: 0;
 }
 </style>
