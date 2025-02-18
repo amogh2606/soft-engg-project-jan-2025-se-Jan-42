@@ -10,3 +10,9 @@ import { Notification, NotificationProgress, Notivue } from 'notivue';
         </Notification>
     </Notivue>
 </template>
+
+<style>
+@import 'notivue/animations.css';
+@import 'notivue/notification.css';
+@import 'notivue/notification-progress.css';
+</style>

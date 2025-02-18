@@ -7,10 +7,6 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 
-import 'notivue/animations.css'; // Only needed if using default animations
-import 'notivue/notification.css'; // Only needed if using built-in <Notification />
-import 'notivue/notification-progress.css';
-
 const app = createApp(App);
 const notivue = createNotivue({
     position: 'bottom-right',
