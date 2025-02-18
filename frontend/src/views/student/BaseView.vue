@@ -65,7 +65,7 @@ const isActive = (path) => {
         <button class="absolute bottom-6 right-6" @click="toggleDrawer">
             <ChatbotIcon class="ai-btn h-12 w-auto" />
         </button>
-        <ChatbotDrawer v-if="drawerOpen" :close-drawer="toggleDrawer" />
+        <ChatbotDrawer :is-open="drawerOpen" :close-drawer="toggleDrawer" />
     </div>
 </template>
 
