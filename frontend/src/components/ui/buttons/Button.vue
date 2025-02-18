@@ -1,12 +1,13 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <button :class="`${baseClasses} ${btnVarients[varient]}`">
+    <button :class="`${rounded ? roundedBaseClasses : baseClasses} ${btnVarients[varient]}`">
         <slot></slot>
     </button>
 </template>
 
 <script setup>
 const baseClasses = 'px-4 py-2 rounded cursor-pointer transition-colors font-medium';
+const roundedBaseClasses = 'rounded-full p-1.5 cursor-pointer transition-colors font-medium';
 const btnVarients = {
     primary: 'bg-blue-500 text-white hover:bg-blue-600',
     secondary: 'bg-gray-500 text-white hover:bg-gray-600',
@@ -22,8 +23,12 @@ defineProps({
         default: 'primary',
         validator: (value) =>
             ['primary', 'secondary', 'light', 'outlineBlack', 'outlineBlue', 'outlineRed'].includes(
-                value
+                value,
             ),
+    },
+    rounded: {
+        type: Boolean,
+        default: false,
     },
 });
 </script>

@@ -74,13 +74,13 @@ const copyMessage = (message) => {
             <div class="flex items-center justify-between border-b bg-gray-50 p-2">
                 <p class="text-lg">{{ chatTitle }}</p>
                 <div class="flex gap-2">
-                    <Button varient="light" class="rounded-full !p-1.5" @click="toggleEditModal">
+                    <Button varient="light" :rounded="true" @click="toggleEditModal">
                         <EditIcon class="h-6 w-auto" />
                     </Button>
-                    <Button varient="light" class="rounded-full !p-1.5" @click="toggleBookmark">
+                    <Button varient="light" :rounded="true" @click="toggleBookmark">
                         <BookmarkIcon :is-solid="isBookmarked" class="h-6 w-auto" />
                     </Button>
-                    <Button varient="light" class="rounded-full !p-1.5" @click="closeDrawer">
+                    <Button varient="light" :rounded="true" @click="closeDrawer">
                         <CrossIcon class="h-6 w-auto" />
                     </Button>
                 </div>
@@ -114,7 +114,7 @@ const copyMessage = (message) => {
                         <p>Got it ! Thanks :)</p>
                         <button
                             class="ms-auto mt-auto opacity-50 transition-opacity hover:opacity-100"
-                            @click="copyMessage('copy message')"
+                            @click="copy('copy message')"
                         >
                             <CopyIcon class="h-4 w-4" />
                         </button>

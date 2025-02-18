@@ -81,19 +81,19 @@ const courses = ref([
                                             <RouterLink
                                                 :to="`/admin/enrollments?course_id=${course.id}`"
                                             >
-                                                <Button varient="light" class="rounded-full !p-1.5">
+                                                <Button varient="light" :rounded="true">
                                                     <StudentIcon class="h-6 w-6" />
                                                 </Button>
                                             </RouterLink>
                                             <RouterLink
                                                 :to="`/admin/kstack?course_id=${course.id}`"
                                             >
-                                                <Button varient="light" class="rounded-full !p-1.5">
+                                                <Button varient="light" :rounded="true">
                                                     <StackIcon class="h-6 w-6" />
                                                 </Button>
                                             </RouterLink>
                                             <RouterLink :to="`/course/${course.id}`">
-                                                <Button varient="light" class="rounded-full !p-1.5">
+                                                <Button varient="light" :rounded="true">
                                                     <EyeIcon class="h-6 w-6" />
                                                 </Button>
                                             </RouterLink>

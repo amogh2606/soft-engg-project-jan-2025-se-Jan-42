@@ -27,7 +27,7 @@ const showWeeklyIndex = ref(true);
                 </p>
                 <div class="flex space-x-2">
                     <RouterLink to="/auth/login">
-                        <Button varient="light" class="!rounded-full !p-1.5">
+                        <Button varient="light" :rounded="true">
                             <UserIcon :is-solid="false" :with-border="false" class="h-6 w-full" />
                         </Button>
                     </RouterLink>

@@ -180,7 +180,7 @@ const filteredStudents = computed(() => {
                                         </div>
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4">
-                                        <Button varient="outlineRed" class="rounded-full !p-1.5">
+                                        <Button varient="outlineRed" :rounded="true">
                                             <DeleteIcon :is-solid="false" class="h-6 w-auto" />
                                         </Button>
                                     </td>
