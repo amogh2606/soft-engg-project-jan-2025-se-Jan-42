@@ -1,5 +1,5 @@
 <template>
-    <Modal v-model="isFileUploadModalOpen" :show-close-button="true">
+    <Modal :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)">
         <div class="flex flex-col gap-4 p-4">
             <p class="text-xl font-semibold tracking-wide">Upload File</p>
 
@@ -41,10 +41,18 @@
 </template>
 
 <script setup>
+import { push } from 'notivue';
 import { ref } from 'vue';
 import Modal from './Modal.vue';
 
-const isFileUploadModalOpen = ref(false);
+defineProps({
+    modelValue: {
+        type: Boolean,
+        default: false,
+    },
+});
+
+const emit = defineEmits(['update:modelValue']);
 const fileName = ref(null);
 const fileInputRef = ref(null);
 
@@ -64,10 +72,19 @@ const removeFile = () => {
 
 const uploadFile = () => {
     if (!fileName.value) {
-        alert('Please select a file to upload.');
+        push.error({
+            title: 'Error',
+            message: 'Please select a file to upload.',
+        });
         return;
     }
-    alert(`Uploaded: ${fileName.value}`);
-    // Handle actual upload logic here
+    push.success({
+        title: 'File uploaded',
+        message: `File ${fileName.value} uploaded successfully`,
+    });
+
+    emit('update:modelValue', false);
+    fileName.value = null;
+    fileInputRef.value.value = null;
 };
 </script>
