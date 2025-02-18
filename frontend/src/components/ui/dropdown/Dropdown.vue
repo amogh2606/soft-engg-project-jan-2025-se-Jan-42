@@ -27,7 +27,16 @@
                 }"
                 @click="updateSelectedOption(option)"
             >
-                {{ option }}
+                <div class="flex items-center gap-2">
+                    <div
+                        class="h-2 w-2 rounded-full"
+                        :class="{
+                            'bg-green-500': selectedOption === option,
+                            'border border-gray-500': selectedOption !== option,
+                        }"
+                    ></div>
+                    <span>{{ option }}</span>
+                </div>
             </button>
         </div>
     </div>
@@ -46,6 +55,10 @@ const props = defineProps({
         type: [String, null],
         required: true,
     },
+    closeOnSelect: {
+        type: Boolean,
+        default: true,
+    },
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -57,6 +70,9 @@ const dropdown = ref(null);
 const updateSelectedOption = (option) => {
     selectedOption.value = option;
     emit('update:modelValue', option);
+    if (props.closeOnSelect) {
+        isOpen.value = false;
+    }
 };
 
 const handleClickOutside = (event) => {
