@@ -1,9 +1,15 @@
 <script setup>
 import ExportIcon from '@/components/icons/ExportIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
+import TableComponent from '@/components/ui/table/TableComponent.vue';
+import BaseView from '@/views/admin/BaseView.vue';
 import { ref } from 'vue';
-import BaseView from './BaseView.vue';
 
+const headers = ref([
+    { key: 'id', label: 'ID' },
+    { key: 'query', label: 'Query' },
+    { key: 'response', label: 'Response' },
+]);
 const chats = ref([
     { id: 1, query: 'Your Query ...?', response: 'Bot Response Here ...' },
     { id: 2, query: 'Your Query ...?', response: 'Bot Response Here ...' },
@@ -21,67 +27,27 @@ const chats = ref([
     <BaseView>
         <template #main-slot>
             <div class="flex flex-1 flex-col overflow-hidden pt-4">
-                <h1 class="p-3 text-center text-2xl font-semibold md:mx-10 md:px-8">
-                    ChatBot Conversations
-                </h1>
-
                 <div
-                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded-lg border bg-white shadow md:mx-10 md:mb-10"
+                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded-lg border bg-white p-4 shadow md:mx-10 md:mb-10"
                 >
-                    <!-- search box -->
-                    <div class="flex justify-between gap-2 border-b p-3">
-                        <input
-                            type="text"
-                            class="w-full rounded border p-2"
-                            placeholder="Search..."
-                        />
-                        <Button varient="primary">Search</Button>
+                    <h1 class="p-3 pb-7 text-center text-2xl font-semibold md:mx-10 md:px-8">
+                        ChatBot Conversations
+                    </h1>
 
-                        <Button varient="primary">
-                            <ExportIcon :is-solid="false" class="h-6 w-auto" />
-                        </Button>
-                    </div>
+                    <div class="flex flex-col overflow-hidden rounded-lg border bg-white shadow">
+                        <div class="flex justify-between gap-2 border-b p-3">
+                            <input
+                                type="text"
+                                class="w-full rounded border p-2"
+                                placeholder="Search..."
+                            />
+                            <Button varient="primary">Search</Button>
 
-                    <!-- Wrap the table in a scrollable container -->
-                    <div class="overflow-y-auto">
-                        <table class="w-full divide-y">
-                            <thead class="sticky top-0 bg-yellow-50 shadow">
-                                <tr class="divide-x">
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                                    >
-                                        Id
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                                    >
-                                        Query
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                                    >
-                                        Response
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y bg-white">
-                                <tr
-                                    v-for="chat in chats"
-                                    :key="chat.id"
-                                    class="cursor-pointer divide-x hover:bg-gray-50"
-                                >
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ chat.id }}</div>
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ chat.query }}</div>
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ chat.response }}</div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            <Button varient="primary">
+                                <ExportIcon :is-solid="false" class="h-6 w-auto" />
+                            </Button>
+                        </div>
+                        <TableComponent :headers="headers" :data="chats" />
                     </div>
                 </div>
             </div>

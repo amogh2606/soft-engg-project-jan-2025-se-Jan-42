@@ -1,6 +1,6 @@
 import js from '@eslint/js';
-import pluginVue from 'eslint-plugin-vue';
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting';
+import pluginVue from 'eslint-plugin-vue';
 
 export default [
     {
@@ -16,4 +16,10 @@ export default [
     js.configs.recommended,
     ...pluginVue.configs['flat/essential'],
     skipFormatting,
+    {
+        name: 'app/parser-options',
+        parserOptions: {
+            ecmaFeatures: { jsx: true },
+        },
+    },
 ];

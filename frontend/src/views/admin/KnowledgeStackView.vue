@@ -1,10 +1,18 @@
-<script setup>
+<script setup lang="jsx">
 import DeleteIcon from '@/components/icons/DeleteIcon.vue';
 import PlusIcon from '@/components/icons/PlusIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
+import FileUploadModal from '@/components/ui/modal/FileUploadModal.vue';
+import TableComponent from '@/components/ui/table/TableComponent.vue';
 import { computed, ref } from 'vue';
 import BaseView from './BaseView.vue';
-import FileUploadModal from '@/components/ui/modal/FileUploadModal.vue';
+
+const headers = ref([
+    { label: 'ID', key: 'id' },
+    { label: 'File Name', key: 'fileName' },
+    { label: 'Created At', key: 'createdAt' },
+    { label: 'Actions', key: 'actions' },
+]);
 
 const files = ref([
     {
@@ -108,6 +116,17 @@ const files = ref([
         createdAt: '2021-09-20 12:00:00',
     },
 ]);
+
+files.value.forEach((file) => {
+    file.actions = {
+        render: () => (
+            <Button varient="outlineRed" rounded="true">
+                <DeleteIcon isSolid="false" class="h-6 w-auto" />
+            </Button>
+        ),
+    };
+});
+
 const filteredFiles = computed(() => {
     return files.value;
 });
@@ -121,78 +140,27 @@ const toggleFileUploadModal = () => {
     <BaseView>
         <template #main-slot>
             <div class="flex flex-1 flex-col overflow-hidden pt-4">
-                <h1 class="p-3 text-center text-2xl font-semibold md:mx-10 md:px-8">
-                    Knowledge Stack : <span>(Course Name Here ...)</span>
-                </h1>
-
                 <div
-                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded-lg border bg-white shadow md:mx-10 md:mb-10"
+                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded-lg border bg-white p-4 shadow md:mx-10 md:mb-10"
                 >
-                    <!-- search box -->
-                    <div class="flex justify-between gap-2 border-b p-3">
-                        <input
-                            type="text"
-                            class="w-full rounded border p-2"
-                            placeholder="Search..."
-                        />
-                        <Button varient="primary">Search</Button>
-                        <Button varient="primary" @click="toggleFileUploadModal">
-                            <PlusIcon class="h-6 w-auto" />
-                        </Button>
-                    </div>
+                    <h1 class="p-3 pb-7 text-center text-2xl font-semibold md:mx-10 md:px-8">
+                        Knowledge Stack : <span>(Course Name Here ...)</span>
+                    </h1>
 
-                    <!-- Wrap the table in a scrollable container -->
-                    <div class="overflow-y-auto">
-                        <table class="w-full divide-y">
-                            <thead class="sticky top-0 bg-yellow-50 shadow">
-                                <tr class="divide-x">
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                                    >
-                                        Id
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                                    >
-                                        File Name
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                                    >
-                                        Created At
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                                    >
-                                        Actions
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y bg-white">
-                                <tr
-                                    v-for="file in filteredFiles"
-                                    :key="file.id"
-                                    class="cursor-pointer divide-x hover:bg-gray-50"
-                                >
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ file.id }}</div>
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ file.fileName }}</div>
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">
-                                            {{ file.createdAt }}
-                                        </div>
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <Button varient="outlineRed" :rounded="true">
-                                            <DeleteIcon :is-solid="false" class="h-6 w-auto" />
-                                        </Button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="flex flex-col overflow-hidden rounded-lg border bg-white shadow">
+                        <div class="flex justify-between gap-2 border-b p-3">
+                            <input
+                                type="text"
+                                class="w-full rounded border p-2"
+                                placeholder="Search..."
+                            />
+                            <Button varient="primary">Search</Button>
+                            <Button varient="primary" @click="toggleFileUploadModal">
+                                <PlusIcon class="h-6 w-auto" />
+                            </Button>
+                        </div>
+
+                        <TableComponent :headers="headers" :data="filteredFiles" />
                     </div>
                 </div>
             </div>

@@ -1,8 +1,14 @@
 <script setup>
 import Button from '@/components/ui/buttons/Button.vue';
+import TableComponent from '@/components/ui/table/TableComponent.vue';
 import { computed, ref } from 'vue';
 import BaseView from './BaseView.vue';
 
+const headers = ref([
+    { label: 'ID', key: 'id' },
+    { label: 'Feedback', key: 'feedback' },
+    { label: 'Created At', key: 'createdAt' },
+]);
 const feedbacks = ref([
     {
         id: 1,
@@ -113,65 +119,23 @@ const filteredFeedbacks = computed(() => {
     <BaseView>
         <template #main-slot>
             <div class="flex flex-1 flex-col overflow-hidden pt-4">
-                <h1 class="p-3 text-center text-2xl font-semibold md:mx-10 md:px-8">Feedbacks</h1>
-
                 <div
-                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded-lg border bg-white shadow md:mx-10 md:mb-10"
+                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded-lg border bg-white p-4 shadow md:mx-10 md:mb-10"
                 >
-                    <!-- search box -->
-                    <div class="flex justify-between gap-2 border-b p-3">
-                        <input
-                            type="text"
-                            class="w-full rounded border p-2"
-                            placeholder="Search..."
-                        />
-                        <Button varient="primary">Search</Button>
-                    </div>
+                    <h1 class="p-3 pb-7 text-center text-2xl font-semibold md:mx-10 md:px-8">
+                        Student Feedbacks
+                    </h1>
 
-                    <!-- Wrap the table in a scrollable container -->
-                    <div class="overflow-y-auto">
-                        <table class="w-full divide-y">
-                            <thead class="sticky top-0 bg-yellow-50 shadow">
-                                <tr class="divide-x">
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                                    >
-                                        Id
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                                    >
-                                        Feedback
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                                    >
-                                        Created At
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y bg-white">
-                                <tr
-                                    v-for="feedback in filteredFeedbacks"
-                                    :key="feedback.id"
-                                    class="cursor-pointer divide-x hover:bg-gray-50"
-                                >
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ feedback.id }}</div>
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">
-                                            {{ feedback.feedback }}
-                                        </div>
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <div class="text-sm text-gray-900">
-                                            {{ feedback.createdAt }}
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="flex flex-col overflow-hidden rounded-lg border bg-white shadow">
+                        <div class="flex justify-between gap-2 border-b p-3">
+                            <input
+                                type="text"
+                                class="w-full rounded border p-2"
+                                placeholder="Search..."
+                            />
+                            <Button varient="primary">Search</Button>
+                        </div>
+                        <TableComponent :headers="headers" :data="filteredFeedbacks" />
                     </div>
                 </div>
             </div>
