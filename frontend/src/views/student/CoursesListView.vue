@@ -18,29 +18,32 @@ const courses = ref([
 <template>
     <BaseView>
         <template #main-slot>
-            <div class="flex h-full flex-1 flex-col items-center justify-center gap-4">
-                <h1 class="mt-4 text-2xl font-bold">Enrolled Courses</h1>
-                <div v-if="courses.length === 0" class="text-xl text-gray-600">
-                    No courses available !
-                </div>
+            <div class="flex flex-1 flex-col justify-center overflow-hidden pt-4">
                 <div
-                    v-else
-                    class="mx-2 mb-2 flex w-auto flex-wrap justify-center gap-4 overflow-y-scroll scroll-smooth rounded-lg border bg-white p-4 shadow-md sm:p-8 md:mx-10 md:mb-10"
+                    class="mx-2 mb-2 flex flex-col overflow-hidden rounded-lg border bg-white p-4 shadow md:mx-10 md:mb-10"
                 >
-                    <div
-                        v-for="course in courses"
-                        :key="course.id"
-                        class="custom flex aspect-square w-52 flex-col items-center justify-between rounded-lg border border-gray-300 text-center shadow hover:bg-gray-300 hover:shadow-md"
-                    >
-                        <p class="my-auto px-2 text-xl font-semibold text-white">
-                            {{ course.name }}
-                        </p>
+                    <h1 class="p-3 pb-7 text-center text-2xl font-semibold md:mx-10 md:px-8">
+                        Enrolled Courses
+                    </h1>
+                    <div v-if="courses.length === 0" class="text-xl text-center text-gray-600">
+                        No courses available !
+                    </div>
+                    <div v-else class="custom-grid w-full overflow-y-scroll">
+                        <div
+                            v-for="course in courses"
+                            :key="course.id"
+                            class="custom flex aspect-square w-52 flex-col items-center justify-between rounded-lg border border-gray-300 text-center shadow hover:bg-gray-300 hover:shadow-md"
+                        >
+                            <p class="my-auto px-2 text-xl font-semibold text-white">
+                                {{ course.name }}
+                            </p>
 
-                        <RouterLink :to="'/course/' + course.id" class="w-full">
-                            <Button class="mt-2 w-full rounded-b-lg" varient="light"
-                                >View Course</Button
-                            >
-                        </RouterLink>
+                            <RouterLink :to="'/course/' + course.id" class="w-full">
+                                <Button class="mt-2 w-full rounded-b-lg" varient="light"
+                                    >View Course</Button
+                                >
+                            </RouterLink>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -57,5 +60,11 @@ const courses = ref([
         repeating-radial-gradient(circle at 0 0, transparent 0, #e7e7ef 10px),
         repeating-linear-gradient(#444cf755, #444cf7);
     background-blend-mode: multiply;
+}
+.custom-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
+    place-items: center;
+    gap: 1rem;
 }
 </style>
