@@ -25,10 +25,13 @@ const courses = ref([
                     <h1 class="p-3 pb-7 text-center text-2xl font-semibold md:mx-10 md:px-8">
                         Enrolled Courses
                     </h1>
-                    <div v-if="courses.length === 0" class="text-xl text-center text-gray-600">
+                    <div v-if="courses.length === 0" class="text-center text-xl text-gray-600">
                         No courses available !
                     </div>
-                    <div v-else class="custom-grid w-full overflow-y-scroll">
+                    <div
+                        v-else
+                        class="custom-grid w-full overflow-y-scroll rounded-lg border px-1 py-4 shadow"
+                    >
                         <div
                             v-for="course in courses"
                             :key="course.id"
