@@ -9,7 +9,7 @@ import Dropdown from '@/components/ui/dropdown/Dropdown.vue';
 import Modal from '@/components/ui/modal/Modal.vue';
 import { useClipboard } from '@vueuse/core';
 import { push } from 'notivue';
-import { ref } from 'vue';
+import { nextTick, ref, watch } from 'vue';
 
 defineProps({
     closeDrawer: {
@@ -75,6 +75,25 @@ const copyMessage = (message) => {
 };
 
 const newMessage = ref('');
+const chatContainer = ref(null);
+
+const scrollToBottom = () => {
+    if (chatContainer.value) {
+        chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
+    }
+};
+
+watch(
+    chats,
+    () => {
+        // Use nextTick to ensure DOM is updated before scrolling
+        nextTick(() => {
+            scrollToBottom();
+        });
+    },
+    { deep: true },
+);
+
 const sendMessage = () => {
     if (newMessage.value.trim() === '') return;
     chats.value.push({
@@ -124,7 +143,7 @@ const sendMessage = () => {
             </div>
 
             <!-- body -->
-            <div class="flex h-full w-full flex-1 overflow-y-scroll">
+            <div ref="chatContainer" class="flex h-full w-full flex-1 overflow-y-scroll">
                 <div
                     class="flex flex-1 flex-col items-center gap-2 overflow-y-scroll p-2 first:mt-auto"
                 >
@@ -157,7 +176,7 @@ const sendMessage = () => {
                     class="w-full resize-none rounded p-2 outline-none"
                     placeholder="Type a message ..."
                     v-model="newMessage"
-                    @keydown.enter="sendMessage"
+                    @keydown.enter.prevent="sendMessage"
                 ></textarea>
                 <div class="flex items-center justify-between p-2">
                     <Dropdown :options="contextList" v-model="selectedContext" />
