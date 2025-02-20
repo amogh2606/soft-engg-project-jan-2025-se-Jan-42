@@ -1,4 +1,4 @@
-<script setup lang="jsx">
+<script setup>
 import DeleteIcon from '@/components/icons/DeleteIcon.vue';
 import PlusIcon from '@/components/icons/PlusIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
@@ -117,16 +117,6 @@ const files = ref([
     },
 ]);
 
-files.value.forEach((file) => {
-    file.actions = {
-        render: () => (
-            <Button varient="outlineRed" rounded="true">
-                <DeleteIcon isSolid="false" class="h-6 w-auto" />
-            </Button>
-        ),
-    };
-});
-
 const filteredFiles = computed(() => {
     return files.value;
 });
@@ -160,7 +150,13 @@ const toggleFileUploadModal = () => {
                             </Button>
                         </div>
 
-                        <TableComponent :headers="headers" :data="filteredFiles" />
+                        <TableComponent :headers="headers" :rows="filteredFiles">
+                            <template #actions="{ row }">
+                                <Button varient="outlineRed" :rounded="true">
+                                    <DeleteIcon :isSolid="false" class="h-6 w-auto" />
+                                </Button>
+                            </template>
+                        </TableComponent>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-<script setup lang="jsx">
+<script setup>
 import DeleteIcon from '@/components/icons/DeleteIcon.vue';
 import PlusIcon from '@/components/icons/PlusIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
@@ -116,16 +116,6 @@ const students = ref([
     },
 ]);
 
-students.value.forEach((student) => {
-    student.actions = {
-        render: () => (
-            <Button varient="outlineRed" rounded="true">
-                <DeleteIcon isSolid="false" class="h-6 w-auto" />
-            </Button>
-        ),
-    };
-});
-
 const filteredStudents = computed(() => {
     return students.value;
 });
@@ -153,7 +143,13 @@ const filteredStudents = computed(() => {
                                 <PlusIcon class="h-6 w-auto" />
                             </Button>
                         </div>
-                        <TableComponent :headers="headers" :data="filteredStudents" />
+                        <TableComponent :headers="headers" :rows="filteredStudents">
+                            <template #actions="{ row }">
+                                <Button varient="outlineRed" :rounded="true">
+                                    <DeleteIcon :isSolid="false" class="h-6 w-auto" />
+                                </Button>
+                            </template>
+                        </TableComponent>
                     </div>
                 </div>
             </div>

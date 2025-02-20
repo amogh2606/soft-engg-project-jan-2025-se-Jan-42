@@ -47,7 +47,7 @@ const chats = ref([
                                 <ExportIcon :is-solid="false" class="h-6 w-auto" />
                             </Button>
                         </div>
-                        <TableComponent :headers="headers" :data="chats" />
+                        <TableComponent :headers="headers" :rows="chats" />
                     </div>
                 </div>
             </div>

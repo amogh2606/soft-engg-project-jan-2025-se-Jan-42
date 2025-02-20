@@ -68,7 +68,7 @@ const filteredChats = computed(() =>
                                 <span class="text-gray-700">Bookmark Only</span>
                             </label>
                         </div>
-                        <TableComponent :headers="headers" :data="filteredChats" />
+                        <TableComponent :headers="headers" :rows="filteredChats" />
                     </div>
                 </div>
             </div>

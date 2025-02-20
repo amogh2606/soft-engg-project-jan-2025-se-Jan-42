@@ -1,12 +1,11 @@
-<!-- Todo: Fix this file to use the new table component, actions are not working -->
-<script setup lang="jsx">
+<script setup>
 import EyeIcon from '@/components/icons/EyeIcon.vue';
 import PlusIcon from '@/components/icons/PlusIcon.vue';
 import StackIcon from '@/components/icons/StackIcon.vue';
 import StudentIcon from '@/components/icons/StudentIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
-import { h, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import BaseView from './BaseView.vue';
 
@@ -29,30 +28,8 @@ const courses = ref([
     { id: 10, name: 'Natural Language Processing' },
 ]);
 
-courses.value.forEach((course) => {
-    course.actions = {
-        key: 'actions',
-        title: 'Actions',
-        render: (_, record) => {
-            return h('div', { class: 'flex gap-2' }, [
-                h(RouterLink, { to: `/admin/enrollments?course_id=${record.id}` }, () => [
-                    h(Button, { varient: 'light', rounded: true }, () => [
-                        h(StudentIcon, { class: 'h-6 w-6' }),
-                    ]),
-                ]),
-                h(RouterLink, { to: `/admin/kstack?course_id=${record.id}` }, () => [
-                    h(Button, { varient: 'light', rounded: true }, () => [
-                        h(StackIcon, { class: 'h-6 w-6' }),
-                    ]),
-                ]),
-                h(RouterLink, { to: `/course/${record.id}` }, () => [
-                    h(Button, { varient: 'light', rounded: true }, () => [
-                        h(EyeIcon, { class: 'h-6 w-6' }),
-                    ]),
-                ]),
-            ]);
-        },
-    };
+const filteredCourses = computed(() => {
+    return courses.value;
 });
 </script>
 <template>
@@ -79,7 +56,27 @@ courses.value.forEach((course) => {
                             </Button>
                         </div>
 
-                        <TableComponent :headers="headers" :data="courses" />
+                        <TableComponent :headers="headers" :rows="filteredCourses">
+                            <template #actions="{ row }">
+                                <div class="flex gap-2">
+                                    <RouterLink :to="`/admin/enrollments?course_id=${row.id}`">
+                                        <Button varient="light" :rounded="true">
+                                            <StudentIcon class="h-6 w-6" />
+                                        </Button>
+                                    </RouterLink>
+                                    <RouterLink :to="`/admin/kstack?course_id=${row.id}`">
+                                        <Button varient="light" :rounded="true">
+                                            <StackIcon class="h-6 w-6" />
+                                        </Button>
+                                    </RouterLink>
+                                    <RouterLink :to="`/course/${row.id}`">
+                                        <Button varient="light" :rounded="true">
+                                            <EyeIcon class="h-6 w-6" />
+                                        </Button>
+                                    </RouterLink>
+                                </div>
+                            </template>
+                        </TableComponent>
                     </div>
                 </div>
             </div>

@@ -135,7 +135,7 @@ const filteredFeedbacks = computed(() => {
                             />
                             <Button varient="primary">Search</Button>
                         </div>
-                        <TableComponent :headers="headers" :data="filteredFeedbacks" />
+                        <TableComponent :headers="headers" :rows="filteredFeedbacks" />
                     </div>
                 </div>
             </div>
