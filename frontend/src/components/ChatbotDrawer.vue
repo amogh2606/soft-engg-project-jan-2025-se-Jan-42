@@ -22,6 +22,25 @@ defineProps({
     },
 });
 
+const chats = ref([
+    {
+        id: 1,
+        message: 'What is 2 + 2 ?',
+        user: 'user',
+    },
+    {
+        id: 2,
+        message:
+            "I can't give you the direct answer. But, you could get the answer by solving the expression 6 - 2 = ?.",
+        user: 'assistant',
+    },
+    {
+        id: 3,
+        message: 'Got it ! Thanks :)',
+        user: 'user',
+    },
+]);
+
 const contextList = ['Current Page', 'General FAQs', 'Coding', 'Lecture'];
 const selectedContext = ref(null);
 const isBookmarked = ref(false);
@@ -88,33 +107,22 @@ const copyMessage = (message) => {
 
             <!-- body -->
             <div class="flex h-full w-full flex-1 overflow-y-scroll">
-                <div class="flex flex-1 flex-col items-center gap-2 overflow-y-scroll p-2">
-                    <div class="ms-auto mt-auto flex w-4/5 rounded-md bg-blue-200 p-2">
-                        <p>What is 2 + 2 ?</p>
+                <div class="flex flex-1 flex-col items-center gap-2 overflow-y-scroll p-2 first:mt-auto">
+                    <div
+                        v-for="chat in chats"
+                        :key="chat.id"
+                        class="flex w-4/5 rounded-md p-2"
+                        :class="{
+                            'bg-green-200': chat.user === 'assistant',
+                            'bg-blue-200': chat.user === 'user',
+                            'ms-auto': chat.user === 'user',
+                            'me-auto': chat.user === 'assistant',
+                        }"
+                    >
+                        <p>{{ chat.message }}</p>
                         <button
                             class="ms-auto mt-auto opacity-50 transition-opacity hover:opacity-100"
-                            @click="copyMessage('copy message')"
-                        >
-                            <CopyIcon class="h-4 w-4" />
-                        </button>
-                    </div>
-                    <div class="me-auto flex w-4/5 rounded-md bg-green-200 p-2">
-                        <p>
-                            I can't give you the direct answer. But, you could get the answer by
-                            solving the expression 6 - 2 = ?.
-                        </p>
-                        <button
-                            class="ms-auto mt-auto opacity-50 transition-opacity hover:opacity-100"
-                            @click="copyMessage('copy message')"
-                        >
-                            <CopyIcon class="h-4 w-4" />
-                        </button>
-                    </div>
-                    <div class="ms-auto flex w-4/5 rounded-md bg-blue-200 p-2">
-                        <p>Got it ! Thanks :)</p>
-                        <button
-                            class="ms-auto mt-auto opacity-50 transition-opacity hover:opacity-100"
-                            @click="copy('copy message')"
+                            @click="copyMessage(chat.message)"
                         >
                             <CopyIcon class="h-4 w-4" />
                         </button>
