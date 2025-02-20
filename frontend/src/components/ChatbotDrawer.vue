@@ -96,6 +96,13 @@ watch(
 
 const sendMessage = () => {
     if (newMessage.value.trim() === '') return;
+    if (!selectedContext.value) {
+        push.error({
+            message: 'Please select a context',
+        });
+        return;
+    }
+
     chats.value.push({
         id: chats.value.length + 1,
         message: newMessage.value,
