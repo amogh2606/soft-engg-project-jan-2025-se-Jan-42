@@ -73,6 +73,24 @@ const copyMessage = (message) => {
         message: 'Message copied',
     });
 };
+
+const newMessage = ref('');
+const sendMessage = () => {
+    if (newMessage.value.trim() === '') return;
+    chats.value.push({
+        id: chats.value.length + 1,
+        message: newMessage.value,
+        user: 'user',
+    });
+    newMessage.value = '';
+    setTimeout(() => {
+        chats.value.push({
+            id: chats.value.length + 1,
+            message: 'Thanks for your message !',
+            user: 'assistant',
+        });
+    }, 1000);
+};
 </script>
 <template>
     <!-- drawer component -->
@@ -107,7 +125,9 @@ const copyMessage = (message) => {
 
             <!-- body -->
             <div class="flex h-full w-full flex-1 overflow-y-scroll">
-                <div class="flex flex-1 flex-col items-center gap-2 overflow-y-scroll p-2 first:mt-auto">
+                <div
+                    class="flex flex-1 flex-col items-center gap-2 overflow-y-scroll p-2 first:mt-auto"
+                >
                     <div
                         v-for="chat in chats"
                         :key="chat.id"
@@ -136,10 +156,12 @@ const copyMessage = (message) => {
                     type="text"
                     class="w-full resize-none rounded p-2 outline-none"
                     placeholder="Type a message ..."
+                    v-model="newMessage"
+                    @keydown.enter="sendMessage"
                 ></textarea>
                 <div class="flex items-center justify-between p-2">
                     <Dropdown :options="contextList" v-model="selectedContext" />
-                    <button class="rounded-md border p-1.5 hover:bg-gray-100">
+                    <button class="rounded-md border p-1.5 hover:bg-gray-100" @click="sendMessage">
                         <SendIcon :is-solid="true" class="h-6 w-6" />
                     </button>
                 </div>
