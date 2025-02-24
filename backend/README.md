@@ -1,1 +1,1 @@
-# Backend
+- Use `flask run --debug` command from the 'backend' folder to run the app.
