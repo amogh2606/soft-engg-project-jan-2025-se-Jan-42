@@ -1,0 +1,30 @@
+import HomeView from '@/views/HomeView.vue';
+import NotFoundView from '@/views/NotFoundView.vue';
+import CourseView from '@/views/course/CourseView.vue';
+
+export default [
+    {
+        path: '/',
+        name: 'home',
+        component: HomeView,
+        meta: {
+            requiresAuth: false,
+        },
+    },
+    {
+        path: '/course/:id',
+        name: 'course-CourseView',
+        component: CourseView,
+        meta: {
+            requiresAuth: true,
+        },
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'not-found',
+        component: NotFoundView,
+        meta: {
+            requiresAuth: false,
+        },
+    },
+];

@@ -5,7 +5,7 @@ import CrossIcon from '@/components/icons/CrossIcon.vue';
 import EditIcon from '@/components/icons/EditIcon.vue';
 import SendIcon from '@/components/icons/SendIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
-import Dropdown from '@/components/ui/dropdown/Dropdown.vue';
+import Dropdown from '@/components/ui/dropdown/ContextDropdown.vue';
 import Modal from '@/components/ui/modal/Modal.vue';
 import { useClipboard } from '@vueuse/core';
 import { push } from 'notivue';

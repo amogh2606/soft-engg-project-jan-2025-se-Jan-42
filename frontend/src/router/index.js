@@ -1,93 +1,37 @@
+import { useAuthStore } from '@/stores/auth';
 import { createRouter, createWebHistory } from 'vue-router';
-import AdminChatsView from '../views/admin/ChatsView.vue';
-import AdminCoursesListView from '../views/admin/CoursesListView.vue';
-import AdminEnrollmentsView from '../views/admin/EnrollmentsView.vue';
-import AdminKnowledgeStackView from '../views/admin/KnowledgeStackView.vue';
-import LoginView from '../views/auth/LoginView.vue';
-import SignupView from '../views/auth/SignupView.vue';
-import CourseView from '../views/course/CourseView.vue';
-import HomeView from '../views/HomeView.vue';
-import InstructorFaqView from '../views/instructor/FaqView.vue';
-import InstructorFeedbackView from '../views/instructor/FeedbackView.vue';
-import InstructorKnowledgeStackView from '../views/instructor/KnowledgeStackView.vue';
-import NotFoundView from '../views/NotFoundView.vue';
-import StudentChatsView from '../views/student/ChatsView.vue';
-import StudentCoursesListView from '../views/student/CoursesListView.vue';
+import adminRoutes from './routes/admin';
+import authRoutes from './routes/auth';
+import commonRoutes from './routes/common';
+import instructorRoutes from './routes/instructor';
+import studentRoutes from './routes/student';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
-    routes: [
-        {
-            path: '/',
-            name: 'home',
-            component: HomeView,
-        },
-        {
-            path: '/auth/login',
-            name: 'auth-LoginView',
-            component: LoginView,
-        },
-        {
-            path: '/auth/signup',
-            name: 'auth-SignupView',
-            component: SignupView,
-        },
-        {
-            path: '/course/:id',
-            name: 'course-CourseView',
-            component: CourseView,
-        },
-        {
-            path: '/student/courses',
-            name: 'student-CoursesListView',
-            component: StudentCoursesListView,
-        },
-        {
-            path: '/student/chats',
-            name: 'student-ChatsView',
-            component: StudentChatsView,
-        },
-        {
-            path: '/instructor/faqs',
-            name: 'instructor-FaqView',
-            component: InstructorFaqView,
-        },
-        {
-            path: '/instructor/feedbacks',
-            name: 'instructor-FeedbackView',
-            component: InstructorFeedbackView,
-        },
-        {
-            path: '/instructor/kstack',
-            name: 'instructor-KnowledgeStackView',
-            component: InstructorKnowledgeStackView,
-        },
-        {
-            path: '/admin/courses',
-            name: 'admin-CoursesListView',
-            component: AdminCoursesListView,
-        },
-        {
-            path: '/admin/kstack',
-            name: 'admin-KnowledgeStackView',
-            component: AdminKnowledgeStackView,
-        },
-        {
-            path: '/admin/enrollments',
-            name: 'admin-EnrollmentsView',
-            component: AdminEnrollmentsView,
-        },
-        {
-            path: '/admin/chats',
-            name: 'admin-ChatsView',
-            component: AdminChatsView,
-        },
-        {
-            path: '/:pathMatch(.*)*',
-            name: 'not-found',
-            component: NotFoundView,
-        },
-    ],
+    routes: [...commonRoutes, ...authRoutes, ...adminRoutes, ...instructorRoutes, ...studentRoutes],
+});
+
+// Add navigation guards for auth and role checking
+router.beforeEach((to, from, next) => {
+    // Get auth state from store
+    const authStore = useAuthStore();
+    const isAuthenticated = authStore.isLoggedIn();
+    const userRole = isAuthenticated ? authStore.user.role : null;
+
+    // If route requires authentication and user is not authenticated, redirect to login
+    if (to.meta.requiresAuth && !isAuthenticated) {
+        next({ name: 'auth-LoginView' });
+        return;
+    }
+
+    // If route requires a specific role and user doesn't have it, redirect to home
+    if (to.meta.role && to.meta.role !== userRole) {
+        next({ name: 'home' });
+        return;
+    }
+
+    // Otherwise proceed
+    next();
 });
 
 export default router;

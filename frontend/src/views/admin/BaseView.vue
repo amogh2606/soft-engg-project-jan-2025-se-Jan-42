@@ -4,8 +4,7 @@ import BookIcon from '@/components/icons/BookIcon.vue';
 import ChatbotIcon from '@/components/icons/ChatbotIcon.vue';
 import ChatIcon from '@/components/icons/ChatIcon.vue';
 import IITMLogoIcon from '@/components/icons/IITMLogoIcon.vue';
-import UserIcon from '@/components/icons/UserIcon.vue';
-import Button from '@/components/ui/buttons/Button.vue';
+import UserDropdown from '@/components/UserDropdown.vue';
 import BaseView from '@/views/BaseView.vue';
 import { ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
@@ -27,12 +26,8 @@ const isActive = (paths) => {
                 <RouterLink to="/">
                     <IITMLogoIcon class="h-12" />
                 </RouterLink>
-                <div class="flex space-x-2">
-                    <RouterLink to="/auth/login">
-                        <Button varient="light" :rounded="true">
-                            <UserIcon :is-solid="false" :with-border="false" class="h-6 w-full" />
-                        </Button>
-                    </RouterLink>
+                <div class="flex items-center space-x-2">
+                    <UserDropdown />
                 </div>
             </header>
             <div class="flex flex-1 overflow-y-hidden">

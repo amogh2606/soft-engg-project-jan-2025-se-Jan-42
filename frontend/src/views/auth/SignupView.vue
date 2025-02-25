@@ -3,14 +3,25 @@ import Button from '@/components/ui/buttons/Button.vue';
 import router from '@/router';
 import BaseView from '@/views/auth/BaseView.vue';
 import { push } from 'notivue';
+import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
+const name = ref('');
+const email = ref('');
+const password = ref('');
+
 function submit() {
-    console.log('Signup form submitted');
-    router.push('/auth/login');
+    // In a real app, this would call an API to create a user
+    console.log('Signup form submitted', { name: name.value, email: email.value });
+
+    // For now, just redirect to login with the email pre-filled
+    router.push({
+        path: '/auth/login',
+        query: { email: email.value },
+    });
 
     push.success({
-        message: 'Signup successful',
+        message: 'Signup successful. Please login with your credentials.',
     });
 }
 </script>
@@ -25,27 +36,38 @@ function submit() {
                         <div class="mb-4">
                             <label class="block text-gray-700" for="name">Name</label>
                             <input
+                                v-model="name"
                                 type="text"
                                 id="name"
                                 name="name"
+                                required
                                 class="mt-2 w-full rounded border border-gray-400 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
                             />
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700" for="email">Email</label>
                             <input
+                                v-model="email"
                                 type="email"
                                 id="email"
                                 name="email"
+                                required
+                                placeholder="Use prefix to determine role (admin@, instructor@, student@)"
                                 class="mt-2 w-full rounded border border-gray-400 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
                             />
+                            <p class="mt-1 text-xs text-gray-500">
+                                Email prefix determines your role: admin@, instructor@, or any other
+                                prefix for student
+                            </p>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700" for="password">Password</label>
                             <input
+                                v-model="password"
                                 type="password"
                                 id="password"
                                 name="password"
+                                required
                                 class="mt-2 w-full rounded border border-gray-400 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
                             />
                         </div>
