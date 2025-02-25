@@ -1,6 +1,6 @@
 <script setup>
 import UserIcon from '@/components/icons/UserIcon.vue';
-import LogoutButton from '@/components/LogoutButton.vue';
+import LogoutButton from '@/components/ui/buttons/LogoutButton.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import { useAuthStore } from '@/stores/auth';
 import { computed, onMounted, onUnmounted, ref } from 'vue';

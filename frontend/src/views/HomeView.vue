@@ -1,7 +1,7 @@
 <script setup>
 import IITMLogoIcon from '@/components/icons/IITMLogoIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
-import UserDropdown from '@/components/UserDropdown.vue';
+import UserDropdown from '@/components/ui/dropdown/UserDropdown.vue';
 import { useAuthStore } from '@/stores/auth';
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';

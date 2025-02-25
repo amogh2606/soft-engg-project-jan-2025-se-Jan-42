@@ -4,7 +4,7 @@ import BookIcon from '@/components/icons/BookIcon.vue';
 import ChatbotIcon from '@/components/icons/ChatbotIcon.vue';
 import ChatIcon from '@/components/icons/ChatIcon.vue';
 import IITMLogoIcon from '@/components/icons/IITMLogoIcon.vue';
-import UserDropdown from '@/components/UserDropdown.vue';
+import UserDropdown from '@/components/ui/dropdown/UserDropdown.vue';
 import BaseView from '@/views/BaseView.vue';
 import { ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';

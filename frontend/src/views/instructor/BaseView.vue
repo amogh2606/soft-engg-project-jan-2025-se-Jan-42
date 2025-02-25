@@ -5,7 +5,7 @@ import FaqIcon from '@/components/icons/FaqIcon.vue';
 import FeedbackIcon from '@/components/icons/FeedbackIcon.vue';
 import IITMLogoIcon from '@/components/icons/IITMLogoIcon.vue';
 import StackIcon from '@/components/icons/StackIcon.vue';
-import UserDropdown from '@/components/UserDropdown.vue';
+import UserDropdown from '@/components/ui/dropdown/UserDropdown.vue';
 import BaseView from '@/views/BaseView.vue';
 import { ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
