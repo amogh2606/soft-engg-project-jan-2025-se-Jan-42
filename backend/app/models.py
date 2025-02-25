@@ -5,7 +5,6 @@ from flask_security import UserMixin, RoleMixin
 from datetime import datetime
 
 
-
 class Base(DeclarativeBase):
     pass
 
@@ -14,6 +13,7 @@ db = SQLAlchemy(model_class=Base)
 
 # ---------- User related models ----------
 class User(Base, UserMixin):
+    __tablename__ = 'user'
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(db.String(255), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(db.String(255), nullable=False)
@@ -21,10 +21,11 @@ class User(Base, UserMixin):
     fs_uniquifier: Mapped[str] = mapped_column(db.String, unique=True, nullable=False)
     roles = relationship('Role', secondary='user_roles', back_populates='users')
     courses = relationship('Course', secondary='user_courses', back_populates='users')
-    chats = relationship('Chat', back_populates='user', cascade='all, delete')
+    chats = relationship('Chat', back_populates='user', cascade='all, delete-orphan')
 
 
 class Role(Base, RoleMixin):
+    __tablename__ = 'role'
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(db.String(80), unique=True, nullable=False)
     description: Mapped[str] = mapped_column(db.String(255))
@@ -32,26 +33,30 @@ class Role(Base, RoleMixin):
 
 
 class UserRoles(Base):
+    __tablename__ = 'user_roles'
     user_id: Mapped[int] = mapped_column(db.ForeignKey('user.id'), primary_key=True)
     role_id: Mapped[int] = mapped_column(db.ForeignKey('role.id'), primary_key=True)
 
 
 # ---------- Course related models ----------
 class Course(Base):
+    __tablename__ = 'course'
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(db.String(100), nullable=False)
     description: Mapped[str] = mapped_column(db.String, nullable=True)
     users = relationship('User', secondary='user_courses', back_populates='courses')
     videos = relationship('Video', back_populates='course')
-    assignments = relationship('Assignment', back_populates='course', cascade='all, delete')
+    assignments = relationship('Assignment', back_populates='course', cascade='all, delete-orphan')
 
 
 class UserCourses(Base):
+    __tablename__ = 'user_courses'
     user_id: Mapped[int] = mapped_column(db.ForeignKey('user.id'), primary_key=True)
     course_id: Mapped[int] = mapped_column(db.ForeignKey('course.id'), primary_key=True)
 
 
 class Video(Base):
+    __tablename__ = 'video'
     id: Mapped[int] = mapped_column(primary_key=True)
     course_id: Mapped[int] = mapped_column(db.ForeignKey('course.id'))
     week: Mapped[int] = mapped_column(db.Integer, nullable=False)
@@ -62,6 +67,7 @@ class Video(Base):
 
 
 class Assignment(Base):
+    __tablename__ = 'assignment'
     id: Mapped[int] = mapped_column(primary_key=True)
     course_id: Mapped[int] = mapped_column(db.ForeignKey('course.id'), nullable=False)
     week: Mapped[int] = mapped_column(db.Integer, nullable=False)
@@ -71,6 +77,7 @@ class Assignment(Base):
 
 
 class Question(Base):
+    __tablename__ = 'question'
     id: Mapped[int] = mapped_column(primary_key=True)
     assignment_id: Mapped[int] = mapped_column(db.ForeignKey('assignment.id'))
     qno: Mapped[int] = mapped_column(db.Integer, nullable=False)
@@ -86,16 +93,19 @@ class Question(Base):
 
 # ---------- Chatbot related models ----------
 class Chat(Base):
+    __tablename__ = 'chat'
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(db.ForeignKey('user.id'), nullable=False)
-    title: Mapped[str] = mapped_column(db.String(255), default='Chat')
+    title: Mapped[str] = mapped_column(db.String(255), default='Untitled Chat')
     created: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
+    active: Mapped[bool] = mapped_column(db.Boolean, default=True, nullable=False)
     bookmarked: Mapped[bool] = mapped_column(db.Boolean, default=False, nullable=False)
-    messages = relationship('Message', back_populates='chat', cascade='all, delete')
+    messages = relationship('Message', back_populates='chat', cascade='all, delete-orphan')
     user = relationship('User', back_populates='chats')
 
 
 class Message(Base):
+    __tablename__ = 'message'
     id: Mapped[int] = mapped_column(primary_key=True)
     chat_id: Mapped[int] = mapped_column(db.ForeignKey('chat.id'), nullable=False)
     text: Mapped[str] = mapped_column(db.Text, default='')
