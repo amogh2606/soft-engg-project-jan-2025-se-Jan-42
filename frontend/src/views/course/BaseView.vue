@@ -5,6 +5,7 @@ import IITMLogoIcon from '@/components/icons/IITMLogoIcon.vue';
 import ModulesIcon from '@/components/icons/ModulesIcon.vue';
 import UserIcon from '@/components/icons/UserIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
+import UserDropdown from '@/components/ui/dropdown/UserDropdown.vue';
 import BaseView from '@/views/BaseView.vue';
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -25,12 +26,8 @@ const showWeeklyIndex = ref(true);
                 <p class="me-auto rounded border bg-gray-50 p-2 font-semibold">
                     Jan 2025 - Software Engineering
                 </p>
-                <div class="flex space-x-2">
-                    <RouterLink to="/auth/login">
-                        <Button varient="light" :rounded="true">
-                            <UserIcon :is-solid="false" :with-border="false" class="h-6 w-full" />
-                        </Button>
-                    </RouterLink>
+                <div class="flex items-center space-x-2">
+                    <UserDropdown />
                 </div>
             </header>
 
