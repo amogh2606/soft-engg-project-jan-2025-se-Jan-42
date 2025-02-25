@@ -62,6 +62,11 @@ function submit(event) {
                     <h2 class="mb-6 text-center text-2xl font-bold text-gray-800">Login</h2>
                     <form @submit="submit">
                         <div class="mb-4">
+                            <datalist id="email-prefix">
+                                <option value="admin@example.com">Admin</option>
+                                <option value="instructor@example.com">Instructor</option>
+                                <option value="student@example.com">Student</option>
+                            </datalist>
                             <label class="block text-gray-700" for="email">Email</label>
                             <input
                                 v-model="email"
@@ -70,6 +75,8 @@ function submit(event) {
                                 name="email"
                                 placeholder="Enter email (prefix determines role)"
                                 class="mt-2 w-full rounded border border-gray-400 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                list="email-prefix"
+                                autocomplete="off"
                             />
                             <p class="mt-1 text-xs text-gray-500">
                                 Hint: Use "admin@example.com", "instructor@example.com", or
@@ -100,3 +107,9 @@ function submit(event) {
         </template>
     </BaseView>
 </template>
+
+<style scoped>
+input::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+</style>
