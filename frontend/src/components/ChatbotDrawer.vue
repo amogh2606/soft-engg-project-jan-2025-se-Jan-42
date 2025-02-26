@@ -138,13 +138,13 @@ const sendMessage = () => {
                 <p class="text-lg">{{ chatTitle }}</p>
                 <div class="flex gap-2">
                     <Button varient="light" :rounded="true" @click="toggleEditModal">
-                        <EditIcon class="h-6 w-auto" />
+                        <EditIcon class="h-5 w-auto" />
                     </Button>
                     <Button varient="light" :rounded="true" @click="toggleBookmark">
-                        <BookmarkIcon :is-solid="isBookmarked" class="h-6 w-auto" />
+                        <BookmarkIcon :is-solid="isBookmarked" class="h-5 w-auto" />
                     </Button>
                     <Button varient="light" :rounded="true" @click="closeDrawer">
-                        <CrossIcon class="h-6 w-auto" />
+                        <CrossIcon class="h-5 w-auto" />
                     </Button>
                 </div>
             </div>
@@ -157,12 +157,14 @@ const sendMessage = () => {
                     <div
                         v-for="chat in chats"
                         :key="chat.id"
-                        class="flex w-4/5 rounded-md p-2"
+                        class="flex w-4/5 rounded-lg px-3 py-2"
                         :class="{
-                            'bg-green-200': chat.user === 'assistant',
-                            'bg-blue-200': chat.user === 'user',
-                            'ms-auto': chat.user === 'user',
+                            'bg-gray-100': chat.user === 'assistant',
+                            'bg-blue-100': chat.user === 'user',
                             'me-auto': chat.user === 'assistant',
+                            'ms-auto': chat.user === 'user',
+                            'rounded-tl-none': chat.user === 'assistant',
+                            'rounded-tr-none': chat.user === 'user',
                         }"
                     >
                         <p>{{ chat.message }}</p>
@@ -170,7 +172,7 @@ const sendMessage = () => {
                             class="ms-auto mt-auto opacity-50 transition-opacity hover:opacity-100"
                             @click="copyMessage(chat.message)"
                         >
-                            <CopyIcon class="h-4 w-4" />
+                            <CopyIcon class="h-3.5 w-auto" />
                         </button>
                     </div>
                 </div>
@@ -187,8 +189,12 @@ const sendMessage = () => {
                 ></textarea>
                 <div class="flex items-center justify-between p-2">
                     <Dropdown :options="contextList" v-model="selectedContext" />
-                    <button class="rounded-md border p-1.5 hover:bg-gray-100" @click="sendMessage">
-                        <SendIcon :is-solid="true" class="h-6 w-6" />
+                    <button
+                        class="rounded-full bg-gray-500 p-2 text-white transition-colors hover:bg-gray-600 disabled:bg-gray-300"
+                        @click="sendMessage"
+                        :disabled="!selectedContext || newMessage.trim() === ''"
+                    >
+                        <SendIcon :is-solid="true" class="h-5 w-auto" />
                     </button>
                 </div>
             </div>
