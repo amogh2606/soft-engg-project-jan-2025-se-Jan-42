@@ -17,10 +17,25 @@ const dragOffset = ref({ x: 0, y: 0 });
 // Flag to track if any movement occurred during dragging
 const hasMoved = ref(false);
 
+// Functions to save and load position from local storage
+const savePosition = () => {
+    localStorage.setItem('chatbotButtonPosition', JSON.stringify(buttonPosition.value));
+};
+
+const loadPosition = () => {
+    const savedPosition = localStorage.getItem('chatbotButtonPosition');
+    return savedPosition ? JSON.parse(savedPosition) : null;
+};
+
 // Initialize default position
 onMounted(() => {
-    // Default bottom-right position if not previously set
-    if (!buttonPosition.value.x && !buttonPosition.value.y) {
+    // Try to load position from local storage first
+    const savedPosition = loadPosition();
+
+    // Use saved position or default to bottom-right
+    if (savedPosition) {
+        buttonPosition.value = savedPosition;
+    } else {
         buttonPosition.value = { x: window.innerWidth - 100, y: window.innerHeight - 100 };
     }
 
@@ -39,6 +54,7 @@ const updateButtonPosition = () => {
     if (buttonPosition.value.y > window.innerHeight - 50) {
         buttonPosition.value.y = window.innerHeight - 50;
     }
+    savePosition(); // Save position after adjustments
 };
 
 const startDrag = (event) => {
@@ -82,6 +98,11 @@ const stopDrag = () => {
     isDragging.value = false;
     document.removeEventListener('mousemove', onDrag);
     document.removeEventListener('mouseup', stopDrag);
+
+    // Save position to local storage when drag ends
+    if (hasMoved.value) {
+        savePosition();
+    }
 };
 
 // Handle click separately from drag
