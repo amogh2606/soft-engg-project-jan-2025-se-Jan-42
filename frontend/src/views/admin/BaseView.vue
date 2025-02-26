@@ -1,9 +1,9 @@
 <script setup>
 import ChatbotDrawer from '@/components/ChatbotDrawer.vue';
 import BookIcon from '@/components/icons/BookIcon.vue';
-import ChatbotIcon from '@/components/icons/ChatbotIcon.vue';
 import ChatIcon from '@/components/icons/ChatIcon.vue';
 import IITMLogoIcon from '@/components/icons/IITMLogoIcon.vue';
+import DraggableChatbotButton from '@/components/ui/buttons/DraggableChatbotButton.vue';
 import UserDropdown from '@/components/ui/dropdown/UserDropdown.vue';
 import BaseView from '@/views/BaseView.vue';
 import { ref } from 'vue';
@@ -71,10 +71,8 @@ const isActive = (paths) => {
                 <slot name="main-slot"></slot>
             </div>
 
-            <!-- drawer toggle -->
-            <button class="absolute bottom-6 right-6" @click="toggleDrawer">
-                <ChatbotIcon class="ai-btn h-12 w-auto" />
-            </button>
+            <!-- Use the new draggable chatbot button component -->
+            <DraggableChatbotButton :on-toggle="toggleDrawer" />
             <ChatbotDrawer :is-open="drawerOpen" :close-drawer="toggleDrawer" />
         </div>
     </BaseView>

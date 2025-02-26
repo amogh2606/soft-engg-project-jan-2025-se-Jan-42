@@ -1,10 +1,8 @@
 <script setup>
 import ChatbotDrawer from '@/components/ChatbotDrawer.vue';
-import ChatbotIcon from '@/components/icons/ChatbotIcon.vue';
 import IITMLogoIcon from '@/components/icons/IITMLogoIcon.vue';
 import ModulesIcon from '@/components/icons/ModulesIcon.vue';
-import UserIcon from '@/components/icons/UserIcon.vue';
-import Button from '@/components/ui/buttons/Button.vue';
+import DraggableChatbotButton from '@/components/ui/buttons/DraggableChatbotButton.vue';
 import UserDropdown from '@/components/ui/dropdown/UserDropdown.vue';
 import BaseView from '@/views/BaseView.vue';
 import { ref } from 'vue';
@@ -44,10 +42,8 @@ const showWeeklyIndex = ref(true);
                 <slot name="main-slot" :showWeeklyIndex="showWeeklyIndex" />
             </div>
 
-            <!-- drawer toggle -->
-            <button class="absolute bottom-6 right-6" @click="toggleDrawer">
-                <ChatbotIcon class="ai-btn h-12 w-auto" />
-            </button>
+            <!-- Use the new draggable chatbot button component -->
+            <DraggableChatbotButton :on-toggle="toggleDrawer" />
             <ChatbotDrawer :is-open="drawerOpen" :close-drawer="toggleDrawer" />
         </div>
     </BaseView>
