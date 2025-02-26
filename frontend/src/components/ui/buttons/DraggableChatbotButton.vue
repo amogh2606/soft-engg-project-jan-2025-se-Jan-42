@@ -94,7 +94,7 @@ const handleButtonClick = () => {
 
 <template>
     <button
-        class="ai-btn draggable-button"
+        class="ai-btn fixed select-none transition-transform"
         @mousedown="startDrag"
         @click="handleButtonClick"
         :style="{
@@ -113,9 +113,5 @@ const handleButtonClick = () => {
 }
 .ai-btn:hover {
     transform: scale(1.1);
-}
-.draggable-button {
-    position: fixed;
-    user-select: none;
 }
 </style>
