@@ -167,7 +167,7 @@ const sendMessage = () => {
                             'rounded-tr-none': chat.user === 'user',
                         }"
                     >
-                        <p>{{ chat.message }}</p>
+                        <p class="whitespace-pre-line">{{ chat.message }}</p>
                         <button
                             class="ms-auto mt-auto opacity-50 transition-opacity hover:opacity-100"
                             @click="copyMessage(chat.message)"
@@ -185,7 +185,8 @@ const sendMessage = () => {
                     class="w-full resize-none rounded p-2 outline-none"
                     placeholder="Type a message ..."
                     v-model="newMessage"
-                    @keydown.enter.prevent="sendMessage"
+                    @keydown.enter.exact.prevent="sendMessage"
+                    @keydown.shift.enter.prevent="newMessage += '\n'"
                 ></textarea>
                 <div class="flex items-center justify-between p-2">
                     <Dropdown :options="contextList" v-model="selectedContext" />
