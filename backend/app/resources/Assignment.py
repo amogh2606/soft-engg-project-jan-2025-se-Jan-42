@@ -4,7 +4,8 @@ from flask_security import current_user, auth_required  # or login_required
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime
 
-from backend.app.models import Assignment, Course, db
+from backend.app import db
+from backend.app.models import Assignment, Course
 
 
 class AssignmentResource(Resource):

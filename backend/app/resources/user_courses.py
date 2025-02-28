@@ -4,7 +4,8 @@ from flask_jwt_extended import current_user
 from flask_restful import Resource
 from flask_security import auth_required
 
-from backend.app.models import UserCourses, User, Course, db
+from backend.app import db
+from backend.app.models import UserCourses, User, Course
 
 
 class UserCourseResource(Resource):

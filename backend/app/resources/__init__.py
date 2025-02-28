@@ -1,6 +1,7 @@
 from flask_restful import Api
 
 from .Assignment import AssignmentListResource, AssignmentResource
+from .Login import LoginResource, LogoutResource, ProtectedResource
 from .Questions import QuestionResource, QuestionListResource
 from .chats import ChatSession, UserChats, AllChats
 from .courses import CourseResource, CourseListResource, CourseUserListResource
@@ -45,3 +46,7 @@ api.add_resource(VideoListResource,
                     '/courses/<int:course_id>/videos'  # Videos for specific course
                     )
 
+# Add resources
+api.add_resource(LoginResource, '/login')
+api.add_resource(LogoutResource, '/logout')
+api.add_resource(ProtectedResource, '/protected')

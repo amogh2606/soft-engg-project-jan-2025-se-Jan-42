@@ -3,7 +3,8 @@ from flask_restful import Resource
 from flask_security import current_user, auth_required  # or login_required
 from sqlalchemy.exc import IntegrityError
 
-from backend.app.models import Question, db, Assignment
+from backend.app import db
+from backend.app.models import Question, Assignment
 
 
 class QuestionResource(Resource):

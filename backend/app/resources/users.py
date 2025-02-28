@@ -7,13 +7,14 @@ from flask_restful import Resource
 from flask_security import auth_required
 from flask_security.utils import hash_password
 
-from backend.app.models import User, db, UserCourses, Course
+from backend.app import db
+from backend.app.models import User, UserCourses, Course
 
 
 
 
 class UserResource(Resource):
-    @auth_required() # or @login_required
+   # @auth_required() # or @login_required
     def get(self, user_id=None):
         """Get user details by ID or current user if no ID provided"""
         if user_id:

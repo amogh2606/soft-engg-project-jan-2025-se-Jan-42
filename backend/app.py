@@ -1,6 +1,9 @@
 from app import create_app
+from backend.app import db
 
-app=create_app()
+app = create_app()
 
-if __name__ == '__main__':
+ # Ensure tables are created
+
+if __name__ == "__main__":
     app.run(debug=True)
