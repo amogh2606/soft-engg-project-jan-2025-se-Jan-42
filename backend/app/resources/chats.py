@@ -1,10 +1,11 @@
 from flask_restful import Resource, marshal_with, fields, abort
 from flask_security import current_user, roles_accepted, auth_required
 from flask import request, send_file
-from app.models import db, Chat, Message
+
 import io, csv
 
-
+from backend.app.database import db
+from backend.app.models import Chat, Message
 
 # Response fields for chat session
 chat_fields = {
