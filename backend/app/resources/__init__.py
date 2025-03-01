@@ -1,11 +1,3 @@
-import os
-from getpass import getpass
-
-# check if LLM API key is set
-if 'GOOGLE_API_KEY' not in os.environ:
-    os.environ['GOOGLE_API_KEY'] = getpass("Enter the Google API key: ")
-
-
 from flask_restful import Api
 from app.resources.chats import ChatSession, UserChats, AllChats
 from app.ai_agent.chatbot_service import ChatbotService
