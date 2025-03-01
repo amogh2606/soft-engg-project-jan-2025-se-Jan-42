@@ -1,8 +1,8 @@
+import io, csv
 from flask_restful import Resource, marshal_with, fields, abort
 from flask_security import current_user, roles_accepted, auth_required
 from flask import request, send_file
 from app.models import db, Chat, Message
-import io, csv
 
 
 
@@ -27,10 +27,12 @@ class ChatSession(Resource):
     @marshal_with(chat_fields)
     def get(self, chat_id=None):
         if chat_id:
+            # get any specific chat session
             chat = db.get_or_404(Chat, chat_id)
             if not (chat.user_id == current_user.id or current_user.has_role('admin')):
-                abort(404)
+                abort(404, message="Chat not found")
         else:
+            # get the active chat session
             if current_user.has_role('admin'):
                 abort(404)
             stmt = db.select(Chat).filter_by(user_id=current_user.id, active=True)
@@ -83,7 +85,7 @@ class AllChats(Resource):
         return db.session.scalars(db.select(Chat))
 
 
-    # Export chat history as CSV
+    # Export chats as CSV
     @roles_accepted('admin')
     def export_chats(self):
         all_chats = db.session.scalars(db.select(Message))
