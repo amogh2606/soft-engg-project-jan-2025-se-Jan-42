@@ -34,3 +34,4 @@ coverage
 *.py[cod]
 __pycache__/
 instance/
+chroma/
