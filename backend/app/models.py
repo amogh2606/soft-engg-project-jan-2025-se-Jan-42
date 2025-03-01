@@ -42,11 +42,12 @@ class UserRoles(Base):
 class Course(Base):
     __tablename__ = 'course'
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(db.String(100), nullable=False)
+    name: Mapped[str] = mapped_column(db.String(100), unique=True, nullable=False)
     description: Mapped[str] = mapped_column(db.String, nullable=True)
     users = relationship('User', secondary='user_courses', back_populates='courses')
     videos = relationship('Video', back_populates='course')
     assignments = relationship('Assignment', back_populates='course', cascade='all, delete-orphan')
+    feedbacks = relationship('Feedback', back_populates='course', cascade='all, delete-orphan')
 
 
 class UserCourses(Base):
@@ -63,7 +64,18 @@ class Video(Base):
     lecture: Mapped[int] = mapped_column(db.Integer, nullable=False)
     title: Mapped[str] = mapped_column(db.String(255), default='')
     url: Mapped[str] = mapped_column(db.String(255), nullable=False)
+    rating: Mapped[float] = mapped_column(db.Float)
     course = relationship('Course', back_populates='videos')
+
+
+class Feedback(Base):
+    __tablename__ = 'feedback'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    course_id: Mapped[int] = mapped_column(db.ForeignKey('course.id'), nullable=False)
+    created: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
+    title: Mapped[str] = mapped_column(db.String(255), default='Untitled Feedback')
+    text: Mapped[str] = mapped_column(db.Text)
+    course = relationship('Course', back_populates='feedbacks')
 
 
 class Assignment(Base):
