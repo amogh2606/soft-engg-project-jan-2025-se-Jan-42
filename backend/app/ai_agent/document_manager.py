@@ -1,7 +1,7 @@
 import os
 from flask import request, jsonify
 from flask_restful import Resource, reqparse, abort
-from flask_security import roles_accepted
+from flask_security import roles_accepted, current_user
 from werkzeug.utils import secure_filename
 from app.ai_agent.embeddings import process_document, remove_vectors
 
@@ -18,6 +18,9 @@ class KnowledgeStack(Resource):
     # fetch all documents for a specific course
     @roles_accepted('instructor', 'admin')
     def get(self, course_id=None):
+        if not self.check_access(course_id):
+            abort(403, message="Access denied")
+
         collection_name = f'course_{course_id}' if course_id else 'general'
         collection_folder = os.path.join(UPLOAD_FOLDER, collection_name)
         if not os.path.exists(collection_folder):
@@ -37,6 +40,9 @@ class KnowledgeStack(Resource):
         filename = secure_filename(file.filename)
         args = parser.parse_args()
         course_id = args.get('course_id')
+        if not self.check_access(course_id):
+            abort(403, message="Access denied")
+
         collection_name = f'course_{course_id}' if course_id else 'general'
         collection_folder = os.path.join(UPLOAD_FOLDER, collection_name)
         os.makedirs(collection_folder, exist_ok=True)
@@ -59,7 +65,10 @@ class KnowledgeStack(Resource):
         # get filename from query params
         filename = request.args.get('filename')
         if not filename:
-            abort(400)
+            abort(400, message="Filename is required")
+        
+        if not self.check_access(course_id):
+            abort(403, message="Access denied")
 
         collection_name = f'course_{course_id}' if course_id else 'general'
         collection_folder = os.path.join(UPLOAD_FOLDER, collection_name)
@@ -73,4 +82,12 @@ class KnowledgeStack(Resource):
 
         os.remove(file_path)
         return {'message': "Deleted successfully"}
+    
+
+    # check if instructor has access to course
+    def check_access(self, course_id):
+        if current_user.has_role('admin'):
+            return True
+        course_ids = [course.id for course in current_user.courses]
+        return course_id in course_ids
         
