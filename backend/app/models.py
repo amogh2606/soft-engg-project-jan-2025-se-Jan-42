@@ -44,7 +44,7 @@ class Course(db.Model):
     __tablename__ = 'course'
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(db.String(100), unique=True, nullable=False)
-    description: Mapped[str] = mapped_column(db.String, nullable=True)
+    description: Mapped[str] = mapped_column(db.String)
     users = relationship('User', secondary='user_courses', back_populates='courses')
     videos = relationship('Video', back_populates='course')
     assignments = relationship('Assignment', back_populates='course', cascade='all, delete-orphan')
@@ -104,10 +104,10 @@ class Question(db.Model):
     qno: Mapped[int] = mapped_column(db.Integer, nullable=False)
     type: Mapped[str] = mapped_column(db.String(80), default='MCQ')
     text: Mapped[str] = mapped_column(db.Text, nullable=False)
-    option1: Mapped[str] = mapped_column(db.String(255), nullable=False)
-    option2: Mapped[str] = mapped_column(db.String(255), nullable=False)
-    option3: Mapped[str] = mapped_column(db.String(255), nullable=False)
-    option4: Mapped[str] = mapped_column(db.String(255), nullable=False)
+    option_1: Mapped[str] = mapped_column(db.String(255), nullable=False)
+    option_2: Mapped[str] = mapped_column(db.String(255), nullable=False)
+    option_3: Mapped[str] = mapped_column(db.String(255), nullable=False)
+    option_4: Mapped[str] = mapped_column(db.String(255), nullable=False)
     correct_option: Mapped[int] = mapped_column(db.Integer, nullable=False)
     assignment = relationship('Assignment', back_populates='questions')
 
