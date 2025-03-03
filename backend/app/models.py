@@ -17,6 +17,7 @@ class User(db.Model, UserMixin):
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(db.String(255), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(db.String(255), nullable=False)
+    name: Mapped[str] = mapped_column(db.String(255), nullable=False)
     active: Mapped[bool] = mapped_column(db.Boolean, default=True, nullable=False)
     fs_uniquifier: Mapped[str] = mapped_column(db.String, unique=True, nullable=False)
     roles = relationship('Role', secondary='user_roles', back_populates='users')
