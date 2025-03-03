@@ -1,11 +1,17 @@
 from flask_restful import Api
+from app.resources.auth import Login, Logout
 from app.resources.chats import ChatSession, UserChats, AllChats
 from app.ai_agent.chatbot_service import ChatbotService
 from app.ai_agent.document_manager import KnowledgeStack
 
 
+
 api = Api(prefix='/api')
 
+
+# api endpoints for authentication
+api.add_resource(Login, '/login')
+api.add_resource(Logout, '/logout')
 
 # api endpoints for chats
 api.add_resource(ChatSession, '/chats/active', '/chats/<int:chat_id>')
