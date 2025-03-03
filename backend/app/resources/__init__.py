@@ -2,6 +2,7 @@ from flask_restful import Api
 from app.resources.auth import Login, Logout
 from app.resources.users import UserResource
 from app.resources.courses import CourseResource, AllCourses
+from app.resources.videos import VideoResource, AllVideos, RateVideo
 from app.ai_agent.chatbot_service import ChatbotService
 from app.ai_agent.document_manager import KnowledgeStack
 from app.resources.chats import ChatSession, UserChats, AllChats
@@ -21,6 +22,11 @@ api.add_resource(UserResource, '/user', '/user/<int:user_id>')
 # api endpoints for courses
 api.add_resource(CourseResource, '/courses' '/courses/<int:course_id>')
 api.add_resource(AllCourses, '/courses/all')
+
+# api endpoints for videos
+api.add_resource(VideoResource, '/videos', '/videos/<int:video_id>')
+api.add_resource(RateVideo, '/videos/<int:video_id>/rate')
+api.add_resource(AllVideos, '/videos/all')
 
 # api endpoints for chats
 api.add_resource(ChatSession, '/chats/active', '/chats/<int:chat_id>')

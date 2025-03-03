@@ -63,8 +63,8 @@ class Video(db.Model):
     course_id: Mapped[int] = mapped_column(db.ForeignKey('course.id'))
     week: Mapped[int] = mapped_column(db.Integer, nullable=False)
     lecture: Mapped[int] = mapped_column(db.Integer, nullable=False)
-    title: Mapped[str] = mapped_column(db.String(255), default='')
-    url: Mapped[str] = mapped_column(db.String(255), nullable=False)
+    title: Mapped[str] = mapped_column(db.String(255), nullable=False)
+    url: Mapped[str] = mapped_column(db.String, nullable=False, unique=True)
     rating: Mapped[float] = mapped_column(db.Float)
     course = relationship('Course', back_populates='videos')
 

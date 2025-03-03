@@ -82,6 +82,9 @@ class CourseResource(Resource):
         # enroll user to course
         if user_id:
             user = db.get_or_404(User, user_id, description="User not found")
+            if user in course.users:
+                abort(400, message="User already enrolled")
+            
             course.users.append(user)
 
         db.session.commit()
