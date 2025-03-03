@@ -19,8 +19,8 @@ api.add_resource(Logout, '/logout')
 api.add_resource(UserResource, '/user', '/user/<int:user_id>')
 
 # api endpoints for courses
-api.add_resource(CourseResource, '/courses/<int:course_id>')
-api.add_resource(AllCourses, '/courses')
+api.add_resource(CourseResource, '/courses' '/courses/<int:course_id>')
+api.add_resource(AllCourses, '/courses/all')
 
 # api endpoints for chats
 api.add_resource(ChatSession, '/chats/active', '/chats/<int:chat_id>')

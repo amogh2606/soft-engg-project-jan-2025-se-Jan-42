@@ -23,7 +23,7 @@ chat_fields = {
 
 class ChatSession(Resource):
     # Load chat session
-    @auth_required()
+    @auth_required
     @marshal_with(chat_fields)
     def get(self, chat_id=None):
         if chat_id:
@@ -34,7 +34,7 @@ class ChatSession(Resource):
         else:
             # get the active chat session
             if current_user.has_role('admin'):
-                abort(404)
+                abort(404, message="Admin cannot have active chat session")
             stmt = db.select(Chat).filter_by(user_id=current_user.id, active=True)
             chat = db.session.scalar(stmt)
             if not chat:
@@ -86,7 +86,6 @@ class AllChats(Resource):
 
 
     # Export chats as CSV
-    @roles_accepted('admin')
     def export_chats(self):
         all_chats = db.session.scalars(db.select(Message))
         output = io.StringIO()

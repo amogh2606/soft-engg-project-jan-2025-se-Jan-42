@@ -25,7 +25,7 @@ class CourseResource(Resource):
 
         if not current_user.has_role('admin'):
             if course not in current_user.courses:
-                abort(404, message="Course not enrolled")
+                abort(400, message="Course not enrolled")
 
         return course
 
