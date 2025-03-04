@@ -43,5 +43,5 @@ class GenerateFAQs(Resource):
     
 
     def get_query_history(self):
-        stmt = db.select(Message.query).filter_by(is_response=False)
+        stmt = db.select(Message.text).filter_by(is_response=False)
         return db.session.scalars(stmt).all()
