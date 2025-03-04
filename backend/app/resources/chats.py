@@ -1,5 +1,5 @@
 import io, csv
-from flask_restful import Resource, marshal_with, fields, abort
+from flask_restful import Resource, reqparse, marshal_with, fields, abort
 from flask_security import current_user, roles_accepted, auth_required
 from flask import request, send_file
 from app.models import db, Chat, Message
@@ -52,12 +52,37 @@ class ChatSession(Resource):
         if active_sessions:
             for session in active_sessions:
                 session.active = False
-            db.session.commit()
 
-        new_session = Chat(user_id=current_user.id)
-        db.session.add(new_session)
+        new_chat = Chat(user_id=current_user.id)
+        db.session.add(new_chat)
         db.session.commit()
-        return new_session
+
+        return new_chat
+    
+
+    # Bookmark or rename chat
+    @roles_accepted('student', 'instructor')
+    @marshal_with(chat_fields)
+    def put(self, chat_id):
+        chat = db.session.get(Chat, chat_id)
+        if not chat or chat.user_id != current_user.id:
+            abort(404, message="Chat not found")
+        
+        parser = reqparse.RequestParser(trim=True)
+        parser.add_argument('title')
+        parser.add_argument('bookmarked', type=bool)
+
+        args = parser.parse_args()
+        title = args.get('title')
+        bookmarked = args.get('bookmarked')
+
+        if title:
+            chat.title = title
+        if bookmarked is not None:
+            chat.bookmarked = bookmarked
+
+        db.session.commit()
+        return chat
 
 
 # Response fields for chat list
