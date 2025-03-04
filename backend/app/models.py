@@ -29,7 +29,7 @@ class Role(db.Model, RoleMixin):
     __tablename__ = 'role'
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(db.String(80), unique=True, nullable=False)
-    description: Mapped[str] = mapped_column(db.String(255))
+    description: Mapped[str] = mapped_column(db.String(255), nullable=True)
     users = relationship('User', secondary='user_roles', back_populates='roles')
 
 
@@ -44,7 +44,7 @@ class Course(db.Model):
     __tablename__ = 'course'
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(db.String(100), unique=True, nullable=False)
-    description: Mapped[str] = mapped_column(db.String)
+    description: Mapped[str] = mapped_column(db.String, nullable=True)
     users = relationship('User', secondary='user_courses', back_populates='courses')
     videos = relationship('Video', back_populates='course')
     assignments = relationship('Assignment', back_populates='course', cascade='all, delete-orphan')
@@ -60,12 +60,12 @@ class UserCourses(db.Model):
 class Video(db.Model):
     __tablename__ = 'video'
     id: Mapped[int] = mapped_column(primary_key=True)
-    course_id: Mapped[int] = mapped_column(db.ForeignKey('course.id'))
+    course_id: Mapped[int] = mapped_column(db.ForeignKey('course.id'), nullable=True)
     week: Mapped[int] = mapped_column(db.Integer, nullable=False)
     lecture: Mapped[int] = mapped_column(db.Integer, nullable=False)
     title: Mapped[str] = mapped_column(db.String(255), nullable=False)
     url: Mapped[str] = mapped_column(db.String, nullable=False, unique=True)
-    rating: Mapped[float] = mapped_column(db.Float)
+    rating: Mapped[float] = mapped_column(db.Float, nullable=True)
     course = relationship('Course', back_populates='videos')
 
 
@@ -83,7 +83,7 @@ class Feedback(db.Model):
     course_id: Mapped[int] = mapped_column(db.ForeignKey('course.id'), nullable=False)
     created: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     title: Mapped[str] = mapped_column(db.String(255), nullable=False)
-    text: Mapped[str] = mapped_column(db.Text)
+    text: Mapped[str] = mapped_column(db.Text, nullable=True)
     course = relationship('Course', back_populates='feedbacks')
 
 
@@ -100,9 +100,9 @@ class Assignment(db.Model):
 class Question(db.Model):
     __tablename__ = 'question'
     id: Mapped[int] = mapped_column(primary_key=True)
-    assignment_id: Mapped[int] = mapped_column(db.ForeignKey('assignment.id'))
+    assignment_id: Mapped[int] = mapped_column(db.ForeignKey('assignment.id'), nullable=True)
     qno: Mapped[int] = mapped_column(db.Integer, nullable=False)
-    type: Mapped[str] = mapped_column(db.String(80), default='MCQ')
+    type: Mapped[str] = mapped_column(db.String(80), default='MCQ', nullable=False)
     text: Mapped[str] = mapped_column(db.Text, nullable=False)
     option_1: Mapped[str] = mapped_column(db.String(255), nullable=False)
     option_2: Mapped[str] = mapped_column(db.String(255), nullable=False)
@@ -117,7 +117,7 @@ class Chat(db.Model):
     __tablename__ = 'chat'
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(db.ForeignKey('user.id'), nullable=False)
-    title: Mapped[str] = mapped_column(db.String(255), default='Untitled Chat')
+    title: Mapped[str] = mapped_column(db.String(255), default='Untitled Chat', nullable=False)
     created: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     active: Mapped[bool] = mapped_column(db.Boolean, default=True, nullable=False)
     bookmarked: Mapped[bool] = mapped_column(db.Boolean, default=False, nullable=False)
@@ -129,7 +129,7 @@ class Message(db.Model):
     __tablename__ = 'message'
     id: Mapped[int] = mapped_column(primary_key=True)
     chat_id: Mapped[int] = mapped_column(db.ForeignKey('chat.id'), nullable=False)
-    text: Mapped[str] = mapped_column(db.Text, default='')
+    text: Mapped[str] = mapped_column(db.Text, nullable=False)
     timestamp: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     is_response: Mapped[bool] = mapped_column(db.Boolean, nullable=False)
     chat = relationship('Chat', back_populates='messages')
