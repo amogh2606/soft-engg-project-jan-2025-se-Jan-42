@@ -146,5 +146,6 @@ class RateVideo(Resource):
         video = db.get_or_404(Video, video_id, description="Video not found")
         stmt = db.select(VideoRating.rating).filter_by(video_id=video_id)
         ratings = db.session.scalars(stmt).all()
-        video.rating = sum(ratings) / len(ratings)
+        avg_rating = sum(ratings) / len(ratings)
+        video.rating = round(avg_rating, 1)
         
