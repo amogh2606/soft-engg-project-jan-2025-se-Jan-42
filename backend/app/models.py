@@ -82,7 +82,7 @@ class Feedback(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     course_id: Mapped[int] = mapped_column(db.ForeignKey('course.id'), nullable=False)
     created: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
-    title: Mapped[str] = mapped_column(db.String(255), default='Untitled Feedback')
+    title: Mapped[str] = mapped_column(db.String(255), nullable=False)
     text: Mapped[str] = mapped_column(db.Text)
     course = relationship('Course', back_populates='feedbacks')
 
