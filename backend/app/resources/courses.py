@@ -56,7 +56,7 @@ class CourseResource(Resource):
     # Update a specific course
     @roles_required('admin')
     def put(self, course_id):
-        parser = reqparse.RequestParser()
+        parser = reqparse.RequestParser(trim=True)
         parser.add_argument('name')
         parser.add_argument('description')
         parser.add_argument('user_id', type=int)
