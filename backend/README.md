@@ -7,4 +7,5 @@
     - On Windows: `.venv\Scripts\activate`
 - Install required dependencies with `pip install -r requirements.txt`
 - Set the `GOOGLE_API_KEY` environment variable
+    - API key can be generated [HERE](https://ai.google.dev/gemini-api/docs).
 - Use `flask --debug run` command to run the app
