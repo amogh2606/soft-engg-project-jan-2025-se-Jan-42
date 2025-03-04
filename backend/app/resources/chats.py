@@ -1,5 +1,5 @@
 import io, csv
-from flask_restful import Resource, marshal_with, fields, abort
+from flask_restful import Resource, reqparse, marshal_with, fields, abort
 from flask_security import current_user, roles_accepted, auth_required
 from flask import request, send_file
 from app.models import db, Chat, Message
@@ -23,7 +23,7 @@ chat_fields = {
 
 class ChatSession(Resource):
     # Load chat session
-    @auth_required()
+    @auth_required
     @marshal_with(chat_fields)
     def get(self, chat_id=None):
         if chat_id:
@@ -34,7 +34,7 @@ class ChatSession(Resource):
         else:
             # get the active chat session
             if current_user.has_role('admin'):
-                abort(404)
+                abort(404, message="Admin cannot have active chat session")
             stmt = db.select(Chat).filter_by(user_id=current_user.id, active=True)
             chat = db.session.scalar(stmt)
             if not chat:
@@ -52,12 +52,37 @@ class ChatSession(Resource):
         if active_sessions:
             for session in active_sessions:
                 session.active = False
-            db.session.commit()
 
-        new_session = Chat(user_id=current_user.id)
-        db.session.add(new_session)
+        new_chat = Chat(user_id=current_user.id)
+        db.session.add(new_chat)
         db.session.commit()
-        return new_session
+
+        return new_chat
+    
+
+    # Bookmark or rename chat
+    @roles_accepted('student', 'instructor')
+    @marshal_with(chat_fields)
+    def put(self, chat_id):
+        chat = db.session.get(Chat, chat_id)
+        if not chat or chat.user_id != current_user.id:
+            abort(404, message="Chat not found")
+        
+        parser = reqparse.RequestParser(trim=True)
+        parser.add_argument('title')
+        parser.add_argument('bookmarked', type=bool)
+
+        args = parser.parse_args()
+        title = args.get('title')
+        bookmarked = args.get('bookmarked')
+
+        if title:
+            chat.title = title
+        if bookmarked is not None:
+            chat.bookmarked = bookmarked
+
+        db.session.commit()
+        return chat
 
 
 # Response fields for chat list
@@ -86,7 +111,6 @@ class AllChats(Resource):
 
 
     # Export chats as CSV
-    @roles_accepted('admin')
     def export_chats(self):
         all_chats = db.session.scalars(db.select(Message))
         output = io.StringIO()
