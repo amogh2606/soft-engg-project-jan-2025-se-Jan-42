@@ -24,7 +24,7 @@ def seed_db():
     if not security.datastore.find_role('admin'):
         security.datastore.create_user(
             email='admin@example.com',
-            password=hash_password(''),
+            password=hash_password('admin@2025'),
             roles=['admin'],
             name='ADMIN'
         )
