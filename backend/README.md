@@ -1,6 +1,6 @@
 ## Backend Server Instructions
 
-- Go to the `backend` folder
+- Change current working directory to `backend`
 - Create a virtual environment with the command `python -m venv .venv`
 - Activate the virtual environment
     - On Linux: `source .venv/bin/activate`

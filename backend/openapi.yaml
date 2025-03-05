@@ -1,0 +1,709 @@
+openapi: 3.0.0
+info:
+  title: E-Learning Platform API
+  version: 1.0.0
+  description: >
+    This API documentation covers endpoints for authentication, chats,
+    courses, FAQs, feedback, user management, videos, chatbot service,
+    and document management in an e-learning platform.
+servers:
+  - url: http://localhost:5000/api
+    description: local server
+paths:
+  # ---------------------------
+  # Authentication Endpoints
+  # ---------------------------
+  /login:
+    post:
+      summary: User Login
+      tags:
+        - Authentication
+      requestBody:
+        description: Login credentials.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: User's email address.
+                password:
+                  type: string
+                  description: User's password.
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Logged in successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Already logged in.
+        '401':
+          description: Invalid credentials or inactive user.
+      # Login endpoint typically does not require prior authentication.
+
+  /logout:
+    post:
+      summary: User Logout
+      tags:
+        - Authentication
+      responses:
+        '200':
+          description: Logged out successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+
+  # ---------------------------
+  # Chat Endpoints
+  # ---------------------------
+  /chats:
+    get:
+      summary: Get active chat session for current user
+      tags:
+        - Chats
+      responses:
+        '200':
+          description: Returns the active chat session.
+        '404':
+          description: Chat not found.
+ 
+    post:
+      summary: Create a new chat session
+      tags:
+        - Chats
+      responses:
+        '200':
+          description: New chat session created.
+
+  /chats/{chat_id}:
+    get:
+      summary: Get a specific chat session by ID
+      tags:
+        - Chats
+      parameters:
+        - in: path
+          name: chat_id
+          required: true
+          schema:
+            type: integer
+          description: Chat session ID.
+      responses:
+        '200':
+          description: Chat session retrieved.
+        '404':
+          description: Chat not found.
+
+    put:
+      summary: Update a chat session (rename/bookmark)
+      tags:
+        - Chats
+      parameters:
+        - in: path
+          name: chat_id
+          required: true
+          schema:
+            type: integer
+          description: Chat session ID.
+      requestBody:
+        description: Fields to update in the chat session.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: New title for the chat.
+                bookmarked:
+                  type: boolean
+                  description: Bookmark flag.
+      responses:
+        '200':
+          description: Chat session updated.
+        '404':
+          description: Chat not found.
+
+  /chats/user:
+    get:
+      summary: Get chat history for the current user
+      tags:
+        - Chats
+      responses:
+        '200':
+          description: List of user's chat sessions.
+
+  /chats/all:
+    get:
+      summary: Get entire chat history
+      tags:
+        - Chats
+      parameters:
+        - in: query
+          name: export
+          schema:
+            type: string
+            enum: [ "true", "1", "false", "0" ]
+          description: Set to "true" or "1" to export chats as CSV.
+      responses:
+        '200':
+          description: List of all chats or exported CSV.
+ 
+
+  # ---------------------------
+  # Courses Endpoints
+  # ---------------------------
+  /courses/{course_id}:
+    get:
+      summary: Get a specific course
+      tags:
+        - Courses
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+          description: Course ID.
+      responses:
+        '200':
+          description: Course details retrieved.
+        '400':
+          description: Course not enrolled.
+        '404':
+          description: Course not found.
+
+    put:
+      summary: Update a specific course
+      tags:
+        - Courses
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+          description: Course ID.
+      requestBody:
+        description: Fields to update in the course.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                user_id:
+                  type: integer
+                  description: ID of user to enroll.
+      responses:
+        '200':
+          description: Course updated successfully.
+        '400':
+          description: Invalid update or user already enrolled.
+        '404':
+          description: Course or user not found.
+
+    delete:
+      summary: Delete a specific course
+      tags:
+        - Courses
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+          description: Course ID.
+      responses:
+        '200':
+          description: Course deleted successfully.
+        '404':
+          description: Course not found.
+
+  /courses:
+    post:
+      summary: Create a new course
+      tags:
+        - Courses
+      requestBody:
+        description: Course information.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the course.
+                description:
+                  type: string
+                  description: Course description.
+              required:
+                - name
+      responses:
+        '201':
+          description: Course created successfully.
+        '400':
+          description: Course already exists.
+
+  /courses/all:
+    get:
+      summary: Retrieve all courses
+      tags:
+        - Courses
+      responses:
+        '200':
+          description: List of all courses.
+    
+
+  # ---------------------------
+  # FAQs Endpoint
+  # ---------------------------
+  /faqs:
+    get:
+      summary: Generate FAQs from student queries
+      tags:
+        - FAQs
+      responses:
+        '200':
+          description: A list of FAQs or queries.
+ 
+
+
+  # ---------------------------
+  # Feedback Endpoints
+  # ---------------------------
+  /feedback/{course_id}:
+    get:
+      summary: Get feedback for a specific course
+      tags:
+        - Feedback
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+          description: Course ID.
+      responses:
+        '200':
+          description: List of feedback entries.
+        '400':
+          description: Course not enrolled.
+
+    post:
+      summary: Submit feedback for a specific course
+      tags:
+        - Feedback
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+          description: Course ID.
+      requestBody:
+        description: Feedback details.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                text:
+                  type: string
+              required:
+                - title
+      responses:
+        '201':
+          description: Feedback submitted successfully.
+        '400':
+          description: Course not enrolled.
+  
+  # ---------------------------
+  # Users Endpoints
+  # ---------------------------
+  /user:
+    get:
+      summary: Get current user details
+      tags:
+        - Users
+      responses:
+        '200':
+          description: User details retrieved.
+    
+    post:
+      summary: Register a new user
+      tags:
+        - Users
+      requestBody:
+        description: Registration details.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                name:
+                  type: string
+              required:
+                - email
+                - password
+                - name
+      responses:
+        '201':
+          description: Registered successfully.
+        '400':
+          description: Invalid input or email already exists.
+      # Registration may be public or may require admin privileges.
+    put:
+      summary: Update current user details
+      tags:
+        - Users
+      requestBody:
+        description: Updated user information.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                name:
+                  type: string
+              required:
+                - email
+                - name
+      responses:
+        '200':
+          description: Updated successfully.
+
+  /user/{user_id}:
+    delete:
+      summary: Delete a user
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user to delete.
+      responses:
+        '200':
+          description: User deleted successfully.
+        '400':
+          description: User not found.
+
+
+  # ---------------------------
+  # Videos Endpoints
+  # ---------------------------
+  /videos/{video_id}:
+    get:
+      summary: Get details for a specific video
+      tags:
+        - Videos
+      parameters:
+        - in: path
+          name: video_id
+          required: true
+          schema:
+            type: integer
+          description: Video ID.
+      responses:
+        '200':
+          description: Video details retrieved.
+        '400':
+          description: Course not enrolled.
+        '404':
+          description: Video not found.
+
+    put:
+      summary: Update details for a specific video
+      tags:
+        - Videos
+      parameters:
+        - in: path
+          name: video_id
+          required: true
+          schema:
+            type: integer
+          description: Video ID.
+      requestBody:
+        description: Updated video details.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                course_id:
+                  type: integer
+                week:
+                  type: integer
+                  minimum: 1
+                  maximum: 12
+                lecture:
+                  type: integer
+                title:
+                  type: string
+                url:
+                  type: string
+      responses:
+        '200':
+          description: Video updated successfully.
+        '400':
+          description: Bad request.
+        '404':
+          description: Video not found.
+
+    delete:
+      summary: Delete a specific video
+      tags:
+        - Videos
+      parameters:
+        - in: path
+          name: video_id
+          required: true
+          schema:
+            type: integer
+          description: Video ID.
+      responses:
+        '200':
+          description: Video deleted successfully.
+        '404':
+          description: Video not found.
+
+  /videos:
+    post:
+      summary: Add a new video to a course
+      tags:
+        - Videos
+      requestBody:
+        description: Video information.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                course_id:
+                  type: integer
+                week:
+                  type: integer
+                  minimum: 1
+                  maximum: 12
+                lecture:
+                  type: integer
+                title:
+                  type: string
+                url:
+                  type: string
+              required:
+                - course_id
+                - week
+                - lecture
+                - title
+                - url
+      responses:
+        '201':
+          description: Video added successfully.
+        '400':
+          description: Video already exists or invalid input.
+
+  /videos/all:
+    get:
+      summary: Retrieve a list of all videos
+      tags:
+        - Videos
+      responses:
+        '200':
+          description: List of videos.
+
+  /videos/{video_id}/rate:
+    post:
+      summary: Rate a video
+      tags:
+        - Videos
+      parameters:
+        - in: path
+          name: video_id
+          required: true
+          schema:
+            type: integer
+          description: Video ID.
+      requestBody:
+        description: Rating information.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+              required:
+                - rating
+      responses:
+        '201':
+          description: Rated successfully.
+        '400':
+          description: Already rated or invalid rating.
+
+  # ---------------------------
+  # Chatbot Service Endpoint
+  # ---------------------------
+  /chatbotservice:
+    post:
+      summary: Generate a chatbot response using the AI agent
+      tags:
+        - Chatbot Service
+      requestBody:
+        description: Payload with chat_id, query, and optional course_id.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                chat_id:
+                  type: integer
+                query:
+                  type: string
+                course_id:
+                  type: integer
+              required:
+                - chat_id
+                - query
+      responses:
+        '200':
+          description: AI response generated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chat_id:
+                    type: integer
+                  timestamp:
+                    type: string
+                    format: date-time
+                  message:
+                    type: string
+        '404':
+          description: Chat not found.
+        '403':
+          description: Access denied.
+
+  # ---------------------------
+  # Document Manager Endpoints
+  # ---------------------------
+  /documents/{course_id}:
+    get:
+      summary: Get documents for a specific course
+      tags:
+        - Document Manager
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+          description: Course ID.
+      responses:
+        '200':
+          description: Returns collection name and list of document filenames.
+        '403':
+          description: Access denied.
+        '404':
+          description: Collection not found.
+    delete:
+      summary: Delete a document for a specific course
+      tags:
+        - Document Manager
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+          description: Course ID.
+        - in: query
+          name: filename
+          required: true
+          schema:
+            type: string
+          description: Filename of the document to delete.
+      responses:
+        '200':
+          description: Document deleted successfully.
+        '400':
+          description: Bad request.
+        '403':
+          description: Access denied.
+        '404':
+          description: File not found.
+    post:
+      summary: Upload a document for a specific course
+      tags:
+        - Document Manager
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+          description: Course ID.
+      requestBody:
+        description: Multipart form data containing the file.
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The document file to upload.
+              required:
+                - file
+      responses:
+        '201':
+          description: File uploaded and processed successfully.
+        '400':
+          description: File missing, already exists, or unsupported format.
+        '403':
+          description: Access denied.
+
