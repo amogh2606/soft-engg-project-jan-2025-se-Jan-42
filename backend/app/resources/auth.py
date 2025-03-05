@@ -10,7 +10,7 @@ parser.add_argument('password', type=str, required=True)
 
 
 class Login(Resource):
-    def post():
+    def post(self):
         if current_user.is_authenticated:
             abort(400, message="Already logged in")
         
@@ -29,7 +29,7 @@ class Login(Resource):
 
 
 class Logout(Resource):
-    def post():
+    def post(self):
         logout_user()        
         return {"message": "Logged out successfully"}
 
