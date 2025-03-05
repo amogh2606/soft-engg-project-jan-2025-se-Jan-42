@@ -28,7 +28,7 @@ class ChatSession(Resource):
     def get(self, chat_id=None):
         if chat_id:
             # get any specific chat session
-            chat = db.get_or_404(Chat, chat_id)
+            chat = db.get_or_404(Chat, chat_id, description="Chat not found")
             if not (chat.user_id == current_user.id or current_user.has_role('admin')):
                 abort(404, message="Chat not found")
         else:
@@ -83,6 +83,16 @@ class ChatSession(Resource):
 
         db.session.commit()
         return chat
+    
+
+    # Delete a chat session
+    @roles_accepted('admin')
+    def delete(self, chat_id):
+        chat = db.get_or_404(Chat, chat_id, description="Chat not found")
+        db.session.delete(chat)
+        db.session.commit()
+        
+        return {"message": "Chat deleted successfully"}
 
 
 # Response fields for chat list
