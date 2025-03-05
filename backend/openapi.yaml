@@ -584,7 +584,7 @@ paths:
   # ---------------------------
   # Chatbot Service Endpoint
   # ---------------------------
-  /chatbotservice:
+  /chatbot:
     post:
       summary: Generate a chatbot response using the AI agent
       tags:
