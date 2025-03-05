@@ -1,6 +1,6 @@
 import os
 from flask import request, jsonify
-from flask_restful import Resource, reqparse, abort
+from flask_restful import Resource, abort
 from flask_security import roles_accepted, current_user
 from werkzeug.utils import secure_filename
 from app.ai_agent.embeddings import process_document, remove_vectors
@@ -10,15 +10,12 @@ from app.ai_agent.embeddings import process_document, remove_vectors
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'documents')
 
-parser = reqparse.RequestParser()
-parser.add_argument('course_id', type=int, required=True)
-
 
 class KnowledgeStack(Resource):
     # fetch all documents for a specific course
     @roles_accepted('instructor', 'admin')
     def get(self, course_id=None):
-        if not self.check_access(course_id):
+        if course_id and not self.check_access(course_id):
             abort(403, message="Access denied")
 
         collection_name = f'course_{course_id}' if course_id else 'general'
@@ -32,17 +29,16 @@ class KnowledgeStack(Resource):
 
     # upload a document for a specific course
     @roles_accepted('instructor', 'admin')
-    def post(self):
+    def post(self, course_id=None):
+        if course_id and not self.check_access(course_id):
+            abort(403, message="Access denied")
+
         if 'file' not in request.files:
             abort(400)
 
         file = request.files['file']
         filename = secure_filename(file.filename)
-        args = parser.parse_args()
-        course_id = args.get('course_id')
-        if not self.check_access(course_id):
-            abort(403, message="Access denied")
-
+        
         collection_name = f'course_{course_id}' if course_id else 'general'
         collection_folder = os.path.join(UPLOAD_FOLDER, collection_name)
         os.makedirs(collection_folder, exist_ok=True)
