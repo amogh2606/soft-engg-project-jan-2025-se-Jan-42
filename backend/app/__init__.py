@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 from app.models import db
 from app.security import security
 from app.resources import api
@@ -13,6 +14,7 @@ def create_app():
     db.init_app(app)
     security.init_app(app)
     api.init_app(app)
+    CORS(app)
 
     with app.app_context():
         seed_db()
