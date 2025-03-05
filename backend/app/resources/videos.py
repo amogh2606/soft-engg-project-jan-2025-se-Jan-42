@@ -16,7 +16,7 @@ video_fields = {
 
 class VideoResource(Resource):
     # Get a specific video
-    @auth_required
+    @auth_required('session')
     @marshal_with(video_fields)
     def get(self, video_id):
         video = db.get_or_404(Video, video_id, description='Video not found')

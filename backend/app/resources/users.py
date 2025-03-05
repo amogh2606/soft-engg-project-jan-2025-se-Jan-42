@@ -19,7 +19,7 @@ user_fields = {
 
 class UserResource(Resource):
     # get user details
-    @auth_required
+    @auth_required('session')
     @marshal_with(user_fields)
     def get(self):
         return current_user
@@ -55,7 +55,7 @@ class UserResource(Resource):
 
 
     # update user details
-    @auth_required
+    @auth_required('session')
     def put(self):
         parser = reqparse.RequestParser(trim=True)
         parser.add_argument('email', nullable=False)

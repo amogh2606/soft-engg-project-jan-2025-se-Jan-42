@@ -26,6 +26,7 @@ def create_app():
 app = create_app()
 
 
+# json error handlers
 @app.errorhandler(HTTPException)
 def handle_http_errors(e):
     return jsonify(message=e.description), e.code

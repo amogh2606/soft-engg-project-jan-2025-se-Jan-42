@@ -18,7 +18,7 @@ course_fields = {
 
 class CourseResource(Resource):
     # Get a specific course
-    @auth_required
+    @auth_required('session')
     @marshal_with(course_fields)
     def get(self, course_id):
         course = db.get_or_404(Course, course_id, description='Course not found')

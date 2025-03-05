@@ -23,7 +23,7 @@ chat_fields = {
 
 class ChatSession(Resource):
     # Load chat session
-    @auth_required
+    @auth_required('session')
     @marshal_with(chat_fields)
     def get(self, chat_id=None):
         if chat_id:
