@@ -14,11 +14,13 @@ def create_app():
     db.init_app(app)
     security.init_app(app)
     api.init_app(app)
-    CORS(app)
+    
+    # Configure CORS with explicit options for local development
+    CORS(app, resources={r"/*": { "supports_credentials": True }})
 
     with app.app_context():
         seed_db()
-        store_initial_embeddings()
+        # store_initial_embeddings()
 
     return app
 
