@@ -23,3 +23,7 @@ export const getAllChats = () => {
 export const getChatById = (id) => {
     return client.get(`/chats/${id}`);
 };
+
+export const getAllCourses = () => {
+    return client.get('/courses/all');
+};
