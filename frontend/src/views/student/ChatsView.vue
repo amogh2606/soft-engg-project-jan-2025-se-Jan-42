@@ -2,32 +2,47 @@
 import Button from '@/components/ui/buttons/Button.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
 import BaseView from '@/views/student/BaseView.vue';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
+import { getUserChats } from '@/api';
 
 const headers = [
     { key: 'id', label: 'Id' },
     { key: 'title', label: 'Title' },
-    { key: 'createdAt', label: 'Created At' },
+    { key: 'created', label: 'Created At' },
 ];
-const chats = ref([
-    { id: 1, title: 'Software Eng...', createdAt: '2021-09-01 12:00:00', isBookmarked: true },
-    { id: 2, title: 'Data Struct...', createdAt: '2021-09-02 12:00:00', isBookmarked: false },
-    { id: 3, title: 'Operating Systems', createdAt: '2021-09-03 12:00:00', isBookmarked: true },
-    { id: 4, title: 'Software Eng...', createdAt: '2021-09-01 12:00:00', isBookmarked: true },
-    { id: 5, title: 'Data Struct...', createdAt: '2021-09-02 12:00:00', isBookmarked: false },
-    { id: 6, title: 'Operating Systems', createdAt: '2021-09-03 12:00:00', isBookmarked: true },
-    { id: 7, title: 'Software Eng...', createdAt: '2021-09-01 12:00:00', isBookmarked: true },
-    { id: 8, title: 'Data Struct...', createdAt: '2021-09-02 12:00:00', isBookmarked: false },
-    { id: 9, title: 'Operating Systems', createdAt: '2021-09-03 12:00:00', isBookmarked: true },
-    { id: 10, title: 'Software Eng...', createdAt: '2021-09-01 12:00:00', isBookmarked: true },
-    { id: 11, title: 'Data Struct...', createdAt: '2021-09-02 12:00:00', isBookmarked: false },
-    { id: 12, title: 'Operating Systems', createdAt: '2021-09-03 12:00:00', isBookmarked: true },
+const chats = ref([]);
+const filterBookmarked = ref(false);
+const filteredChats = computed(() =>
+    filterBookmarked.value ? chats.value.filter((chat) => chat.bookmarked) : chats.value,
+);
+
+const mockChats = ref([
+    { id: 1, title: 'Software Eng...', created: '2021-09-01 12:00:00', bookmarked: true },
+    { id: 2, title: 'Data Struct...', created: '2021-09-02 12:00:00', bookmarked: false },
+    { id: 3, title: 'Operating Systems', created: '2021-09-03 12:00:00', bookmarked: true },
+    { id: 4, title: 'Software Eng...', created: '2021-09-01 12:00:00', bookmarked: true },
+    { id: 5, title: 'Data Struct...', created: '2021-09-02 12:00:00', bookmarked: false },
+    { id: 6, title: 'Operating Systems', created: '2021-09-03 12:00:00', bookmarked: true },
+    { id: 7, title: 'Software Eng...', created: '2021-09-01 12:00:00', bookmarked: true },
+    { id: 8, title: 'Data Struct...', created: '2021-09-02 12:00:00', bookmarked: false },
+    { id: 9, title: 'Operating Systems', created: '2021-09-03 12:00:00', bookmarked: true },
+    { id: 10, title: 'Software Eng...', created: '2021-09-01 12:00:00', bookmarked: true },
+    { id: 11, title: 'Data Struct...', created: '2021-09-02 12:00:00', bookmarked: false },
+    { id: 12, title: 'Operating Systems', created: '2021-09-03 12:00:00', bookmarked: true },
 ]);
 
-const bookmarkOnly = ref(false);
-const filteredChats = computed(() =>
-    bookmarkOnly.value ? chats.value.filter((chat) => chat.isBookmarked) : chats.value,
-);
+onMounted(() => {
+    getUserChats()
+        .then((response) => {
+            // TODO: The response should be an array of chats.
+            // Hence, remove the brackets later.
+            chats.value = [response.data];
+            // chats.value = mockChats.value;
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+});
 </script>
 
 <template>
@@ -56,7 +71,7 @@ const filteredChats = computed(() =>
                                         type="checkbox"
                                         id="toggle"
                                         class="peer sr-only"
-                                        v-model="bookmarkOnly"
+                                        v-model="filterBookmarked"
                                     />
                                     <div
                                         class="block h-6 w-12 rounded-full bg-gray-300 transition-all peer-checked:bg-blue-500"
