@@ -35,3 +35,7 @@ export const getCourseById = (courseId) => {
 export const getKnowledgeStackByCourseId = (courseId) => {
     return client.get(`/documents/${courseId}`);
 };
+
+export const getFeedbacksByCourseId = (courseId) => {
+    return client.get(`/feedback/${courseId}`);
+};

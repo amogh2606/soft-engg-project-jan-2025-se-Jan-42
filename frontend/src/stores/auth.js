@@ -13,6 +13,10 @@ export const useAuthStore = defineStore('auth', {
         userRole() {
             return this.user?.roles?.at(0);
         },
+
+        courseIdOfInstructor() {
+            return this.user?.courses?.at(0)?.id;
+        },
     },
 
     actions: {

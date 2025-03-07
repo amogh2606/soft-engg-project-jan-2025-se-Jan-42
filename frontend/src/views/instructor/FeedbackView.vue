@@ -1,118 +1,38 @@
 <script setup>
 import Button from '@/components/ui/buttons/Button.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import BaseView from './BaseView.vue';
+import { getFeedbacksByCourseId } from '@/api';
+import { useAuthStore } from '@/stores/auth';
+import { push } from 'notivue';
 
 const headers = ref([
     { label: 'ID', key: 'id' },
-    { label: 'Feedback', key: 'feedback' },
-    { label: 'Created At', key: 'createdAt' },
+    { label: 'Title', key: 'title' },
+    { label: 'Text', key: 'text' },
+    { label: 'Created At', key: 'created' },
 ]);
-const feedbacks = ref([
-    {
-        id: 1,
-        feedback: 'Software Eng...',
-        createdAt: '2021-09-01 12:00:00',
-    },
-    {
-        id: 2,
-        feedback: 'Data Struct...',
-        createdAt: '2021-09-02 12:00:00',
-    },
-    {
-        id: 3,
-        feedback: 'Operating Systems',
-        createdAt: '2021-09-03 12:00:00',
-    },
-    {
-        id: 4,
-        feedback: 'Computer Networks',
-        createdAt: '2021-09-04 12:00:00',
-    },
-    {
-        id: 5,
-        feedback: 'Database Mana...',
-        createdAt: '2021-09-05 12:00:00',
-    },
-    {
-        id: 6,
-        feedback: 'Computer Archi...',
-        createdAt: '2021-09-06 12:00:00',
-    },
-    {
-        id: 7,
-        feedback: 'Artificial Int...',
-        createdAt: '2021-09-07 12:00:00',
-    },
-    {
-        id: 8,
-        feedback: 'Machine Learn...',
-        createdAt: '2021-09-08 12:00:00',
-    },
-    {
-        id: 9,
-        feedback: 'Machine Learn...',
-        createdAt: '2021-09-08 12:00:00',
-    },
-    {
-        id: 10,
-        feedback: 'Natural Langu...',
-        createdAt: '2021-09-10 12:00:00',
-    },
-    {
-        id: 11,
-        feedback: 'Software Eng...',
-        createdAt: '2021-09-11 12:00:00',
-    },
-    {
-        id: 12,
-        feedback: 'Data Struct...',
-        createdAt: '2021-09-12 12:00:00',
-    },
-    {
-        id: 13,
-        feedback: 'Operating Systems',
-        createdAt: '2021-09-13 12:00:00',
-    },
-    {
-        id: 14,
-        feedback: 'Computer Networks',
-        createdAt: '2021-09-14 12:00:00',
-    },
-    {
-        id: 15,
-        feedback: 'Database Mana...',
-        createdAt: '2021-09-15 12:00:00',
-    },
-    {
-        id: 16,
-        feedback: 'Computer Archi...',
-        createdAt: '2021-09-16 12:00:00',
-    },
-    {
-        id: 17,
-        feedback: 'Artificial Int...',
-        createdAt: '2021-09-17 12:00:00',
-    },
-    {
-        id: 18,
-        feedback: 'Machine Learn...',
-        createdAt: '2021-09-18 12:00:00',
-    },
-    {
-        id: 19,
-        feedback: 'Deep Learning',
-        createdAt: '2021-09-19 12:00:00',
-    },
-    {
-        id: 20,
-        feedback: 'Natural Langu...',
-        createdAt: '2021-09-20 12:00:00',
-    },
-]);
+
+const feedbacks = ref([]);
 const filteredFeedbacks = computed(() => {
     return feedbacks.value;
+});
+
+onMounted(() => {
+    const { courseIdOfInstructor } = useAuthStore();
+    getFeedbacksByCourseId(courseIdOfInstructor)
+        .then((response) => {
+            feedbacks.value = response.data;
+        })
+        .catch((error) => {
+            console.error(error);
+            if (error?.response?.status === 404) {
+                push.error('No feedbacks found for this course !');
+            } else {
+                push.error('Error fetching feedbacks !');
+            }
+        });
 });
 </script>
 <template>
