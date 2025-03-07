@@ -96,8 +96,13 @@ class ChatSession(Resource):
 
 
 # Response fields for chat list
-chat_list_fields = chat_fields.copy()
-chat_list_fields.pop('messages')
+chat_list_fields = {
+    'id': fields.Integer,
+    'title': fields.String,
+    'created': fields.DateTime('iso8601'),
+    'active': fields.Boolean,
+    'bookmarked': fields.Boolean,
+}
 
 
 class UserChats(Resource):
@@ -125,10 +130,13 @@ class AllChats(Resource):
         all_chats = db.session.scalars(db.select(Message))
         output = io.StringIO()
         writer = csv.writer(output)
-        writer.writerow(['id', 'chat_id', 'text', 'timestamp', 'is_response']) # header row
+        writer.writerow(['msg_id', 'chat_id', 'message', 'timestamp', 'sender']) # header row
 
         for msg in all_chats:
-            writer.writerow([msg.id, msg.chat_id, msg.text, msg.timestamp, msg.is_response])
+            if msg.is_response:
+                writer.writerow([msg.id, msg.chat_id, msg.text, msg.timestamp, 'AI'])
+            else:
+                writer.writerow([msg.id, msg.chat_id, msg.text, msg.timestamp, 'User'])
 
         output.seek(0)
 
