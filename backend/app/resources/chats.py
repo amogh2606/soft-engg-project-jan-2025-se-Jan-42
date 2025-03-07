@@ -111,7 +111,8 @@ class UserChats(Resource):
     @marshal_with(chat_list_fields)
     def get(self):
         stmt = db.select(Chat).filter_by(user_id=current_user.id)
-        return db.session.scalars(stmt)
+        chats = list(db.session.scalars(stmt))
+        return chats
 
 
 class AllChats(Resource):
