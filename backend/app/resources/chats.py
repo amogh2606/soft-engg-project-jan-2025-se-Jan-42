@@ -111,7 +111,7 @@ class UserChats(Resource):
     @marshal_with(chat_list_fields)
     def get(self):
         stmt = db.select(Chat).filter_by(user_id=current_user.id)
-        chats = list(db.session.scalars(stmt))
+        chats = db.session.scalars(stmt).all()
         return chats
 
 
@@ -123,7 +123,8 @@ class AllChats(Resource):
         if request.args.get('export') in ('true', '1'):
             return self.export_chats()
         
-        return db.session.scalars(db.select(Chat)).all()
+        chats = db.session.scalars(db.select(Chat)).all() 
+        return chats
 
 
     # Export chats as CSV

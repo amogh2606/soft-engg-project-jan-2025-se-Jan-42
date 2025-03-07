@@ -16,11 +16,7 @@ def create_app():
     api.init_app(app)
     
     # Configure CORS 
-    CORS(app, resources={r"/*": { "supports_credentials": True }})
-
-    # Set SameSite=None; Secure in the cookie (for cross-site requests)
-    app.config['SESSION_COOKIE_SAMESITE'] = 'None'
-    app.config['SESSION_COOKIE_SECURE'] = True
+    CORS(app, supports_credentials=True)
 
     with app.app_context():
         seed_db()
