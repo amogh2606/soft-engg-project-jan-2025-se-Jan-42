@@ -17,6 +17,10 @@ export const useAuthStore = defineStore('auth', {
         courseIdOfInstructor() {
             return this.user?.courses?.at(0)?.id;
         },
+
+        userCourses() {
+            return this.user?.courses;
+        },
     },
 
     actions: {

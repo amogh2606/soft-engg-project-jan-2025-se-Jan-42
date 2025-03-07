@@ -1,19 +1,14 @@
 <script setup>
 import Button from '@/components/ui/buttons/Button.vue';
-import { ref } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+import { onMounted, ref } from 'vue';
 import BaseView from './BaseView.vue';
-const courses = ref([
-    { id: 1, name: 'Software Engineering' },
-    { id: 2, name: 'Data Structures and Algorithms' },
-    { id: 3, name: 'Operating Systems' },
-    { id: 4, name: 'Computer Networks' },
-    { id: 5, name: 'Database Management Systems' },
-    { id: 6, name: 'Computer Architecture' },
-    { id: 7, name: 'Artificial Intelligence' },
-    { id: 8, name: 'Machine Learning' },
-    { id: 9, name: 'Deep Learning' },
-    { id: 10, name: 'Natural Language Processing' },
-]);
+const courses = ref([]);
+
+onMounted(() => {
+    const { userCourses } = useAuthStore();
+    courses.value = userCourses;
+});
 </script>
 <template>
     <BaseView>
