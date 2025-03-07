@@ -20,10 +20,18 @@ export const getAllChats = () => {
     return client.get('/chats/all');
 };
 
-export const getChatById = (id) => {
-    return client.get(`/chats/${id}`);
+export const getChatById = (chatId) => {
+    return client.get(`/chats/${chatId}`);
 };
 
 export const getAllCourses = () => {
     return client.get('/courses/all');
+};
+
+export const getCourseById = (courseId) => {
+    return client.get(`/courses/${courseId}`);
+};
+
+export const getKnowledgeStackByCourseId = (courseId) => {
+    return client.get(`/documents/${courseId}`);
 };
