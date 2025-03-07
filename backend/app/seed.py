@@ -20,14 +20,29 @@ def seed_db():
     security.datastore.find_or_create_role(name='admin', description='The admin')
     security.datastore.find_or_create_role(name='instructor', description='Instructor / TA')
     security.datastore.find_or_create_role(name='student', description='Student - primary user')
-    # create admin
-    if not security.datastore.find_role('admin'):
+    # create users
+    if security.datastore.find_role('admin'):
         security.datastore.create_user(
             email='admin@example.com',
-            password=hash_password('admin@2025'),
+            password=hash_password('password'),
             roles=['admin'],
             name='ADMIN'
         )
+    if security.datastore.find_role('instructor'):
+        security.datastore.create_user(
+            email='instructor@example.com',
+            password=hash_password('password'),
+            roles=['instructor'],
+            name='instructor'
+        )
+    if security.datastore.find_role('student'):
+        security.datastore.create_user(
+            email='student@example.com',
+            password=hash_password('password'),
+            roles=['student'],
+            name='student'
+        )
+    
     populate_sample_data()
     db.session.commit()
 
@@ -36,6 +51,12 @@ def populate_sample_data():
     # create a course
     course = Course(name="Software Engineering", description="Degree Level course")
     db.session.add(course)
+
+    # create 3 more courses
+    db.session.add(Course(name="Data Structures", description="Degree Level course"))
+    db.session.add(Course(name="Machine Learning", description="Degree Level course"))
+    db.session.add(Course(name="Web Development", description="Degree Level course"))
+
     db.session.commit()
 
     course_id = course.id
