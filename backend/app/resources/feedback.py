@@ -7,7 +7,7 @@ from app.models import db, Feedback, Course
 feedback_fields = {
     'id': fields.Integer,
     'course_id': fields.Integer,
-    'created': fields.DateTime('iso8601'),
+    'created': fields.String,
     'title': fields.String,
     'text': fields.String
 }

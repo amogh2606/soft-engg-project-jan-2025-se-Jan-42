@@ -10,13 +10,13 @@ from app.models import db, Chat, Message
 chat_fields = {
     'id': fields.Integer,
     'title': fields.String,
-    'created': fields.DateTime('iso8601'),
+    'created': fields.String,
     'active': fields.Boolean,
     'bookmarked': fields.Boolean,
     'messages': fields.List(fields.Nested({
         'id': fields.Integer,
         'text': fields.String,
-        'timestamp': fields.DateTime('iso8601'),
+        'timestamp': fields.String,
         'is_response': fields.Boolean
     }))
 }
@@ -99,7 +99,7 @@ class ChatSession(Resource):
 chat_list_fields = {
     'id': fields.Integer,
     'title': fields.String,
-    'created': fields.DateTime('iso8601'),
+    'created': fields.String,
     'active': fields.Boolean,
     'bookmarked': fields.Boolean,
 }

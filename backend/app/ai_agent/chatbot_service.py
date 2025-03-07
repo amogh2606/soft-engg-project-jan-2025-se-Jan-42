@@ -16,7 +16,7 @@ parser.add_argument("course_id", type=int)
 
 response_fields = {
     'chat_id': fields.Integer,
-    'timestamp': fields.DateTime('iso8601'),
+    'timestamp': fields.String,
     'message': fields.String(attribute='text')
 }
 
