@@ -65,15 +65,14 @@ class Video(db.Model):
     lecture: Mapped[int] = mapped_column(db.Integer, nullable=False)
     title: Mapped[str] = mapped_column(db.String(255), nullable=False)
     url: Mapped[str] = mapped_column(db.String, nullable=False, unique=True)
-    rating: Mapped[float] = mapped_column(db.Float, nullable=True)
+    avg_rating: Mapped[float] = mapped_column(db.Float, nullable=True)
     course = relationship('Course', back_populates='videos')
 
 
 class VideoRating(db.Model):
     __tablename__ = 'video_rating'
-    id: Mapped[int] = mapped_column(primary_key=True)
-    video_id: Mapped[int] = mapped_column(db.ForeignKey('video.id', ondelete='CASCADE'), nullable=False)
-    user_id: Mapped[int] = mapped_column(db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+    video_id: Mapped[int] = mapped_column(db.ForeignKey('video.id', ondelete='CASCADE'), primary_key=True)
+    user_id: Mapped[int] = mapped_column(db.ForeignKey('user.id', ondelete='CASCADE'), primary_key=True)
     rating: Mapped[int] = mapped_column(db.Integer, nullable=False)
 
 
