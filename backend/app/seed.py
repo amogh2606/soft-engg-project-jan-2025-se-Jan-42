@@ -21,27 +21,24 @@ def seed_db():
     security.datastore.find_or_create_role(name='instructor', description='Instructor / TA')
     security.datastore.find_or_create_role(name='student', description='Student - primary user')
     # create users
-    if security.datastore.find_role('admin'):
-        security.datastore.create_user(
-            email='admin@example.com',
-            password=hash_password('password'),
-            roles=['admin'],
-            name='ADMIN'
-        )
-    if security.datastore.find_role('instructor'):
-        security.datastore.create_user(
-            email='instructor@example.com',
-            password=hash_password('password'),
-            roles=['instructor'],
-            name='instructor'
-        )
-    if security.datastore.find_role('student'):
-        security.datastore.create_user(
-            email='student@example.com',
-            password=hash_password('password'),
-            roles=['student'],
-            name='student'
-        )
+    security.datastore.create_user(
+        email='admin@example.com',
+        password=hash_password('password'),
+        roles=['admin'],
+        name='ADMIN'
+    )
+    security.datastore.create_user(
+        email='instructor@example.com',
+        password=hash_password('password'),
+        roles=['instructor'],
+        name='instructor'
+    )
+    security.datastore.create_user(
+        email='student@example.com',
+        password=hash_password('password'),
+        roles=['student'],
+        name='student'
+    )
     
     populate_sample_data()
     db.session.commit()
