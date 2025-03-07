@@ -1,15 +1,17 @@
 <script setup>
-import { useAuthStore } from '@/stores/auth';
-import { push } from 'notivue';
-import { useRouter } from 'vue-router';
 import Button from '@/components/ui/buttons/Button.vue';
+import { performLogout } from '@/services/authService';
+import { useAuthStore } from '@/stores/auth';
+import { redirectToLogin } from '@/utils/routerHelper';
+import { push } from 'notivue';
 
 const authStore = useAuthStore();
-const router = useRouter();
 
-function logout() {
-    authStore.logout();
-    router.push('/auth/login');
+async function logout() {
+    await performLogout();
+    authStore.clearUser();
+
+    redirectToLogin();
     push.success({
         message: 'Logged out successfully',
     });

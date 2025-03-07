@@ -6,8 +6,7 @@ import { useAuthStore } from '@/stores/auth';
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 
-const authStore = useAuthStore();
-const isLoggedIn = computed(() => authStore.isLoggedIn());
+const { isLoggedIn } = useAuthStore();
 </script>
 
 <template>

@@ -1,15 +1,16 @@
 <script setup>
 import Button from '@/components/ui/buttons/Button.vue';
-import router from '@/router';
+import { performLogin } from '@/services/authService';
 import { useAuthStore } from '@/stores/auth';
+import { redirectBasedOnRole } from '@/utils/routerHelper';
 import BaseView from '@/views/auth/BaseView.vue';
 import { push } from 'notivue';
 import { onMounted, ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 
 const route = useRoute();
-const email = ref('');
-const password = ref('');
+const email = ref('student1@example.com');
+const password = ref('password');
 const authStore = useAuthStore();
 
 // Check if email was passed from signup page
@@ -19,37 +20,31 @@ onMounted(() => {
     }
 });
 
-function submit(event) {
+async function submit(event) {
     // Prevent the form from submitting
     event.preventDefault();
 
-    if (!email.value || !password.value) {
-        push.error({
-            message: 'Please enter an email and password',
-        });
-        return;
-    }
-
     try {
-        // Use the auth store to login
-        const user = authStore.login(email.value, password.value);
-
-        // Redirect based on user role
-        if (user.role === 'student') {
-            router.push('/student/courses');
-        } else if (user.role === 'instructor') {
-            router.push('/instructor/faqs');
-        } else if (user.role === 'admin') {
-            router.push('/admin/courses');
+        // Validate the email and password
+        if (!email.value || !password.value) {
+            throw new Error('Please enter an email and password');
         }
 
-        push.success({
-            message: `Login successful as ${user.role}`,
-        });
+        // Perform login and fetch user data.
+        const userData = await performLogin(email.value, password.value);
+        authStore.setUser(userData);
+
+        // Notify and redirect.
+        push.success({ message: `Login successful as ${authStore.userRole}` });
+        redirectBasedOnRole(authStore.userRole);
     } catch (error) {
-        push.error({
-            message: 'Login failed',
-        });
+        if (error.message === 'Already logged in') {
+            redirectBasedOnRole(authStore.userRole);
+        } else {
+            push.error({
+                message: error.message || 'An unexpected error occurred during login.',
+            });
+        }
     }
 }
 </script>
@@ -110,6 +105,6 @@ function submit(event) {
 
 <style scoped>
 input::-webkit-calendar-picker-indicator {
-  opacity: 0;
+    opacity: 0;
 }
 </style>
