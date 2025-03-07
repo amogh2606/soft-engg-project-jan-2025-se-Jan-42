@@ -98,7 +98,7 @@ course_list_fields = {
 
 class AllCourses(Resource):
     # Get all courses
-    @roles_required('admin','student')
+    @roles_accepted('admin','student')
     @marshal_with(course_list_fields)
     def get(self):
         all_courses = db.session.scalars(db.select(Course))
