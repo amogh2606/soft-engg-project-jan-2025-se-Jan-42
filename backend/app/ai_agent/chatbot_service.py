@@ -53,7 +53,7 @@ class ChatbotService(Resource):
             create_collection_if_not_exists=False
         )
         retriever = vector_store.as_retriever(
-            search_kwargs={'k': 4, 'score_threshold': 0.5}
+            search_kwargs={'k': 4}
         )
         
         llm = ChatGoogleGenerativeAI(
@@ -65,22 +65,24 @@ class ChatbotService(Resource):
 
         messages = self.load_conversation(chat_id)
         messages.append(HumanMessage(query))
-        relevant_docs = retriever.invoke(query)
+        
+        res = retriever.invoke(query)
+        relevant_docs = '\n\n'.join(set(doc.page_content for doc in res))
+        print(relevant_docs)
 
         response = chain.invoke({"messages": messages, "context": relevant_docs})
         
-        return response.text
+        return response.text()
     
 
     def create_prompt_template(self):           
-        prompt_template = ChatPromptTemplate(
-            ("system", """You are a chatbot in an e-learning platform. The user has asked a question. 
-                Provide a concise friendly response based on the conversation and use the given context."""),
+        prompt_template = ChatPromptTemplate([
+            ("system", """You are a chatbot in an e-learning platform. 
+                Provide a concise friendly response based on the conversation.
+                You may use the given context: \n{context}"""),
 
             ("placeholder", "{messages}"),
-
-            ("placeholder", "{context}")
-        )
+        ])
         return prompt_template
     
 
@@ -90,7 +92,7 @@ class ChatbotService(Resource):
             .filter_by(chat_id=chat_id)
             .order_by(Message.timestamp.desc())
             .limit(10)
-        )
+        ).all()
         messages = []
         for msg in reversed(previous_msgs):
             if msg.is_response:
