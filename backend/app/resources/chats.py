@@ -96,8 +96,13 @@ class ChatSession(Resource):
 
 
 # Response fields for chat list
-chat_list_fields = chat_fields.copy()
-chat_list_fields.pop('messages')
+chat_list_fields = {
+    'id': fields.Integer,
+    'title': fields.String,
+    'created': fields.DateTime('iso8601'),
+    'active': fields.Boolean,
+    'bookmarked': fields.Boolean,
+}
 
 
 class UserChats(Resource):
