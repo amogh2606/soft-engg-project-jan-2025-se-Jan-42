@@ -9,7 +9,7 @@ import { onMounted, ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 
 const route = useRoute();
-const email = ref('student1@example.com');
+const email = ref('student@example.com');
 const password = ref('password');
 const authStore = useAuthStore();
 
