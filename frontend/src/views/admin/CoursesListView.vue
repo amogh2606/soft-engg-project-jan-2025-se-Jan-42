@@ -5,31 +5,29 @@ import StackIcon from '@/components/icons/StackIcon.vue';
 import StudentIcon from '@/components/icons/StudentIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
 import BaseView from './BaseView.vue';
+import { getAllCourses } from '@/api';
+import { push } from 'notivue';
 
 const headers = ref([
     { label: 'ID', key: 'id' },
     { label: 'Course Name', key: 'name' },
     { label: 'Actions', key: 'actions' },
 ]);
+const courses = ref([]);
+const filteredCourses = computed(() => courses.value);
 
-const courses = ref([
-    { id: 1, name: 'Software Engineering' },
-    { id: 2, name: 'Data Structures and Algorithms' },
-    { id: 3, name: 'Operating Systems' },
-    { id: 4, name: 'Computer Networks' },
-    { id: 5, name: 'Database Management Systems' },
-    { id: 6, name: 'Computer Architecture' },
-    { id: 7, name: 'Artificial Intelligence' },
-    { id: 8, name: 'Machine Learning' },
-    { id: 9, name: 'Deep Learning' },
-    { id: 10, name: 'Natural Language Processing' },
-]);
-
-const filteredCourses = computed(() => {
-    return courses.value;
+onMounted(() => {
+    getAllCourses()
+        .then((response) => {
+            courses.value = response.data;
+        })
+        .catch((error) => {
+            console.error(error);
+            push.error('Error fetching courses !');
+        });
 });
 </script>
 <template>
