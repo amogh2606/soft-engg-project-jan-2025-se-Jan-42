@@ -114,7 +114,7 @@ class AllVideos(Resource):
     @roles_required('admin')
     @marshal_with(video_list_fields)
     def get(self):
-        all_videos = db.session.scalars(db.select(Video))
+        all_videos = db.session.scalars(db.select(Video)).all()
         return all_videos
 
 

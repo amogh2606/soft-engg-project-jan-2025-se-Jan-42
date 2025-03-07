@@ -22,7 +22,7 @@ class FeedbackResource(Resource):
             abort(400, message="Course not enrolled")
         
         stmt = db.select(Feedback).filter_by(course_id=course_id)
-        feedbacks = db.session.scalars(stmt)
+        feedbacks = db.session.scalars(stmt).all()
 
         return feedbacks
 

@@ -92,8 +92,8 @@ class CourseResource(Resource):
 
 
 course_list_fields = {
-    'course_id': fields.Integer,
-    'course_name': fields.String
+    'id': fields.Integer,
+    'name': fields.String
 }
 
 class AllCourses(Resource):
@@ -101,7 +101,7 @@ class AllCourses(Resource):
     @roles_accepted('admin','student')
     @marshal_with(course_list_fields)
     def get(self):
-        all_courses = db.session.scalars(db.select(Course))
+        all_courses = db.session.scalars(db.select(Course)).all()
         return all_courses
 
 
