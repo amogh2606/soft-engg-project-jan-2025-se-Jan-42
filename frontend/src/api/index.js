@@ -15,3 +15,11 @@ export const getUser = () => {
 export const getUserChats = () => {
     return client.get('/chats/user');
 };
+
+export const getAllChats = () => {
+    return client.get('/chats/all');
+};
+
+export const getChatById = (id) => {
+    return client.get(`/chats/${id}`);
+};

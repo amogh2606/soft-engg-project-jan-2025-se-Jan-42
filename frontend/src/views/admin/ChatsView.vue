@@ -1,27 +1,30 @@
 <script setup>
+import { getAllChats } from '@/api';
 import ExportIcon from '@/components/icons/ExportIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
 import BaseView from '@/views/admin/BaseView.vue';
-import { ref } from 'vue';
+import { push } from 'notivue';
+import { computed, onMounted, ref } from 'vue';
 
-const headers = ref([
-    { key: 'id', label: 'ID' },
-    { key: 'query', label: 'Query' },
-    { key: 'response', label: 'Response' },
-]);
-const chats = ref([
-    { id: 1, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 2, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 3, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 4, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 5, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 6, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 7, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 8, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 9, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 10, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-]);
+const headers = [
+    { key: 'id', label: 'Id' },
+    { key: 'title', label: 'Title' },
+    { key: 'created', label: 'Created At' },
+];
+const chats = ref([]);
+const filteredChats = computed(() => chats.value);
+
+onMounted(() => {
+    getAllChats()
+        .then((response) => {
+            chats.value = response.data;
+        })
+        .catch((error) => {
+            console.error(error);
+            push.error('Error fetching chats !');
+        });
+});
 </script>
 <template>
     <BaseView>
@@ -47,7 +50,7 @@ const chats = ref([
                                 <ExportIcon :is-solid="false" class="h-6 w-auto" />
                             </Button>
                         </div>
-                        <TableComponent :headers="headers" :rows="chats" />
+                        <TableComponent :headers="headers" :rows="filteredChats" />
                     </div>
                 </div>
             </div>

@@ -123,7 +123,7 @@ class AllChats(Resource):
         if request.args.get('export') in ('true', '1'):
             return self.export_chats()
         
-        return db.session.scalars(db.select(Chat))
+        return db.session.scalars(db.select(Chat)).all()
 
 
     # Export chats as CSV
