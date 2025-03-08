@@ -1,6 +1,6 @@
 from flask_restful import Api
 from app.resources.auth import Login, Logout
-from app.resources.users import UserResource
+from app.resources.users import UserResource, UsersResource
 from app.resources.courses import CourseResource, AllCourses, CourseEnrollment
 from app.resources.videos import VideoResource, AllVideos, RateVideo
 from app.resources.assignments import AssignmentResource
@@ -21,6 +21,7 @@ api.add_resource(Logout, '/logout')
 
 # api endpoints for user
 api.add_resource(UserResource, '/user', '/user/<int:user_id>')
+api.add_resource(UsersResource, '/users')
 
 # api endpoints for courses
 api.add_resource(CourseResource, '/courses', '/courses/<int:course_id>')

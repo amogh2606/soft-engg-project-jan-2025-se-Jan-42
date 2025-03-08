@@ -6,6 +6,7 @@ import IITMLogoIcon from '@/components/icons/IITMLogoIcon.vue';
 import DraggableChatbotButton from '@/components/ui/buttons/DraggableChatbotButton.vue';
 import UserDropdown from '@/components/ui/dropdown/UserDropdown.vue';
 import BaseView from '@/views/BaseView.vue';
+import TeacherIcon from '@/components/icons/TeacherIcon.vue';
 import { ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 
@@ -66,6 +67,17 @@ const isActive = (paths) => {
                     >
                         <ChatIcon :is-solid="isActive(['/admin/chats'])" class="h-8" />
                         <span class="text-sm">Chats</span>
+                    </RouterLink>
+                    <RouterLink
+                        to="/admin/instructors"
+                        class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-100"
+                        :class="{
+                            'bg-gray-300': isActive(['/admin/instructors']),
+                            'hover:bg-gray-300': isActive(['/admin/instructors']),
+                        }"
+                    >
+                        <TeacherIcon :is-solid="isActive(['/admin/instructors'])" class="h-8 w-auto" />
+                        <span class="text-sm">Instructors</span>
                     </RouterLink>
                 </div>
                 <slot name="main-slot"></slot>

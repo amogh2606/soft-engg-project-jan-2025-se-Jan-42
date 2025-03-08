@@ -8,8 +8,16 @@ export const logoutUser = () => {
     return client.post('/logout');
 };
 
+export const registerUser = (name, email, password) => {
+    return client.post('/user', { name, email, password });
+};
+
 export const getUser = () => {
     return client.get('/user');
+};
+
+export const getAllUsers = (role) => {
+    return client.get(`/users?role=${role}`);
 };
 
 export const getUserChats = () => {
