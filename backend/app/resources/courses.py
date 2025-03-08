@@ -16,7 +16,7 @@ course_fields = {
     })),
     'assignments': fields.List(fields.Nested({
         'id': fields.Integer,
-        'week': fields.String,
+        'week': fields.Integer,
     }))
 }
 

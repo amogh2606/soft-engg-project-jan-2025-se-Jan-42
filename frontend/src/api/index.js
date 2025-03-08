@@ -71,3 +71,11 @@ export const getCourseEnrollments = (courseId) => {
 export const enrollUserInCourse = (userId, courseId) => {
     return client.post(`/courses/enroll`, { user_id: userId, course_id: courseId });
 };
+
+export const getVideoById = (videoId) => {
+    return client.get(`/videos/${videoId}`);
+};
+
+export const getAssignmentById = (assignmentId) => {
+    return client.get(`/assignments/${assignmentId}`);
+};
