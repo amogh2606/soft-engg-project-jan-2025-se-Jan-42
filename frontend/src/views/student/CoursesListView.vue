@@ -107,7 +107,7 @@ const enrollInCourse = (userId, courseId) => {
                             <template #actions="{ row }">
                                 <RouterLink
                                     v-if="enrolledCourses?.find((c) => c.id === row.id)"
-                                    :to="`/course/${row.id}`"
+                                    :to="`/course?course_id=${row.id}`"
                                 >
                                     <Button varient="light" :rounded="true">
                                         <EyeIcon class="h-6 w-6" />

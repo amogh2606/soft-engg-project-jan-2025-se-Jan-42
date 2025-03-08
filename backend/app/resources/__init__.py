@@ -8,7 +8,7 @@ from app.resources.chats import ChatSession, UserChats, AllChats
 from app.resources.feedback import FeedbackResource
 from app.ai_agent.chatbot_service import ChatbotService
 from app.ai_agent.document_manager import KnowledgeStack
-from app.ai_agent.faqs import FAQsResource
+from app.ai_agent.faqs import GenerateFAQs
 from app.ai_agent.video_features import VideoSummary, GenerateQuiz
 from app.ai_agent.assignment_help import AssignmentHelp
 
@@ -54,5 +54,5 @@ api.add_resource(KnowledgeStack, '/documents', '/documents/<int:course_id>')
 api.add_resource(FeedbackResource, '/feedback/<int:course_id>')
 
 # api endpoint for generating faqs
-api.add_resource(FAQsResource, '/faqs')
+api.add_resource(GenerateFAQs, '/faqs')
 

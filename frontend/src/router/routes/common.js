@@ -12,12 +12,16 @@ export default [
         },
     },
     {
-        path: '/course/:id',
+        // /course?course_id=1
+        path: '/course',
         name: 'course-CourseView',
         component: CourseView,
         meta: {
             requiresAuth: true,
         },
+        props: (route) => ({
+            courseId: route.query.course_id,
+        }),
     },
     {
         path: '/:pathMatch(.*)*',

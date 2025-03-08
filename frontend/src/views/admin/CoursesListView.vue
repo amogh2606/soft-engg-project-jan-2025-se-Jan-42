@@ -82,7 +82,7 @@ watch(
                                             <StackIcon class="h-6 w-6" />
                                         </Button>
                                     </RouterLink>
-                                    <RouterLink :to="`/course/${row.id}`">
+                                    <RouterLink :to="`/course?course_id=${row.id}`">
                                         <Button varient="light" :rounded="true">
                                             <EyeIcon class="h-6 w-6" />
                                         </Button>
