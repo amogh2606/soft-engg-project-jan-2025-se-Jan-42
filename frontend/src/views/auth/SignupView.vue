@@ -1,4 +1,5 @@
 <script setup>
+import { registerUser } from '@/api';
 import Button from '@/components/ui/buttons/Button.vue';
 import router from '@/router';
 import BaseView from '@/views/auth/BaseView.vue';
@@ -10,19 +11,37 @@ const name = ref('');
 const email = ref('');
 const password = ref('');
 
+const validateForm = () => {
+    if (!name.value || !email.value || !password.value) {
+        return false;
+    }
+    return true;
+};
+
 function submit() {
-    // In a real app, this would call an API to create a user
-    console.log('Signup form submitted', { name: name.value, email: email.value });
+    if (!validateForm()) {
+        push.error('Please fill all fields !');
+        return;
+    }
 
-    // For now, just redirect to login with the email pre-filled
-    router.push({
-        path: '/auth/login',
-        query: { email: email.value },
-    });
+    registerUser(name.value, email.value, password.value)
+        .then((res) => {
+            console.log('addInstructor', res);
+            push.success('Signup successful !');
 
-    push.success({
-        message: 'Signup successful. Please login with your credentials.',
-    });
+            // For now, just redirect to login with the email pre-filled
+            router.push({
+                path: '/auth/login',
+                query: { email: email.value },
+            });
+        })
+        .catch((err) => {
+            if (err?.response?.status === 400) {
+                push.error(err?.response?.data?.message || 'Failed to signup');
+            } else {
+                push.error('Failed to signup');
+            }
+        });
 }
 </script>
 
