@@ -39,3 +39,7 @@ export const getKnowledgeStackByCourseId = (courseId) => {
 export const getFeedbacksByCourseId = (courseId) => {
     return client.get(`/feedback/${courseId}`);
 };
+
+export const getCourseEnrollments = (courseId) => {
+    return client.get(`/enrollments/${courseId}`);
+};

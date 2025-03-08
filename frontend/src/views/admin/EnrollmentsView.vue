@@ -1,123 +1,55 @@
 <script setup>
+import { getCourseById, getCourseEnrollments } from '@/api';
 import DeleteIcon from '@/components/icons/DeleteIcon.vue';
 import PlusIcon from '@/components/icons/PlusIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
-import { computed, ref } from 'vue';
+import { push } from 'notivue';
+import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import BaseView from './BaseView.vue';
 
+const courseId = useRoute().query.course_id;
+const course = ref(null);
 const headers = ref([
-    { label: 'ID', key: 'id' },
-    { label: 'Student Name', key: 'name' },
-    { label: 'Created At', key: 'createdAt' },
+    { label: 'Name', key: 'name' },
+    { label: 'Email', key: 'email' },
+    { label: 'Role', key: 'role' },
     { label: 'Actions', key: 'actions' },
 ]);
 
-const students = ref([
-    {
-        id: 1,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-01 12:00:00',
-    },
-    {
-        id: 2,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-02 12:00:00',
-    },
-    {
-        id: 3,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-03 12:00:00',
-    },
-    {
-        id: 4,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-04 12:00:00',
-    },
-    {
-        id: 5,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-05 12:00:00',
-    },
-    {
-        id: 6,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-06 12:00:00',
-    },
-    {
-        id: 7,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-07 12:00:00',
-    },
-    {
-        id: 8,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-08 12:00:00',
-    },
-    {
-        id: 9,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-08 12:00:00',
-    },
-    {
-        id: 10,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-10 12:00:00',
-    },
-    {
-        id: 11,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-11 12:00:00',
-    },
-    {
-        id: 12,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-12 12:00:00',
-    },
-    {
-        id: 13,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-13 12:00:00',
-    },
-    {
-        id: 14,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-14 12:00:00',
-    },
-    {
-        id: 15,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-15 12:00:00',
-    },
-    {
-        id: 16,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-16 12:00:00',
-    },
-    {
-        id: 17,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-17 12:00:00',
-    },
-    {
-        id: 18,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-18 12:00:00',
-    },
-    {
-        id: 19,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-19 12:00:00',
-    },
-    {
-        id: 20,
-        name: 'Student Name Here ...',
-        createdAt: '2021-09-20 12:00:00',
-    },
-]);
+const users = ref([]);
+const filteredUsers = computed(() => {
+    return users.value;
+});
 
-const filteredStudents = computed(() => {
-    return students.value;
+onMounted(() => {
+    getCourseById(courseId)
+        .then((response) => {
+            course.value = response?.data;
+        })
+        .catch((error) => {
+            console.error(error);
+            push.error('Error fetching course !');
+        });
+    getCourseEnrollments(courseId)
+        .then((response) => {
+            const { instructors, students } = response?.data?.enrolled_users?.reduce(
+                (acc, user) => {
+                    acc[user.roles.at(0) === 'instructor' ? 'instructors' : 'students'].push({
+                        ...user,
+                        role: user.roles.at(0),
+                    });
+                    return acc;
+                },
+                { instructors: [], students: [] },
+            );
+            users.value = [...instructors, ...students];
+        })
+        .catch((error) => {
+            console.error(error);
+            push.error('Error fetching course enrollments !');
+        });
 });
 </script>
 <template>
@@ -128,7 +60,8 @@ const filteredStudents = computed(() => {
                     class="mx-2 mb-2 flex flex-col overflow-hidden rounded-lg border bg-white p-4 shadow md:mx-10 md:mb-10"
                 >
                     <h1 class="p-3 pb-7 text-center text-2xl font-semibold md:mx-10 md:px-8">
-                        Manage Enrollments : <span>(Course Name Here ...)</span>
+                        Manage Enrollments :
+                        <span>{{ course?.name || 'Course Name Here ...' }}</span>
                     </h1>
 
                     <div class="flex flex-col overflow-hidden rounded-lg border bg-white shadow">
@@ -143,7 +76,7 @@ const filteredStudents = computed(() => {
                                 <PlusIcon class="h-6 w-auto" />
                             </Button>
                         </div>
-                        <TableComponent :headers="headers" :rows="filteredStudents">
+                        <TableComponent :headers="headers" :rows="filteredUsers">
                             <template #actions="{ row }">
                                 <Button varient="outlineRed" :rounded="true">
                                     <DeleteIcon :isSolid="false" class="h-6 w-auto" />
