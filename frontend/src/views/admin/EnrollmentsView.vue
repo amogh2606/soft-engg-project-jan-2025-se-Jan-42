@@ -19,8 +19,10 @@ const headers = ref([
 ]);
 
 const users = ref([]);
+const activeTab = ref('student');
+
 const filteredUsers = computed(() => {
-    return users.value;
+    return users.value.filter((user) => user.role === activeTab.value);
 });
 
 onMounted(() => {
@@ -65,6 +67,29 @@ onMounted(() => {
                     </h1>
 
                     <div class="flex flex-col overflow-hidden rounded-lg border bg-white shadow">
+                        <div class="flex border-b">
+                            <button
+                                class="px-6 py-3 font-medium"
+                                :class="{
+                                    'border-b-2 border-blue-500 text-blue-500':
+                                        activeTab === 'student',
+                                }"
+                                @click="activeTab = 'student'"
+                            >
+                                Students
+                            </button>
+                            <button
+                                class="px-6 py-3 font-medium"
+                                :class="{
+                                    'border-b-2 border-blue-500 text-blue-500':
+                                        activeTab === 'instructor',
+                                }"
+                                @click="activeTab = 'instructor'"
+                            >
+                                Instructors
+                            </button>
+                        </div>
+
                         <div class="flex justify-between gap-2 border-b p-3">
                             <input
                                 type="text"
@@ -72,9 +97,6 @@ onMounted(() => {
                                 placeholder="Search..."
                             />
                             <Button varient="primary">Search</Button>
-                            <Button varient="primary">
-                                <PlusIcon class="h-6 w-auto" />
-                            </Button>
                         </div>
                         <TableComponent :headers="headers" :rows="filteredUsers">
                             <template #actions="{ row }">
