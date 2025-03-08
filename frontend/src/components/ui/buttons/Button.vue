@@ -1,6 +1,11 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <button :class="`${rounded ? roundedBaseClasses : baseClasses} ${btnVarients[varient]}`">
+    <button
+        :class="`${rounded ? roundedBaseClasses : baseClasses} ${btnVarients[varient]} ${
+            disabled ? 'opacity-50 cursor-not-allowed' : ''
+        }`"
+        :disabled="disabled"
+    >
         <slot></slot>
     </button>
 </template>
@@ -27,6 +32,10 @@ defineProps({
             ),
     },
     rounded: {
+        type: Boolean,
+        default: false,
+    },
+    disabled: {
         type: Boolean,
         default: false,
     },

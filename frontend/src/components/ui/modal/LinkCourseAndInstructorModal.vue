@@ -1,83 +1,77 @@
 <template>
     <Modal :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)">
         <div class="flex flex-col gap-4 py-2">
-            <p class="text-xl font-semibold tracking-wide">Add Instructor</p>
+            <p class="text-xl font-semibold tracking-wide">Link Course</p>
             <div class="flex flex-col gap-2">
-                <label class="text-sm font-medium text-gray-600">Name</label>
+                <label class="text-sm font-medium text-gray-600">Instructor Name</label>
                 <input
                     type="text"
                     class="rounded-md border border-gray-400 p-2 text-gray-600 focus:outline-none focus:ring-1 focus:ring-gray-400"
                     placeholder="Enter instructor name"
-                    v-model="name"
+                    v-model="instructor.name"
+                    disabled
                 />
             </div>
             <div class="flex flex-col gap-2">
-                <label class="text-sm font-medium text-gray-600">Email</label>
-                <input
-                    type="email"
+                <label class="text-sm font-medium text-gray-600">Course</label>
+                <select
                     class="rounded-md border border-gray-400 p-2 text-gray-600 focus:outline-none focus:ring-1 focus:ring-gray-400"
-                    placeholder="Enter instructor email"
-                    v-model="email"
-                />
+                    v-model="selectedCourseId"
+                >
+                    <option v-for="course in courses" :value="course.id">{{ course.name }}</option>
+                </select>
             </div>
-            <div class="flex flex-col gap-2">
-                <label class="text-sm font-medium text-gray-600">Password</label>
-                <input
-                    type="password"
-                    class="rounded-md border border-gray-400 p-2 text-gray-600 focus:outline-none focus:ring-1 focus:ring-gray-400"
-                    placeholder="Enter instructor password"
-                    v-model="password"
-                />
-            </div>
-            <Button varient="primary" @click="addInstructor">Add Instructor</Button>
+            <Button varient="primary" @click="linkCourse">Link Course</Button>
         </div>
     </Modal>
 </template>
 
 <script setup>
-import { registerUser } from '@/api';
+import { enrollUserInCourse } from '@/api';
 import Button from '@/components/ui/buttons/Button.vue';
 import { push } from 'notivue';
 import { ref } from 'vue';
 import Modal from './Modal.vue';
 
-defineProps({
+const props = defineProps({
     modelValue: {
         type: Boolean,
         default: false,
     },
+    courses: {
+        type: Array,
+        default: [],
+    },
+    instructor: {
+        type: Object,
+        default: {},
+    },
 });
 const emit = defineEmits(['update:modelValue']);
 
-const name = ref('');
-const email = ref('');
-const password = ref('');
+const selectedCourseId = ref(null);
 
 const validateForm = () => {
-    if (!name.value || !email.value || !password.value) {
+    if (!selectedCourseId.value) {
         return false;
     }
     return true;
 };
 
-const addInstructor = () => {
+const linkCourse = () => {
     if (!validateForm()) {
-        push.error('Please fill all fields !');
+        push.error('Please select a course');
         return;
     }
 
-    registerUser(name.value, email.value, password.value)
+    enrollUserInCourse(props.instructor.id, selectedCourseId.value)
         .then((res) => {
-            console.log('addInstructor', res);
+            push.success('Course linked successfully');
             emit('update:modelValue', false);
-            push.success('Instructor added successfully');
         })
         .catch((err) => {
-            if (err?.response?.status === 400) {
-                push.error(err?.response?.data?.message || 'Failed to add instructor');
-            } else {
-                push.error('Failed to add instructor');
-            }
+            console.log(err);
+            push.error('Failed to link course');
         });
 };
 </script>

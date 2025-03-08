@@ -55,3 +55,7 @@ export const getFeedbacksByCourseId = (courseId) => {
 export const getCourseEnrollments = (courseId) => {
     return client.get(`/enrollments/${courseId}`);
 };
+
+export const enrollUserInCourse = (userId, courseId) => {
+    return client.post(`/courses/enroll`, { user_id: userId, course_id: courseId });
+};
