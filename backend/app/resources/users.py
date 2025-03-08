@@ -7,6 +7,7 @@ import re
 
 
 user_fields = {
+    'id': fields.Integer,
     'email': fields.String,
     'name': fields.String,
     'roles': fields.List(fields.String(attribute='name')),

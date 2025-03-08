@@ -13,6 +13,10 @@ course_fields = {
         'title': fields.String,
         'week': fields.Integer,
         'lecture': fields.Integer
+    })),
+    'assignments': fields.List(fields.Nested({
+        'id': fields.Integer,
+        'week': fields.String,
     }))
 }
 

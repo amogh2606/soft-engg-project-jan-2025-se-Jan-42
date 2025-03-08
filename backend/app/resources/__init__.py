@@ -3,6 +3,7 @@ from app.resources.auth import Login, Logout
 from app.resources.users import UserResource
 from app.resources.courses import CourseResource, AllCourses, CourseEnrollment
 from app.resources.videos import VideoResource, AllVideos, RateVideo
+from app.resources.assignments import AssignmentResource
 from app.resources.chats import ChatSession, UserChats, AllChats
 from app.resources.feedback import FeedbackResource
 from app.resources.faqs import GenerateFAQs
@@ -30,6 +31,9 @@ api.add_resource(AllCourses, '/courses/all')
 api.add_resource(VideoResource, '/videos', '/videos/<int:video_id>')
 api.add_resource(RateVideo, '/videos/<int:video_id>/rate')
 api.add_resource(AllVideos, '/videos/all')
+
+# api endpoint for assignments
+api.add_resource(AssignmentResource, '/assignments/<int:assignment_id>')
 
 # api endpoints for chats
 api.add_resource(ChatSession, '/chats', '/chats/<int:chat_id>')
