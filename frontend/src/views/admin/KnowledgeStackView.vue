@@ -1,5 +1,9 @@
 <script setup>
-import { getKnowledgeStackByCourseId, getCourseById } from '@/api';
+import {
+    deleteDocumentFromKnowledgeStack,
+    getCourseById,
+    getKnowledgeStackByCourseId,
+} from '@/api';
 import DeleteIcon from '@/components/icons/DeleteIcon.vue';
 import PlusIcon from '@/components/icons/PlusIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
@@ -25,6 +29,39 @@ const toggleFileUploadModal = () => {
     isFileUploadModalOpen.value = !isFileUploadModalOpen.value;
 };
 
+const deleteDocument = (fileName) => {
+    deleteDocumentFromKnowledgeStack(courseId, fileName)
+        .then((response) => {
+            push.success('File deleted successfully');
+            loadKnowledgeStack();
+        })
+        .catch((error) => {
+            if (error?.response?.status === 404) {
+                push.error('File not found !');
+            } else {
+                push.error(error?.response?.data?.message || 'Failed to delete file !');
+            }
+        });
+};
+
+const loadKnowledgeStack = () => {
+    getKnowledgeStackByCourseId(courseId)
+        .then((response) => {
+            files.value = response.data.documents.map((file, index) => ({
+                fileName: file,
+                id: index + 1,
+            }));
+        })
+        .catch((error) => {
+            console.error(error);
+            if (error?.response?.status === 404) {
+                push.error('No knowledge stack found for this course !');
+            } else {
+                push.error(error?.response?.data?.message || 'Error fetching knowledge stack !');
+            }
+        });
+};
+
 onMounted(() => {
     getCourseById(courseId)
         .then((response) => {
@@ -34,22 +71,7 @@ onMounted(() => {
             console.error(error);
             push.error('Error fetching course !');
         });
-    getKnowledgeStackByCourseId(courseId)
-        .then((response) => {
-            files.value = response.data.documents.map((file, index) => ({
-                fileName: file,
-                id: index + 1,
-            }));
-
-        })
-        .catch((error) => {
-            console.error(error);
-            if (error?.response?.status === 404) {
-                push.error('No knowledge stack found for this course !');
-            } else {
-                push.error('Error fetching knowledge stack !');
-            }
-        });
+    loadKnowledgeStack();
 });
 </script>
 <template>
@@ -78,7 +100,11 @@ onMounted(() => {
 
                         <TableComponent :headers="headers" :rows="filteredFiles">
                             <template #actions="{ row }">
-                                <Button varient="outlineRed" :rounded="true">
+                                <Button
+                                    varient="outlineRed"
+                                    :rounded="true"
+                                    @click="deleteDocument(row.fileName)"
+                                >
                                     <DeleteIcon :isSolid="false" class="h-6 w-auto" />
                                 </Button>
                             </template>

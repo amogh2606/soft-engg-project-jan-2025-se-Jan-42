@@ -1,5 +1,5 @@
 <script setup>
-import { getKnowledgeStackByCourseId } from '@/api';
+import { deleteDocumentFromKnowledgeStack, getKnowledgeStackByCourseId } from '@/api';
 import DeleteIcon from '@/components/icons/DeleteIcon.vue';
 import PlusIcon from '@/components/icons/PlusIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
@@ -10,6 +10,7 @@ import { push } from 'notivue';
 import { computed, onMounted, ref } from 'vue';
 import BaseView from './BaseView.vue';
 
+const { courseIdOfInstructor } = useAuthStore();
 const headers = ref([
     { label: 'ID', key: 'id' },
     { label: 'File Name', key: 'fileName' },
@@ -17,14 +18,27 @@ const headers = ref([
 ]);
 const files = ref([]);
 const filteredFiles = computed(() => files.value);
-
 const isFileUploadModalOpen = ref(false);
 const toggleFileUploadModal = () => {
     isFileUploadModalOpen.value = !isFileUploadModalOpen.value;
 };
 
-onMounted(() => {
-    const { courseIdOfInstructor } = useAuthStore();
+const deleteDocument = (fileName) => {
+    deleteDocumentFromKnowledgeStack(courseIdOfInstructor, fileName)
+        .then((response) => {
+            push.success('File deleted successfully');
+            loadKnowledgeStack();
+        })
+        .catch((error) => {
+            if (error?.response?.status === 404) {
+                push.error('File not found !');
+            } else {
+                push.error(error?.response?.data?.message || 'Failed to delete file !');
+            }
+        });
+};
+
+const loadKnowledgeStack = () => {
     getKnowledgeStackByCourseId(courseIdOfInstructor)
         .then((response) => {
             files.value = response.data.documents.map((file, index) => ({
@@ -37,9 +51,13 @@ onMounted(() => {
             if (error?.response?.status === 404) {
                 push.error('No knowledge stack found for this course !');
             } else {
-                push.error('Error fetching knowledge stack !');
+                push.error(error?.response?.data?.message || 'Error fetching knowledge stack !');
             }
         });
+};
+
+onMounted(() => {
+    loadKnowledgeStack();
 });
 </script>
 <template>
@@ -67,7 +85,11 @@ onMounted(() => {
                         </div>
                         <TableComponent :headers="headers" :rows="filteredFiles">
                             <template #actions="{ row }">
-                                <Button varient="outlineRed" :rounded="true">
+                                <Button
+                                    varient="outlineRed"
+                                    :rounded="true"
+                                    @click="deleteDocument(row.fileName)"
+                                >
                                     <DeleteIcon :isSolid="false" class="h-6 w-auto" />
                                 </Button>
                             </template>

@@ -48,6 +48,10 @@ export const getKnowledgeStackByCourseId = (courseId) => {
     return client.get(`/documents/${courseId}`);
 };
 
+export const deleteDocumentFromKnowledgeStack = (courseId, documentName) => {
+    return client.delete(`/documents/${courseId}?filename=${documentName}`);
+};
+
 export const getFeedbacksByCourseId = (courseId) => {
     return client.get(`/feedback/${courseId}`);
 };
