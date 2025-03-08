@@ -91,7 +91,7 @@ const enrollInCourse = (userId, courseId) => {
                                 }"
                                 @click="activeTab = 'all'"
                             >
-                                Available Courses
+                                Pending Courses
                             </button>
                         </div>
                         <div class="flex justify-between gap-2 border-b p-3">
