@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse, marshal_with, fields, abort
-from flask_security import current_user, roles_accepted
-from app.models import db, Chat, Message
+from flask_security import current_user, auth_required
+from app.models import db, Chat, Message, Course
 
 from langchain_chroma import Chroma
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -11,8 +11,8 @@ from app.ai_agent.embeddings import client, embedding_function
 
 parser = reqparse.RequestParser()
 parser.add_argument("chat_id", type=int, required=True)
-parser.add_argument("query", type=str, required=True)
 parser.add_argument("course_id", type=int)
+parser.add_argument("query", required=True)
 
 response_fields = {
     'chat_id': fields.Integer,
@@ -20,9 +20,8 @@ response_fields = {
     'message': fields.String(attribute='text')
 }
 
-
 class ChatbotService(Resource):
-    @roles_accepted('student', 'instructor')
+    @auth_required('session')
     @marshal_with(response_fields)
     def post(self):
         args = parser.parse_args()
@@ -35,6 +34,7 @@ class ChatbotService(Resource):
         course_id = args.get('course_id')
         response = self.generate_response(query, chat_id, course_id)
 
+        # Save the question and response in db
         user_query = Message(chat_id=chat.id, text=query, is_response=False)
         ai_response = Message(chat_id=chat.id, text=response, is_response=True)
         
@@ -45,6 +45,9 @@ class ChatbotService(Resource):
     
     
     def generate_response(self, query, chat_id, course_id=None):
+        if course_id:
+            db.get_or_404(Course, course_id, description="Course not found")
+            
         collection_name = f'course_{course_id}' if course_id else 'general'
         vector_store = Chroma(
             collection_name=collection_name,
@@ -55,7 +58,6 @@ class ChatbotService(Resource):
         retriever = vector_store.as_retriever(
             search_kwargs={'k': 4}
         )
-        
         llm = ChatGoogleGenerativeAI(
             model='gemini-2.0-flash-001', 
             temperature=0.5 
@@ -68,7 +70,6 @@ class ChatbotService(Resource):
         
         res = retriever.invoke(query)
         relevant_docs = '\n\n'.join(set(doc.page_content for doc in res))
-        print(relevant_docs)
 
         response = chain.invoke({"messages": messages, "context": relevant_docs})
         
@@ -79,7 +80,8 @@ class ChatbotService(Resource):
         prompt_template = ChatPromptTemplate([
             ("system", """You are a chatbot in an e-learning platform. 
                 Provide a concise friendly response based on the conversation.
-                You may use the given context: \n{context}"""),
+                You can also point to external sources of information if required.
+                You may use the given context if relevant: \n\n{context}"""),
 
             ("placeholder", "{messages}"),
         ])

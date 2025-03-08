@@ -33,8 +33,6 @@ class ChatSession(Resource):
                 abort(404, message="Chat not found")
         else:
             # get the active chat session
-            if current_user.has_role('admin'):
-                abort(404, message="Admin cannot have active chat session")
             stmt = db.select(Chat).filter_by(user_id=current_user.id, active=True)
             chat = db.session.scalar(stmt)
             if not chat:
@@ -44,7 +42,7 @@ class ChatSession(Resource):
     
 
     # Create new chat session
-    @roles_accepted('student', 'instructor')
+    @auth_required('session')
     @marshal_with(chat_fields)
     def post(self):
         stmt = db.select(Chat).filter_by(user_id=current_user.id, active=True)
@@ -61,7 +59,7 @@ class ChatSession(Resource):
     
 
     # Bookmark or rename chat
-    @roles_accepted('student', 'instructor')
+    @auth_required('session')
     @marshal_with(chat_fields)
     def put(self, chat_id):
         chat = db.session.get(Chat, chat_id)
@@ -107,7 +105,7 @@ chat_list_fields = {
 
 class UserChats(Resource):
     # Get chat history for current user
-    @roles_accepted('student', 'instructor')
+    @auth_required('session')
     @marshal_with(chat_list_fields)
     def get(self):
         stmt = db.select(Chat).filter_by(user_id=current_user.id)
