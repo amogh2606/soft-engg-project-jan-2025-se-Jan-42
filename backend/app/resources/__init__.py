@@ -6,9 +6,9 @@ from app.resources.videos import VideoResource, AllVideos, RateVideo
 from app.resources.assignments import AssignmentResource
 from app.resources.chats import ChatSession, UserChats, AllChats
 from app.resources.feedback import FeedbackResource
-from app.resources.faqs import GenerateFAQs
 from app.ai_agent.chatbot_service import ChatbotService
 from app.ai_agent.document_manager import KnowledgeStack
+from app.ai_agent.faqs import GenerateFAQs
 
 
 
@@ -24,7 +24,7 @@ api.add_resource(UserResource, '/user', '/user/<int:user_id>')
 
 # api endpoints for courses
 api.add_resource(CourseResource, '/courses', '/courses/<int:course_id>')
-api.add_resource(CourseEnrollment, '/courses/enroll')
+api.add_resource(CourseEnrollment, '/courses/enroll', '/enrollments/<int:course_id>')
 api.add_resource(AllCourses, '/courses/all')
 
 # api endpoints for videos

@@ -109,7 +109,23 @@ class AllCourses(Resource):
         return all_courses
 
 
+user_fields = {
+    'id': fields.Integer,
+    'email': fields.String,
+    'name': fields.String,
+    'roles': fields.List(fields.String(attribute='name'))
+}
+
 class CourseEnrollment(Resource):
+    # Get users enrolled in a course
+    @roles_accepted('admin')
+    @marshal_with(user_fields, envelope='enrolled_users')
+    def get(self, course_id):
+        course = db.get_or_404(Course, course_id, description="Course not found")
+        users = course.users
+        return users
+    
+
     # Enroll a user to a course
     @roles_accepted('student', 'admin')
     def post(self):
@@ -121,14 +137,18 @@ class CourseEnrollment(Resource):
         course_id = args.get('course_id')
         user_id = args.get('user_id')
 
-        # check if student is enrolling themselves
+        # check if student is not enrolling themselves
         if current_user.has_role('student') and current_user.id != user_id:
             abort(403)
-
+        
         course = db.get_or_404(Course, course_id, description="Course not found")
         user = db.get_or_404(User, user_id, description="User not found")
         if course in user.courses:
             abort(400, message="User already enrolled")
+
+        # instructor can be assigned to only one course
+        if user.has_role('instructor') and user.courses:
+            abort(400, message="Instructor already assigned to a course")
 
         course.users.append(user)
         db.session.commit()
