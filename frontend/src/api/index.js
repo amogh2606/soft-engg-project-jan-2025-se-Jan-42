@@ -32,6 +32,10 @@ export const getCourseById = (courseId) => {
     return client.get(`/courses/${courseId}`);
 };
 
+export const addCourse = (name, description) => {
+    return client.post('/courses', { name, description });
+};
+
 export const getKnowledgeStackByCourseId = (courseId) => {
     return client.get(`/documents/${courseId}`);
 };

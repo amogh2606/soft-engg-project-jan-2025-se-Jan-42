@@ -1,15 +1,16 @@
 <script setup>
+import { getAllCourses } from '@/api';
 import EyeIcon from '@/components/icons/EyeIcon.vue';
 import PlusIcon from '@/components/icons/PlusIcon.vue';
 import StackIcon from '@/components/icons/StackIcon.vue';
 import StudentIcon from '@/components/icons/StudentIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
+import AddCourseModal from '@/components/ui/modal/AddCourseModal.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
-import { computed, ref, onMounted } from 'vue';
+import { push } from 'notivue';
+import { computed, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 import BaseView from './BaseView.vue';
-import { getAllCourses } from '@/api';
-import { push } from 'notivue';
 
 const headers = ref([
     { label: 'ID', key: 'id' },
@@ -18,8 +19,12 @@ const headers = ref([
 ]);
 const courses = ref([]);
 const filteredCourses = computed(() => courses.value);
+const isAddCourseModalOpen = ref(false);
+const toggleAddCourseModal = () => {
+    isAddCourseModalOpen.value = !isAddCourseModalOpen.value;
+};
 
-onMounted(() => {
+const fetchCourses = () => {
     getAllCourses()
         .then((response) => {
             courses.value = response.data;
@@ -28,7 +33,17 @@ onMounted(() => {
             console.error(error);
             push.error('Error fetching courses !');
         });
-});
+};
+
+watch(
+    isAddCourseModalOpen,
+    () => {
+        if (!isAddCourseModalOpen.value) {
+            fetchCourses();
+        }
+    },
+    { immediate: true },
+);
 </script>
 <template>
     <BaseView>
@@ -49,7 +64,7 @@ onMounted(() => {
                                 placeholder="Search..."
                             />
                             <Button varient="primary">Search</Button>
-                            <Button varient="primary">
+                            <Button varient="primary" @click="toggleAddCourseModal">
                                 <PlusIcon class="h-6 w-auto" />
                             </Button>
                         </div>
@@ -78,6 +93,7 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
+            <AddCourseModal v-model="isAddCourseModalOpen" />
         </template>
     </BaseView>
 </template>
