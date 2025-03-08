@@ -4,6 +4,7 @@ import DeleteIcon from '@/components/icons/DeleteIcon.vue';
 import PlusIcon from '@/components/icons/PlusIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
+import AddInstructorModal from '@/components/ui/modal/AddInstructorModal.vue';
 import { push } from 'notivue';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
@@ -24,6 +25,11 @@ const activeTab = ref('student');
 const filteredUsers = computed(() => {
     return users.value.filter((user) => user.role === activeTab.value);
 });
+
+const isAddInstructorModalOpen = ref(false);
+const toggleAddInstructorModal = () => {
+    isAddInstructorModalOpen.value = !isAddInstructorModalOpen.value;
+};
 
 onMounted(() => {
     getCourseById(courseId)
@@ -97,6 +103,13 @@ onMounted(() => {
                                 placeholder="Search..."
                             />
                             <Button varient="primary">Search</Button>
+                            <Button
+                                v-if="activeTab === 'instructor' && filteredUsers.length === 0"
+                                varient="primary"
+                                @click="toggleAddInstructorModal"
+                            >
+                                <PlusIcon class="h-6 w-auto" />
+                            </Button>
                         </div>
                         <TableComponent :headers="headers" :rows="filteredUsers">
                             <template #actions="{ row }">
@@ -108,6 +121,7 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
+            <AddInstructorModal v-model="isAddInstructorModalOpen" :course="course" />
         </template>
     </BaseView>
 </template>
