@@ -7,7 +7,7 @@ import FileUploadModal from '@/components/ui/modal/FileUploadModal.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
 import { useAuthStore } from '@/stores/auth';
 import { push } from 'notivue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import BaseView from './BaseView.vue';
 
 const { courseIdOfInstructor } = useAuthStore();
@@ -56,9 +56,15 @@ const loadKnowledgeStack = () => {
         });
 };
 
-onMounted(() => {
-    loadKnowledgeStack();
-});
+watch(
+    isFileUploadModalOpen,
+    () => {
+        if (!isFileUploadModalOpen.value) {
+            loadKnowledgeStack();
+        }
+    },
+    { immediate: true },
+);
 </script>
 <template>
     <BaseView>
@@ -97,7 +103,10 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
-            <FileUploadModal v-model="isFileUploadModalOpen" />
+            <FileUploadModal
+                v-model="isFileUploadModalOpen"
+                :course-id="courseIdOfInstructor.toString()"
+            />
         </template>
     </BaseView>
 </template>

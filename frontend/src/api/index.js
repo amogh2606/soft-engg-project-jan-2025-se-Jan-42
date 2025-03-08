@@ -52,6 +52,14 @@ export const deleteDocumentFromKnowledgeStack = (courseId, documentName) => {
     return client.delete(`/documents/${courseId}?filename=${documentName}`);
 };
 
+export const uploadDocumentToKnowledgeStack = (courseId, formData) => {
+    return client.post(`/documents/${courseId}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+};
+
 export const getFeedbacksByCourseId = (courseId) => {
     return client.get(`/feedback/${courseId}`);
 };

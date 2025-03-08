@@ -4,16 +4,7 @@
             <p class="text-xl font-semibold tracking-wide">Upload File</p>
 
             <div class="flex flex-col gap-2">
-                <label class="text-sm font-medium text-gray-600">File Name</label>
-                <input
-                    type="text"
-                    class="rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-1 focus:ring-gray-300"
-                    placeholder="Enter file name"
-                />
-            </div>
-
-            <div class="flex flex-col gap-2">
-                <label class="text-sm font-medium text-gray-600">Select File</label>
+                <label class="hidden text-sm font-medium text-gray-600">Select File</label>
                 <input
                     type="file"
                     @change="handleFileUpload"
@@ -30,31 +21,34 @@
                 <button @click="removeFile" class="text-sm font-medium text-red-500">Remove</button>
             </div>
 
-            <button
-                @click="uploadFile"
-                class="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-            >
-                Upload
-            </button>
+            <Button @click="uploadFile" :loading="isLoading">
+                <span>Upload</span>
+            </Button>
         </div>
     </Modal>
 </template>
 
 <script setup>
+import { uploadDocumentToKnowledgeStack } from '@/api';
+import Button from '@/components/ui/buttons/Button.vue';
 import { push } from 'notivue';
 import { ref } from 'vue';
 import Modal from './Modal.vue';
-
-defineProps({
+const props = defineProps({
     modelValue: {
         type: Boolean,
         default: false,
+    },
+    courseId: {
+        type: String,
+        required: true,
     },
 });
 
 const emit = defineEmits(['update:modelValue']);
 const fileName = ref(null);
 const fileInputRef = ref(null);
+const isLoading = ref(false);
 
 const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -70,21 +64,42 @@ const removeFile = () => {
     fileInputRef.value.value = null;
 };
 
+const validateInput = () => {
+    if (!fileName.value || !fileInputRef.value.files[0]) {
+        return false;
+    }
+    return true;
+};
+
 const uploadFile = () => {
-    if (!fileName.value) {
+    if (!validateInput()) {
         push.error({
             title: 'Error',
             message: 'Please select a file to upload.',
         });
         return;
     }
-    push.success({
-        title: 'File uploaded',
-        message: `File ${fileName.value} uploaded successfully`,
-    });
 
-    emit('update:modelValue', false);
-    fileName.value = null;
-    fileInputRef.value.value = null;
+    isLoading.value = true;
+    const formData = new FormData();
+    formData.append('file', fileInputRef.value.files[0]);
+
+    uploadDocumentToKnowledgeStack(props.courseId, formData)
+        .then((response) => {
+            push.success({
+                title: 'File uploaded',
+                message: `File ${fileName.value} uploaded successfully`,
+            });
+
+            emit('update:modelValue', false);
+            fileName.value = null;
+            fileInputRef.value.value = null;
+        })
+        .catch((error) => {
+            push.error(error?.response?.data?.message || 'Failed to upload file !');
+        })
+        .finally(() => {
+            isLoading.value = false;
+        });
 };
 </script>

@@ -10,7 +10,7 @@ import Button from '@/components/ui/buttons/Button.vue';
 import FileUploadModal from '@/components/ui/modal/FileUploadModal.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
 import { push } from 'notivue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import BaseView from './BaseView.vue';
 
@@ -71,8 +71,17 @@ onMounted(() => {
             console.error(error);
             push.error('Error fetching course !');
         });
-    loadKnowledgeStack();
 });
+
+watch(
+    isFileUploadModalOpen,
+    () => {
+        if (!isFileUploadModalOpen.value) {
+            loadKnowledgeStack();
+        }
+    },
+    { immediate: true },
+);
 </script>
 <template>
     <BaseView>
@@ -112,7 +121,7 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
-            <FileUploadModal v-model="isFileUploadModalOpen" />
+            <FileUploadModal v-model="isFileUploadModalOpen" :course-id="courseId?.toString()" />
         </template>
     </BaseView>
 </template>
