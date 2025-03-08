@@ -113,7 +113,11 @@ user_fields = {
     'id': fields.Integer,
     'email': fields.String,
     'name': fields.String,
-    'roles': fields.List(fields.String(attribute='name'))
+    'roles': fields.List(fields.String(attribute='name')),
+    'courses': fields.List(fields.Nested({
+        'id': fields.Integer,
+        'name': fields.String
+    }))
 }
 
 class CourseEnrollment(Resource):
