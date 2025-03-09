@@ -79,3 +79,23 @@ export const getVideoById = (videoId) => {
 export const getAssignmentById = (assignmentId) => {
     return client.get(`/assignments/${assignmentId}`);
 };
+
+// chatbot endpoints
+export const getChatbotSession = (sessionId = null) => {
+    if (sessionId) {
+        return client.get(`/chats/${sessionId}`);
+    }
+    return client.get('/chats');
+};
+
+export const updateChatbotSession = (sessionId, title, bookmarked) => {
+    return client.put(`/chats/${sessionId}`, { title, bookmarked });
+};
+
+export const deleteChatbotSession = (sessionId) => {
+    return client.delete(`/chats/${sessionId}`);
+};
+
+export const sendMessageToChatbot = (sessionId, message, courseId = null) => {
+    return client.post('/chatbot', { chat_id: sessionId, course_id: courseId, query: message });
+};

@@ -1,17 +1,20 @@
 <script setup>
+import { getChatbotSession, sendMessageToChatbot, updateChatbotSession } from '@/api';
 import BookmarkIcon from '@/components/icons/BookmarkIcon.vue';
 import CopyIcon from '@/components/icons/CopyIcon.vue';
 import CrossIcon from '@/components/icons/CrossIcon.vue';
 import EditIcon from '@/components/icons/EditIcon.vue';
+import ResetIcon from '@/components/icons/ResetIcon.vue';
 import SendIcon from '@/components/icons/SendIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import Dropdown from '@/components/ui/dropdown/ContextDropdown.vue';
 import Modal from '@/components/ui/modal/Modal.vue';
+import { useAuthStore } from '@/stores/auth';
 import { useClipboard } from '@vueuse/core';
 import { push } from 'notivue';
-import { nextTick, ref, watch } from 'vue';
+import { ref, watchEffect } from 'vue';
 
-defineProps({
+const props = defineProps({
     closeDrawer: {
         type: Function,
         required: true,
@@ -22,51 +25,75 @@ defineProps({
     },
 });
 
-const chats = ref([
-    {
-        id: 1,
-        message: 'What is 2 + 2 ?',
-        user: 'user',
-    },
-    {
-        id: 2,
-        message:
-            "I can't give you the direct answer. But, you could get the answer by solving the expression 6 - 2 = ?.",
-        user: 'assistant',
-    },
-    {
-        id: 3,
-        message: 'Got it ! Thanks :)',
-        user: 'user',
-    },
-]);
-
-const contextList = ['Current Page', 'General FAQs', 'Coding', 'Lecture'];
-const selectedContext = ref(null);
-const isBookmarked = ref(false);
-const toggleBookmark = () => {
-    isBookmarked.value = !isBookmarked.value;
-    push.success({
-        message: isBookmarked.value ? 'Bookmark added' : 'Bookmark removed',
-    });
-};
-
-const chatTitle = ref('Chat Title Here ...');
-const _chatTitle = ref(chatTitle.value);
-const isEditModalOpen = ref(false);
-const updateChatTitle = () => {
-    chatTitle.value = _chatTitle.value;
-    isEditModalOpen.value = false;
-    push.success({
-        message: 'Chat title updated',
-    });
-};
-const toggleEditModal = () => {
-    isEditModalOpen.value = !isEditModalOpen.value;
-    _chatTitle.value = chatTitle.value;
-};
-
+const { user } = useAuthStore();
 const { copy } = useClipboard();
+
+const session = ref(null);
+const chatTitleInput = ref('Chat Title Here ...');
+const isEditTitleModalOpen = ref(false);
+const newMessage = ref('');
+const chatContainer = ref(null);
+const selectedCourse = ref(null);
+const courseList = user.courses.map((course) => course.name);
+
+const refreshSession = () => {
+    getChatbotSession()
+        .then((res) => {
+            session.value = res.data;
+            selectedCourse.value = null;
+            newMessage.value = '';
+            setTimeout(() => scrollToBottom(), 500);
+        })
+        .catch((error) => {
+            push.error(error?.response?.data?.message || 'Something went wrong fetching session !');
+        });
+};
+
+const toggleBookmark = () => {
+    updateChatbotSession(session.value.id, session.value.title, !session.value.bookmarked)
+        .then((res) => {
+            session.value = res.data;
+            push.success({
+                message: session.value.bookmarked ? 'Bookmark added' : 'Bookmark removed',
+            });
+        })
+        .catch((error) => {
+            push.error(error?.response?.data?.message || 'Something went wrong updating session !');
+        });
+};
+
+const updateChatTitle = () => {
+    updateChatbotSession(session.value.id, chatTitleInput.value, session.value.bookmarked)
+        .then((res) => {
+            session.value = res.data;
+            push.success({
+                message: 'Chat title updated',
+            });
+            toggleEditTitleModal();
+        })
+        .catch((error) => {
+            push.error(error?.response?.data?.message || 'Something went wrong updating session !');
+        });
+};
+
+const toggleEditTitleModal = () => {
+    isEditTitleModalOpen.value = !isEditTitleModalOpen.value;
+    chatTitleInput.value = session.value.title;
+};
+
+const sendMessage = () => {
+    if (newMessage.value.trim() === '') return;
+    const courseId = user.courses.find((course) => course.name === selectedCourse.value)?.id;
+
+    sendMessageToChatbot(session.value.id, newMessage.value, courseId)
+        .then((res) => {
+            refreshSession();
+        })
+        .catch((error) => {
+            push.error(error?.response?.data?.message || 'Something went wrong sending message !');
+        });
+};
+
 const copyMessage = (message) => {
     copy(message);
     push.success({
@@ -74,49 +101,20 @@ const copyMessage = (message) => {
     });
 };
 
-const newMessage = ref('');
-const chatContainer = ref(null);
-
 const scrollToBottom = () => {
     if (chatContainer.value) {
-        chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
+        chatContainer.value.scrollTo({
+            top: chatContainer.value.scrollHeight,
+            behavior: 'smooth',
+        });
     }
 };
 
-watch(
-    chats,
-    () => {
-        // Use nextTick to ensure DOM is updated before scrolling
-        nextTick(() => {
-            scrollToBottom();
-        });
-    },
-    { deep: true },
-);
-
-const sendMessage = () => {
-    if (newMessage.value.trim() === '') return;
-    if (!selectedContext.value) {
-        push.error({
-            message: 'Please select a context',
-        });
-        return;
+watchEffect(() => {
+    if (props.isOpen) {
+        refreshSession();
     }
-
-    chats.value.push({
-        id: chats.value.length + 1,
-        message: newMessage.value,
-        user: 'user',
-    });
-    newMessage.value = '';
-    setTimeout(() => {
-        chats.value.push({
-            id: chats.value.length + 1,
-            message: 'Thanks for your message !',
-            user: 'assistant',
-        });
-    }, 1000);
-};
+});
 </script>
 <template>
     <!-- drawer component -->
@@ -135,13 +133,13 @@ const sendMessage = () => {
         >
             <!-- header -->
             <div class="flex items-center justify-between border-b bg-gray-50 p-2">
-                <p class="text-lg">{{ chatTitle }}</p>
+                <p class="text-lg">{{ session?.title }}</p>
                 <div class="flex gap-2">
-                    <Button varient="light" :rounded="true" @click="toggleEditModal">
+                    <Button varient="light" :rounded="true" @click="toggleEditTitleModal">
                         <EditIcon class="h-5 w-auto" />
                     </Button>
                     <Button varient="light" :rounded="true" @click="toggleBookmark">
-                        <BookmarkIcon :is-solid="isBookmarked" class="h-5 w-auto" />
+                        <BookmarkIcon :is-solid="session?.bookmarked" class="h-5 w-auto" />
                     </Button>
                     <Button varient="light" :rounded="true" @click="closeDrawer">
                         <CrossIcon class="h-5 w-auto" />
@@ -155,22 +153,22 @@ const sendMessage = () => {
                     class="flex flex-1 flex-col items-center gap-2 overflow-y-scroll p-2 first:mt-auto"
                 >
                     <div
-                        v-for="chat in chats"
-                        :key="chat.id"
+                        v-for="msg in session?.messages"
+                        :key="msg.id"
                         class="flex w-4/5 rounded-lg px-3 py-2"
                         :class="{
-                            'bg-gray-100': chat.user === 'assistant',
-                            'bg-blue-100': chat.user === 'user',
-                            'me-auto': chat.user === 'assistant',
-                            'ms-auto': chat.user === 'user',
-                            'rounded-tl-none': chat.user === 'assistant',
-                            'rounded-tr-none': chat.user === 'user',
+                            'bg-gray-100': msg?.is_response,
+                            'bg-blue-100': !msg?.is_response,
+                            'me-auto': msg?.is_response,
+                            'ms-auto': !msg?.is_response,
+                            'rounded-tl-none': msg?.is_response,
+                            'rounded-tr-none': !msg?.is_response,
                         }"
                     >
-                        <p class="whitespace-pre-line">{{ chat.message }}</p>
+                        <p class="whitespace-pre-line">{{ msg.text }}</p>
                         <button
                             class="ms-auto mt-auto opacity-50 transition-opacity hover:opacity-100"
-                            @click="copyMessage(chat.message)"
+                            @click="copyMessage(msg.text)"
                         >
                             <CopyIcon class="h-3.5 w-auto" />
                         </button>
@@ -189,30 +187,41 @@ const sendMessage = () => {
                     @keydown.shift.enter.prevent="newMessage += '\n'"
                 ></textarea>
                 <div class="flex items-center justify-between p-2">
-                    <Dropdown :options="contextList" v-model="selectedContext" />
-                    <button
-                        class="rounded-full bg-gray-500 p-2 text-white transition-colors hover:bg-gray-600 disabled:bg-gray-300"
+                    <div class="flex items-center gap-2">
+                        <Dropdown :options="courseList" v-model="selectedCourse" />
+                        <Button
+                            v-if="selectedCourse !== null"
+                            varient="light"
+                            :rounded="true"
+                            @click="selectedCourse = null"
+                        >
+                            <ResetIcon class="h-3 w-auto" />
+                        </Button>
+                    </div>
+                    <Button
+                        varient="secondary"
+                        :rounded="true"
+                        :disabled="newMessage.trim() === ''"
                         @click="sendMessage"
-                        :disabled="!selectedContext || newMessage.trim() === ''"
                     >
                         <SendIcon :is-solid="true" class="h-5 w-auto" />
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>
     </Transition>
 
     <!-- edit modal -->
-    <Modal v-model="isEditModalOpen" :show-close-button="false">
+    <Modal v-model="isEditTitleModalOpen" :show-close-button="false">
         <div class="flex flex-col gap-2">
             <p class="text-lg font-semibold tracking-wide">Edit Chat Title</p>
             <input
                 type="text"
-                v-model="_chatTitle"
+                v-model="chatTitleInput"
                 class="text-md w-full rounded-md border border-gray-300 px-4 py-2 text-gray-700 shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
             />
             <div class="flex items-center justify-end gap-2">
-                <Button varient="secondary" @click="toggleEditModal"> Cancel </Button>
+                <Button varient="secondary" @click="toggleEditTitleModal"> Cancel </Button>
                 <Button varient="primary" @click="updateChatTitle"> Save </Button>
             </div>
         </div>
