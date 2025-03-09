@@ -3,6 +3,7 @@ import ChatbotDrawer from '@/components/ChatbotDrawer.vue';
 import FaqIcon from '@/components/icons/FaqIcon.vue';
 import FeedbackIcon from '@/components/icons/FeedbackIcon.vue';
 import IITMLogoIcon from '@/components/icons/IITMLogoIcon.vue';
+import ChatIcon from '@/components/icons/ChatIcon.vue';
 import StackIcon from '@/components/icons/StackIcon.vue';
 import BookIcon from '@/components/icons/BookIcon.vue';
 import DraggableChatbotButton from '@/components/ui/buttons/DraggableChatbotButton.vue';
@@ -80,6 +81,17 @@ const isActive = (path) => {
                     >
                         <StackIcon class="h-9 w-auto" :is-solid="isActive('/instructor/kstack')" />
                         <span class="text-sm">KStack</span>
+                    </RouterLink>
+                    <RouterLink
+                        to="/instructor/chats"
+                        class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-100"
+                        :class="{
+                            'bg-gray-300': isActive('/instructor/chats'),
+                            'hover:bg-gray-300': isActive('/instructor/chats'),
+                        }"
+                    >
+                        <ChatIcon class="h-8 w-auto" :is-solid="isActive('/instructor/chats')" />
+                        <span class="text-sm">Chats</span>
                     </RouterLink>
                 </div>
                 <slot name="main-slot"></slot>
