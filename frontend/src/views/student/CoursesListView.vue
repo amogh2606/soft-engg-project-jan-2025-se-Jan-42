@@ -1,8 +1,10 @@
 <script setup>
 import { enrollUserInCourse, getAllCourses, getUser } from '@/api';
 import EyeIcon from '@/components/icons/EyeIcon.vue';
+import FeedbackIcon from '@/components/icons/FeedbackIcon.vue';
 import PlusIcon from '@/components/icons/PlusIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
+import SubmitFeedbackModal from '@/components/ui/modal/SubmitFeedbackModal.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
 import { useAuthStore } from '@/stores/auth';
 import { push } from 'notivue';
@@ -24,6 +26,14 @@ const filteredCourses = computed(() => {
     }
     return courses.value.filter((c) => !enrolledCourses.value.find((ec) => ec.id === c.id));
 });
+
+const isFeedbackModalOpen = ref(false);
+const courseIdForFeedback = ref('');
+
+const toggleFeedbackModal = (courseId) => {
+    courseIdForFeedback.value = courseId;
+    isFeedbackModalOpen.value = !isFeedbackModalOpen.value;
+};
 
 const fetchCourses = () => {
     getUser()
@@ -121,11 +131,21 @@ const enrollInCourse = (userId, courseId) => {
                                 >
                                     <PlusIcon class="h-6 w-6" />
                                 </Button>
+                                <Button
+                                    v-if="enrolledCourses?.find((c) => c.id === row.id)"
+                                    varient="light"
+                                    :rounded="true"
+                                    class="ml-2"
+                                    @click="toggleFeedbackModal(row.id)"
+                                >
+                                    <FeedbackIcon class="h-6 w-6" />
+                                </Button>
                             </template>
                         </TableComponent>
                     </div>
                 </div>
             </div>
+            <SubmitFeedbackModal :course-id="courseIdForFeedback" v-model="isFeedbackModalOpen" />
         </template>
     </BaseView>
 </template>

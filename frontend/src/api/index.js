@@ -67,6 +67,10 @@ export const getFeedbacksByCourseId = (courseId) => {
     return client.get(`/feedback/${courseId}`);
 };
 
+export const submitFeedback = (courseId, title, description) => {
+    return client.post(`/feedback/${courseId}`, { title, text: description });
+};
+
 export const getFaqs = () => {
     return client.get('/faqs');
 };
