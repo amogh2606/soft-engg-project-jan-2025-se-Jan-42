@@ -43,7 +43,11 @@
                         </label>
                     </div>
                     <div class="flex justify-end">
-                        <Button varient="light" :rounded="true">
+                        <Button
+                            varient="light"
+                            :rounded="true"
+                            @click="handleQuestionHelp(question.id)"
+                        >
                             <HelpIcon class="h-4 w-4" />
                         </Button>
                     </div>
@@ -62,11 +66,11 @@
 </template>
 
 <script setup>
-import { getAssignmentById } from '@/api';
+import { createChatbotSessionForQuestionHelp, getAssignmentById } from '@/api';
+import HelpIcon from '@/components/icons/HelpIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import { push } from 'notivue';
 import { onMounted, reactive, ref } from 'vue';
-import HelpIcon from '@/components/icons/HelpIcon.vue';
 
 const props = defineProps({
     assignmentId: {
@@ -78,26 +82,6 @@ const props = defineProps({
         required: true,
     },
 });
-
-// question_fields = {
-//     'id': fields.Integer,
-//     'qno': fields.Integer,
-//     'type': fields.String,
-//     'text': fields.String,
-//     'option_1': fields.String,
-//     'option_2': fields.String,
-//     'option_3': fields.String,
-//     'option_4': fields.String,
-//     'correct_option': fields.Integer
-// }
-
-// assignment_fields = {
-//     'id': fields.Integer,
-//     'course_id': fields.Integer,
-//     'week': fields.Integer,
-//     'due_date': fields.String,
-//     'questions': fields.List(fields.Nested(question_fields))
-// }
 
 const assignment = ref(null);
 const selectedAnswers = reactive({});
@@ -125,4 +109,17 @@ onMounted(() => {
             );
         });
 });
+
+const handleQuestionHelp = (questionId) => {
+    createChatbotSessionForQuestionHelp(props.courseId, props.assignmentId, questionId)
+        .then((res) => {
+            push.info('Chatbot session created for question help');
+        })
+        .catch((error) => {
+            push.error(
+                error?.response?.data?.message ||
+                    'Something went wrong creating chatbot session for question help',
+            );
+        });
+};
 </script>
