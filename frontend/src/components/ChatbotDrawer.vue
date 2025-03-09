@@ -39,6 +39,7 @@ const isEditTitleModalOpen = ref(false);
 const newMessage = ref('');
 const chatContainer = ref(null);
 const selectedCourse = ref(null);
+const isWaitingForResponse = ref(false);
 const courseList = user.courses.map((course) => course.name);
 
 const refreshSession = () => {
@@ -88,6 +89,7 @@ const toggleEditTitleModal = () => {
 
 const sendMessage = () => {
     if (newMessage.value.trim() === '') return;
+    isWaitingForResponse.value = true;
     const courseId = user.courses.find((course) => course.name === selectedCourse.value)?.id;
 
     sendMessageToChatbot(session.value.id, newMessage.value, courseId)
@@ -96,6 +98,9 @@ const sendMessage = () => {
         })
         .catch((error) => {
             push.error(error?.response?.data?.message || 'Something went wrong sending message !');
+        })
+        .finally(() => {
+            isWaitingForResponse.value = false;
         });
 };
 
@@ -187,7 +192,7 @@ watchEffect(() => {
                             'rounded-tr-none': !msg?.is_response,
                         }"
                     >
-                        <p class="whitespace-pre-line">{{ msg.text }}</p>
+                        <p class="whitespace-pre-line text-sm">{{ msg.text }}</p>
                         <button
                             class="ms-auto mt-auto opacity-50 transition-opacity hover:opacity-100"
                             @click="copyMessage(msg.text)"
@@ -205,6 +210,7 @@ watchEffect(() => {
                     class="w-full resize-none rounded p-2 outline-none"
                     placeholder="Type a message ..."
                     v-model="newMessage"
+                    :disabled="isWaitingForResponse"
                     @keydown.enter.exact.prevent="sendMessage"
                     @keydown.shift.enter.prevent="newMessage += '\n'"
                 ></textarea>
@@ -223,7 +229,8 @@ watchEffect(() => {
                     <Button
                         varient="secondary"
                         :rounded="true"
-                        :disabled="newMessage.trim() === ''"
+                        :disabled="newMessage.trim() === '' || isWaitingForResponse"
+                        :loading="isWaitingForResponse"
                         @click="sendMessage"
                     >
                         <SendIcon :is-solid="true" class="h-5 w-auto" />
