@@ -6,7 +6,7 @@ import Button from '@/components/ui/buttons/Button.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
 import BaseView from '@/views/student/BaseView.vue';
 import { push } from 'notivue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 const headers = [
     { key: 'id', label: 'Id' },
@@ -33,7 +33,7 @@ const closeDrawer = () => {
     selectedChatId.value = null;
 };
 
-onMounted(() => {
+const syncUserChats = () => {
     getUserChats()
         .then((response) => {
             chats.value = response.data;
@@ -42,7 +42,17 @@ onMounted(() => {
             console.error(error);
             push.error('Error fetching chats !');
         });
-});
+};
+
+watch(
+    isDrawerOpen,
+    (newVal) => {
+        if (!newVal) {
+            syncUserChats();
+        }
+    },
+    { immediate: true },
+);
 </script>
 
 <template>
