@@ -132,3 +132,12 @@ class Message(db.Model):
     timestamp: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
     is_response: Mapped[bool] = mapped_column(db.Boolean, nullable=False)
     chat = relationship('Chat', back_populates='messages')
+
+
+class FAQs(db.Model):
+    __tablename__ = 'faqs'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    rank: Mapped[int] = mapped_column(db.Integer, nullable=False)
+    question: Mapped[str] = mapped_column(db.Text, nullable=False)
+    last_updated: Mapped[datetime] = mapped_column(db.DateTime, default=db.func.now(), nullable=False)
+
