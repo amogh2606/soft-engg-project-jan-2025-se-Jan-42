@@ -87,6 +87,14 @@ export const giveRatingToVideo = (videoId, rating) => {
     return client.post(`/videos/${videoId}/rate`, { rating });
 };
 
+export const generateSummaryOfVideo = (videoId) => {
+    return client.post(`/videos/${videoId}/summary`);
+};
+
+export const generateQuizOfVideo = (videoId) => {
+    return client.post(`/videos/${videoId}/quiz`);
+};
+
 export const getAssignmentById = (assignmentId) => {
     return client.get(`/assignments/${assignmentId}`);
 };
