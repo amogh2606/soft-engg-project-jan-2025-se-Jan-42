@@ -6,42 +6,61 @@
                 <p class="text-gray-500">General Instructions Here ...</p>
             </div>
             <div class="flex flex-col gap-4">
-                <div class="flex flex-col gap-2 rounded bg-white p-4 shadow" v-for="question in assignment?.questions" :key="question.id">
+                <div
+                    class="flex flex-col gap-2 rounded bg-white p-4 shadow"
+                    v-for="question in assignment?.questions"
+                    :key="question.id"
+                >
                     <p class="font-semibold">
                         <span>{{ question.qno }}) {{ question.text }}</span>
                     </p>
                     <div class="flex flex-col gap-2">
-                        <label class="flex items-center gap-2">
-                            <input type="radio" name="question1" :value="question.option_1" />
-                            <span>{{ question.option_1 }}</span>
-                        </label>
-                        <label class="flex items-center gap-2">
-                            <input type="radio" name="question1" :value="question.option_2" />
-                            <span>{{ question.option_2 }}</span>
-                        </label>
-                        <label class="flex items-center gap-2">
-                            <input type="radio" name="question1" :value="question.option_3" />
-                            <span>{{ question.option_3 }}</span>
-                        </label>
-                        <label class="flex items-center gap-2">
-                            <input type="radio" name="question1" :value="question.option_4" />
-                            <span>{{ question.option_4 }}</span>
+                        <label
+                            v-for="optionNum in 4"
+                            :key="optionNum"
+                            class="flex items-center gap-2"
+                            :class="{
+                                'text-green-600':
+                                    isSubmitted &&
+                                    question[`option_${optionNum}`] ===
+                                        question[`option_${question.correct_option}`],
+                                'text-red-600':
+                                    isSubmitted &&
+                                    selectedAnswers[question.id] ===
+                                        question[`option_${optionNum}`] &&
+                                    question[`option_${optionNum}`] !==
+                                        question[`option_${question.correct_option}`],
+                            }"
+                        >
+                            <input
+                                type="radio"
+                                :name="`question${question.id}`"
+                                :value="question[`option_${optionNum}`]"
+                                v-model="selectedAnswers[question.id]"
+                                :disabled="isSubmitted"
+                            />
+                            <span>{{ question[`option_${optionNum}`] }}</span>
                         </label>
                     </div>
                 </div>
             </div>
-            <div class="flex justify-start">
-                <Button varient="secondary">Submit</Button>
+            <div class="flex justify-start gap-4">
+                <Button @click="handleSubmit" varient="secondary" :disabled="isSubmitted"
+                    >Submit</Button
+                >
+                <Button v-if="isSubmitted" @click="handleRetry" varient="secondary"
+                    >Try Again</Button
+                >
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import Button from '@/components/ui/buttons/Button.vue';
 import { getAssignmentById } from '@/api';
-import { onMounted, ref } from 'vue';
+import Button from '@/components/ui/buttons/Button.vue';
 import { push } from 'notivue';
+import { onMounted, reactive, ref } from 'vue';
 
 const props = defineProps({
     assignmentId: {
@@ -71,6 +90,19 @@ const props = defineProps({
 // }
 
 const assignment = ref(null);
+const selectedAnswers = reactive({});
+const isSubmitted = ref(false);
+
+const handleSubmit = () => {
+    isSubmitted.value = true;
+};
+
+const handleRetry = () => {
+    isSubmitted.value = false;
+    Object.keys(selectedAnswers).forEach((key) => {
+        delete selectedAnswers[key];
+    });
+};
 
 onMounted(() => {
     getAssignmentById(props.assignmentId)
@@ -78,7 +110,9 @@ onMounted(() => {
             assignment.value = res.data;
         })
         .catch((error) => {
-            push.error(error?.response?.data?.message || 'Something went wrong fetching assignment !');
+            push.error(
+                error?.response?.data?.message || 'Something went wrong fetching assignment !',
+            );
         });
 });
 </script>
