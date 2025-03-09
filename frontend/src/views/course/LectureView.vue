@@ -60,6 +60,9 @@
                                 />
                             </svg>
                         </template>
+                        <span class="ml-1 text-sm text-gray-600">
+                            ({{ video?.user_rating || '0.0' }})
+                        </span>
                     </div>
                 </div>
             </div>
