@@ -5,7 +5,7 @@ export function getRouteBasedOnRole(userRole) {
         case 'student':
             return '/student/courses';
         case 'instructor':
-            return '/instructor/faqs';
+            return '/instructor/courses';
         case 'admin':
             return '/admin/courses';
         default:

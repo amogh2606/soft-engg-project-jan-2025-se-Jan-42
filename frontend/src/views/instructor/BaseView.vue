@@ -4,6 +4,7 @@ import FaqIcon from '@/components/icons/FaqIcon.vue';
 import FeedbackIcon from '@/components/icons/FeedbackIcon.vue';
 import IITMLogoIcon from '@/components/icons/IITMLogoIcon.vue';
 import StackIcon from '@/components/icons/StackIcon.vue';
+import BookIcon from '@/components/icons/BookIcon.vue';
 import DraggableChatbotButton from '@/components/ui/buttons/DraggableChatbotButton.vue';
 import UserDropdown from '@/components/ui/dropdown/UserDropdown.vue';
 import BaseView from '@/views/BaseView.vue';
@@ -33,6 +34,17 @@ const isActive = (path) => {
             </header>
             <div class="flex flex-1 overflow-y-hidden">
                 <div class="flex h-full flex-col items-center overflow-y-scroll border-r bg-white">
+                    <RouterLink
+                        to="/instructor/courses"
+                        class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-100"
+                        :class="{
+                            'bg-gray-300': isActive('/instructor/courses'),
+                            'hover:bg-gray-300': isActive('/instructor/courses'),
+                        }"
+                    >
+                        <BookIcon :is-solid="isActive('/instructor/courses')" class="h-8 w-auto" />
+                        <span class="text-sm">Courses</span>
+                    </RouterLink>
                     <RouterLink
                         to="/instructor/faqs"
                         class="flex w-full flex-col items-center justify-center p-2 transition-colors hover:bg-gray-100"
