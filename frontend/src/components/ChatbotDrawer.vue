@@ -17,7 +17,7 @@ import Modal from '@/components/ui/modal/Modal.vue';
 import { useAuthStore } from '@/stores/auth';
 import { useClipboard } from '@vueuse/core';
 import { push } from 'notivue';
-import { ref, watchEffect } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 
 const props = defineProps({
     closeDrawer: {
@@ -49,6 +49,7 @@ const chatContainer = ref(null);
 const selectedCourse = ref(null);
 const isWaitingForResponse = ref(false);
 const courseList = user.courses.map((course) => course.name);
+const isChatOwner = computed(() => session?.value?.user_id === user.id);
 
 const refreshSession = () => {
     getChatbotSession(props.chatId)
@@ -168,7 +169,7 @@ watchEffect(() => {
                 <p class="text-lg">{{ session?.title }}</p>
                 <div class="flex gap-2">
                     <Button
-                        v-if="!readOnly"
+                        v-if="!readOnly || isChatOwner"
                         varient="light"
                         :rounded="true"
                         @click="toggleEditTitleModal"
@@ -176,7 +177,7 @@ watchEffect(() => {
                         <EditIcon class="h-5 w-auto" />
                     </Button>
                     <Button
-                        v-if="!readOnly"
+                        v-if="!readOnly || isChatOwner"
                         varient="light"
                         :rounded="true"
                         @click="toggleBookmark"

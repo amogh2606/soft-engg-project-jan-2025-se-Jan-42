@@ -9,6 +9,7 @@ from app.models import db, Chat, Message
 # Response fields for chat session
 chat_fields = {
     'id': fields.Integer,
+    'user_id': fields.Integer,
     'title': fields.String,
     'created': fields.String,
     'active': fields.Boolean,
