@@ -18,13 +18,18 @@ const headers = ref([
     { label: 'Course Name', key: 'name' },
     { label: 'Actions', key: 'actions' },
 ]);
+const searchInput = ref('');
 const courses = ref([]);
 const enrolledCourses = ref([]);
 const filteredCourses = computed(() => {
     if (activeTab.value === 'enrolled') {
-        return enrolledCourses.value;
+        return enrolledCourses.value.filter((c) =>
+            c.name.toLowerCase().includes(searchInput.value?.toLowerCase()),
+        );
     }
-    return courses.value.filter((c) => !enrolledCourses.value.find((ec) => ec.id === c.id));
+    return courses.value
+        .filter((c) => !enrolledCourses.value.find((ec) => ec.id === c.id))
+        .filter((c) => c.name.toLowerCase().includes(searchInput.value?.toLowerCase()));
 });
 
 const isFeedbackModalOpen = ref(false);
@@ -109,6 +114,7 @@ const enrollInCourse = (userId, courseId) => {
                                 type="text"
                                 class="w-full rounded border p-2"
                                 placeholder="Search..."
+                                v-model="searchInput"
                             />
                             <Button varient="primary">Search</Button>
                         </div>

@@ -16,12 +16,17 @@ const headers = ref([
     { label: 'Role', key: 'role' },
     { label: 'Actions', key: 'actions' },
 ]);
-
+const searchInput = ref('');
 const users = ref([]);
 const activeTab = ref('student');
 
 const filteredUsers = computed(() => {
-    return users.value.filter((user) => user.role === activeTab.value);
+    return users.value
+        .filter((user) => user.role === activeTab.value)
+        .filter((user) =>
+            user.name.toLowerCase().includes(searchInput.value?.toLowerCase()) ||
+            user.email.toLowerCase().includes(searchInput.value?.toLowerCase()),
+        );
 });
 
 onMounted(() => {
@@ -94,6 +99,7 @@ onMounted(() => {
                                 type="text"
                                 class="w-full rounded border p-2"
                                 placeholder="Search..."
+                                v-model="searchInput"
                             />
                             <Button varient="primary">Search</Button>
                         </div>

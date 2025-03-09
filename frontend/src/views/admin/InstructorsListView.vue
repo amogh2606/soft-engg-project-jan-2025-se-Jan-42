@@ -8,17 +8,24 @@ import TableComponent from '@/components/ui/table/TableComponent.vue';
 import { push } from 'notivue';
 import { computed, ref, watch } from 'vue';
 import BaseView from './BaseView.vue';
+
 const headers = ref([
     { label: 'Name', key: 'name' },
     { label: 'Email', key: 'email' },
     { label: 'Course', key: 'course' },
     { label: 'Actions', key: 'actions' },
 ]);
-
+const searchInput = ref('');
 const courses = ref([]);
 const selectedInstructor = ref(null);
 const instructors = ref([]);
-const filteredInstructors = computed(() => instructors.value);
+const filteredInstructors = computed(() =>
+    instructors.value.filter(
+        (instructor) =>
+            instructor.name.toLowerCase().includes(searchInput.value?.toLowerCase()) ||
+            instructor.email.toLowerCase().includes(searchInput.value?.toLowerCase()),
+    ),
+);
 const isAddInstructorModalOpen = ref(false);
 const isLinkCourseModalOpen = ref(false);
 const toggleAddInstructorModal = () => {
@@ -90,6 +97,7 @@ const handleLinkCourse = (instructor) => {
                                 type="text"
                                 class="w-full rounded border p-2"
                                 placeholder="Search..."
+                                v-model="searchInput"
                             />
                             <Button varient="primary">Search</Button>
 

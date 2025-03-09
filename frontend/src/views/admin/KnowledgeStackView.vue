@@ -21,8 +21,13 @@ const headers = ref([
     { label: 'File Name', key: 'fileName' },
     { label: 'Actions', key: 'actions' },
 ]);
+const searchInput = ref('');
 const files = ref([]);
-const filteredFiles = computed(() => files.value);
+const filteredFiles = computed(() =>
+    files.value.filter((file) =>
+        file.fileName.toLowerCase().includes(searchInput.value?.toLowerCase()),
+    ),
+);
 
 const isFileUploadModalOpen = ref(false);
 const toggleFileUploadModal = () => {
@@ -100,6 +105,7 @@ watch(
                                 type="text"
                                 class="w-full rounded border p-2"
                                 placeholder="Search..."
+                                v-model="searchInput"
                             />
                             <Button varient="primary">Search</Button>
                             <Button varient="primary" @click="toggleFileUploadModal">

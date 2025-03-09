@@ -14,14 +14,18 @@ const headers = [
     { key: 'created', label: 'Created At' },
     { key: 'actions', label: 'Actions' },
 ];
+const searchInput = ref('');
 const chats = ref([]);
 const filterBookmarked = ref(false);
 const selectedChatId = ref(null);
 const isDrawerOpen = ref(false);
 
-const filteredChats = computed(() =>
-    filterBookmarked.value ? chats.value.filter((chat) => chat.bookmarked) : chats.value,
-);
+const filteredChats = computed(() => {
+    const filteredChats = chats.value.filter((chat) =>
+        chat.title.toLowerCase().includes(searchInput.value?.toLowerCase()),
+    );
+    return filterBookmarked.value ? filteredChats.filter((chat) => chat.bookmarked) : filteredChats;
+});
 
 const openChat = (chatId) => {
     selectedChatId.value = chatId;
@@ -72,6 +76,7 @@ watch(
                                     type="text"
                                     class="w-full rounded border p-2"
                                     placeholder="Search..."
+                                    v-model="searchInput"
                                 />
                                 <Button varient="primary">Search</Button>
                             </div>

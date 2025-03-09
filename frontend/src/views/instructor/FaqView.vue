@@ -12,10 +12,12 @@ const headers = ref([
     { label: 'Updated At', key: 'last_updated' },
 ]);
 
+const searchInput = ref('');
 const faqs = ref([]);
-
 const filteredFaqs = computed(() => {
-    return faqs.value;
+    return faqs.value.filter((faq) =>
+        faq.question.toLowerCase().includes(searchInput.value?.toLowerCase()),
+    );
 });
 
 onMounted(() => {
@@ -45,6 +47,7 @@ onMounted(() => {
                                 type="text"
                                 class="w-full rounded border p-2"
                                 placeholder="Search..."
+                                v-model="searchInput"
                             />
                             <Button varient="primary">Search</Button>
                         </div>

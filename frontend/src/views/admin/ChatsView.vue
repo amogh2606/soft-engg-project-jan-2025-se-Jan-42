@@ -15,8 +15,11 @@ const headers = [
     { key: 'created', label: 'Created At' },
     { key: 'actions', label: 'Actions' },
 ];
+const searchInput = ref('');
 const chats = ref([]);
-const filteredChats = computed(() => chats.value);
+const filteredChats = computed(() =>
+    chats.value.filter((chat) => chat.title.toLowerCase().includes(searchInput.value?.toLowerCase())),
+);
 const selectedChatId = ref(null);
 const isDrawerOpen = ref(false);
 
@@ -86,6 +89,7 @@ const downloadChats = () => {
                                 type="text"
                                 class="w-full rounded border p-2"
                                 placeholder="Search..."
+                                v-model="searchInput"
                             />
                             <Button varient="primary">Search</Button>
 

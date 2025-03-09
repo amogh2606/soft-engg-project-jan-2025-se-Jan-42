@@ -17,8 +17,11 @@ const headers = ref([
     { label: 'Course Name', key: 'name' },
     { label: 'Actions', key: 'actions' },
 ]);
+const searchInput = ref('');
 const courses = ref([]);
-const filteredCourses = computed(() => courses.value);
+const filteredCourses = computed(() =>
+    courses.value.filter((c) => c.name.toLowerCase().includes(searchInput.value?.toLowerCase())),
+);
 const isAddCourseModalOpen = ref(false);
 const toggleAddCourseModal = () => {
     isAddCourseModalOpen.value = !isAddCourseModalOpen.value;
@@ -62,6 +65,7 @@ watch(
                                 type="text"
                                 class="w-full rounded border p-2"
                                 placeholder="Search..."
+                                v-model="searchInput"
                             />
                             <Button varient="primary">Search</Button>
                             <Button varient="primary" @click="toggleAddCourseModal">

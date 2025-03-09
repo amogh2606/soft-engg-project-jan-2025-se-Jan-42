@@ -14,8 +14,11 @@ const headers = ref([
     { label: 'Course Name', key: 'name' },
     { label: 'Actions', key: 'actions' },
 ]);
+const searchInput = ref('');
 const courses = ref([]);
-const filteredCourses = computed(() => courses.value);
+const filteredCourses = computed(() =>
+    courses.value.filter((c) => c.name.toLowerCase().includes(searchInput.value?.toLowerCase())),
+);
 
 const fetchCourses = () => {
     getUser()
@@ -50,6 +53,7 @@ onMounted(() => {
                                 type="text"
                                 class="w-full rounded border p-2"
                                 placeholder="Search..."
+                                v-model="searchInput"
                             />
                             <Button varient="primary">Search</Button>
                         </div>
