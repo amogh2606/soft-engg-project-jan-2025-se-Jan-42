@@ -207,7 +207,7 @@ watchEffect(() => {
             <div class="m-2 flex flex-col rounded-md border border-gray-400">
                 <textarea
                     type="text"
-                    class="w-full resize-none rounded p-2 outline-none"
+                    class="w-full resize-none rounded p-2 text-sm outline-none"
                     placeholder="Type a message ..."
                     v-model="newMessage"
                     :disabled="isWaitingForResponse"

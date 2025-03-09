@@ -14,7 +14,7 @@
             </span>
         </button>
         <div
-            v-if="isOpen"
+            v-if="isOpen && options.length > 0"
             class="absolute bottom-9 left-0 flex w-48 flex-col gap-1 rounded-lg border bg-white p-2 text-sm shadow"
         >
             <button
