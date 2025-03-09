@@ -1,5 +1,10 @@
 <script setup>
-import { getChatbotSession, sendMessageToChatbot, updateChatbotSession } from '@/api';
+import {
+    getChatbotSession,
+    sendMessageToChatbot,
+    updateChatbotSession,
+    createChatbotSession,
+} from '@/api';
 import BookmarkIcon from '@/components/icons/BookmarkIcon.vue';
 import CopyIcon from '@/components/icons/CopyIcon.vue';
 import CrossIcon from '@/components/icons/CrossIcon.vue';
@@ -110,6 +115,20 @@ const scrollToBottom = () => {
     }
 };
 
+const createNewChatSession = () => {
+    createChatbotSession()
+        .then((res) => {
+            refreshSession();
+            push.success({
+                title: 'Success',
+                message: 'New chat session created',
+            });
+        })
+        .catch((error) => {
+            push.error(error?.response?.data?.message || 'Something went wrong creating session !');
+        });
+};
+
 watchEffect(() => {
     if (props.isOpen) {
         refreshSession();
@@ -140,6 +159,9 @@ watchEffect(() => {
                     </Button>
                     <Button varient="light" :rounded="true" @click="toggleBookmark">
                         <BookmarkIcon :is-solid="session?.bookmarked" class="h-5 w-auto" />
+                    </Button>
+                    <Button varient="light" :rounded="true" @click="createNewChatSession">
+                        <ResetIcon class="h-4 w-auto" />
                     </Button>
                     <Button varient="light" :rounded="true" @click="closeDrawer">
                         <CrossIcon class="h-5 w-auto" />

@@ -88,6 +88,10 @@ export const getChatbotSession = (sessionId = null) => {
     return client.get('/chats');
 };
 
+export const createChatbotSession = () => {
+    return client.post('/chats');
+};
+
 export const updateChatbotSession = (sessionId, title, bookmarked) => {
     return client.put(`/chats/${sessionId}`, { title, bookmarked });
 };

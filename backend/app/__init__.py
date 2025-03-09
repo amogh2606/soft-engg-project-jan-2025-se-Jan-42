@@ -19,7 +19,7 @@ def create_app():
 
     with app.app_context():
         seed_db()
-        store_initial_embeddings()
+        # store_initial_embeddings()
         start_scheduler()
 
     return app
