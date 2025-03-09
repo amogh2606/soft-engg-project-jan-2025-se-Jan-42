@@ -84,6 +84,13 @@
                 >
                     {{ showQuiz ? 'Hide Quiz' : 'Show Quiz' }}
                 </Button>
+                <Button
+                    :varient="ratingInput ? 'secondary' : 'light'"
+                    @click="toggleRatingModal"
+                    :disabled="video?.user_rating"
+                >
+                    Rate Video
+                </Button>
             </div>
 
             <!-- Summary Section -->
@@ -99,12 +106,18 @@
             </div>
         </div>
     </div>
+    <SubmitVideoRatingModal
+        :video-id="videoId"
+        v-model="isRatingModalOpen"
+        @rating-submitted="syncVideoData"
+    />
     <LoadingOverlay :show="isSummaryLoading || isQuizLoading" message="Loading..." />
 </template>
 
 <script setup>
 import { generateQuizOfVideo, generateSummaryOfVideo, getVideoById } from '@/api';
 import Button from '@/components/ui/buttons/Button.vue';
+import SubmitVideoRatingModal from '@/components/ui/modal/SubmitVideoRatingModal.vue';
 import LoadingOverlay from '@/components/ui/overlays/LoadingOverlay.vue';
 import { push } from 'notivue';
 import { onMounted, ref } from 'vue';
@@ -124,6 +137,12 @@ const summary = ref(null);
 const quiz = ref(null);
 const isSummaryLoading = ref(false);
 const isQuizLoading = ref(false);
+const ratingInput = ref(0);
+const isRatingModalOpen = ref(false);
+
+const toggleRatingModal = () => {
+    isRatingModalOpen.value = !isRatingModalOpen.value;
+};
 
 const generateSummary = async () => {
     if (isSummaryLoading.value) return;
@@ -185,7 +204,7 @@ const generateQuiz = async () => {
         });
 };
 
-onMounted(() => {
+const syncVideoData = () => {
     getVideoById(props.videoId)
         .then((res) => {
             video.value = res.data;
@@ -193,5 +212,9 @@ onMounted(() => {
         .catch((error) => {
             push.error(error?.response?.data?.message || 'Something went wrong fetching video !');
         });
+};
+
+onMounted(() => {
+    syncVideoData();
 });
 </script>
