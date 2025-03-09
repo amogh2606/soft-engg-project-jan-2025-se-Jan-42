@@ -1,11 +1,12 @@
 <script setup>
+import { getUserChats } from '@/api';
+import ChatbotDrawer from '@/components/ChatbotDrawer.vue';
+import EyeIcon from '@/components/icons/EyeIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
 import BaseView from '@/views/student/BaseView.vue';
-import EyeIcon from '@/components/icons/EyeIcon.vue';
-import { computed, ref, onMounted } from 'vue';
-import { getUserChats } from '@/api';
 import { push } from 'notivue';
+import { computed, onMounted, ref } from 'vue';
 
 const headers = [
     { key: 'id', label: 'Id' },
@@ -15,9 +16,22 @@ const headers = [
 ];
 const chats = ref([]);
 const filterBookmarked = ref(false);
+const selectedChatId = ref(null);
+const isDrawerOpen = ref(false);
+
 const filteredChats = computed(() =>
     filterBookmarked.value ? chats.value.filter((chat) => chat.bookmarked) : chats.value,
 );
+
+const openChat = (chatId) => {
+    selectedChatId.value = chatId;
+    isDrawerOpen.value = true;
+};
+
+const closeDrawer = () => {
+    isDrawerOpen.value = false;
+    selectedChatId.value = null;
+};
 
 onMounted(() => {
     getUserChats()
@@ -71,11 +85,7 @@ onMounted(() => {
                         </div>
                         <TableComponent :headers="headers" :rows="filteredChats">
                             <template #actions="{ row }">
-                                <Button
-                                    varient="light"
-                                    :rounded="true"
-                                    @click="openChat(row.id)"
-                                >
+                                <Button varient="light" :rounded="true" @click="openChat(row.id)">
                                     <EyeIcon :is-solid="false" class="h-6 w-6" />
                                 </Button>
                             </template>
@@ -85,4 +95,10 @@ onMounted(() => {
             </div>
         </template>
     </BaseView>
+    <ChatbotDrawer
+        :is-open="isDrawerOpen"
+        :close-drawer="closeDrawer"
+        :read-only="true"
+        :chat-id="selectedChatId"
+    />
 </template>

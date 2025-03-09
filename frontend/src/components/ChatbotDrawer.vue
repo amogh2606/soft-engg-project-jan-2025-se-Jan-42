@@ -1,9 +1,9 @@
 <script setup>
 import {
+    createChatbotSession,
     getChatbotSession,
     sendMessageToChatbot,
     updateChatbotSession,
-    createChatbotSession,
 } from '@/api';
 import BookmarkIcon from '@/components/icons/BookmarkIcon.vue';
 import CopyIcon from '@/components/icons/CopyIcon.vue';
@@ -28,6 +28,14 @@ const props = defineProps({
         type: Boolean,
         required: true,
     },
+    readOnly: {
+        type: Boolean,
+        default: false,
+    },
+    chatId: {
+        type: [String, Number],
+        default: null,
+    },
 });
 
 const { user } = useAuthStore();
@@ -43,7 +51,7 @@ const isWaitingForResponse = ref(false);
 const courseList = user.courses.map((course) => course.name);
 
 const refreshSession = () => {
-    getChatbotSession()
+    getChatbotSession(props.chatId)
         .then((res) => {
             session.value = res.data;
             selectedCourse.value = null;
@@ -159,13 +167,28 @@ watchEffect(() => {
             <div class="flex items-center justify-between border-b bg-gray-50 p-2">
                 <p class="text-lg">{{ session?.title }}</p>
                 <div class="flex gap-2">
-                    <Button varient="light" :rounded="true" @click="toggleEditTitleModal">
+                    <Button
+                        v-if="!readOnly"
+                        varient="light"
+                        :rounded="true"
+                        @click="toggleEditTitleModal"
+                    >
                         <EditIcon class="h-5 w-auto" />
                     </Button>
-                    <Button varient="light" :rounded="true" @click="toggleBookmark">
+                    <Button
+                        v-if="!readOnly"
+                        varient="light"
+                        :rounded="true"
+                        @click="toggleBookmark"
+                    >
                         <BookmarkIcon :is-solid="session?.bookmarked" class="h-5 w-auto" />
                     </Button>
-                    <Button varient="light" :rounded="true" @click="createNewChatSession">
+                    <Button
+                        v-if="!readOnly"
+                        varient="light"
+                        :rounded="true"
+                        @click="createNewChatSession"
+                    >
                         <ResetIcon class="h-4 w-auto" />
                     </Button>
                     <Button varient="light" :rounded="true" @click="closeDrawer">
@@ -204,7 +227,7 @@ watchEffect(() => {
             </div>
 
             <!-- footer -->
-            <div class="m-2 flex flex-col rounded-md border border-gray-400">
+            <div v-if="!readOnly" class="m-2 flex flex-col rounded-md border border-gray-400">
                 <textarea
                     type="text"
                     class="w-full resize-none rounded p-2 text-sm outline-none"
