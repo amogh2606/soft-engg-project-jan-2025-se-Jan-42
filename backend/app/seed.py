@@ -34,10 +34,28 @@ def seed_db():
 
 def populate_sample_data():
     # create a course
+    #This is software Engineering;
     course = Course(name="Software Engineering", description="Degree Level course")
     db.session.add(course)
     db.session.commit()
+    
+    #This is Software Testing;
+    course=Course(name="Software Testing",description="Degree Level course")
+    db.session.add(course)
+    db.session.commit()
+    
+    #This is English 1;
+    course=Course(name="Englist I",description="Foundatioin Level course");
+    db.session.add(course)
+    db.session.commit()
+    
+    #This is Machine Learning Practice;
+    course=Course(name="Machine Learning Practice",description="Diploma Level course");
+    db.session.add(course)
+    db.session.commit()
+    
 
+    
     course_id = course.id
     # add videos for a week
     videos = [  
