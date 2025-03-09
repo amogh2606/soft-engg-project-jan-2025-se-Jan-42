@@ -227,7 +227,10 @@ watchEffect(() => {
             </div>
 
             <!-- footer -->
-            <div v-if="!readOnly" class="m-2 flex flex-col rounded-md border border-gray-400">
+            <div
+                class="m-2 flex flex-col rounded-md border border-gray-400"
+                :class="{ 'pointer-events-none opacity-50': readOnly }"
+            >
                 <textarea
                     type="text"
                     class="w-full resize-none rounded p-2 text-sm outline-none"
