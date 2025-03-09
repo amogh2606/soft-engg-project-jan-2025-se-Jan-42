@@ -63,6 +63,11 @@
             </div>
         </div>
     </div>
+    <ChatbotDrawer
+        :is-open="isDrawerOpen"
+        :close-drawer="closeDrawer"
+    />
+    <LoadingOverlay :show="isQuestionHelpLoading" message="Loading..." />
 </template>
 
 <script setup>
@@ -71,6 +76,8 @@ import HelpIcon from '@/components/icons/HelpIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import { push } from 'notivue';
 import { onMounted, reactive, ref } from 'vue';
+import ChatbotDrawer from '@/components/ChatbotDrawer.vue';
+import LoadingOverlay from '@/components/ui/overlays/LoadingOverlay.vue';
 
 const props = defineProps({
     assignmentId: {
@@ -86,6 +93,12 @@ const props = defineProps({
 const assignment = ref(null);
 const selectedAnswers = reactive({});
 const isSubmitted = ref(false);
+const isDrawerOpen = ref(false);
+const isQuestionHelpLoading = ref(false);
+
+const closeDrawer = () => {
+    isDrawerOpen.value = false;
+};
 
 const handleSubmit = () => {
     isSubmitted.value = true;
@@ -111,15 +124,20 @@ onMounted(() => {
 });
 
 const handleQuestionHelp = (questionId) => {
+    isQuestionHelpLoading.value = true;
     createChatbotSessionForQuestionHelp(props.courseId, props.assignmentId, questionId)
         .then((res) => {
-            push.info('Chatbot session created for question help');
+            console.log(res);
+            isDrawerOpen.value = true;
         })
         .catch((error) => {
             push.error(
                 error?.response?.data?.message ||
                     'Something went wrong creating chatbot session for question help',
             );
+        })
+        .finally(() => {
+            isQuestionHelpLoading.value = false;
         });
 };
 </script>

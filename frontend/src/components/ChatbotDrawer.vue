@@ -154,14 +154,14 @@ watchEffect(() => {
     <Transition name="fade">
         <div
             v-if="isOpen"
-            class="absolute right-0 top-0 h-screen w-screen bg-black opacity-50"
+            class="absolute right-0 top-0 h-screen w-screen bg-black opacity-50 z-40"
             id="overlay"
         ></div>
     </Transition>
     <Transition name="slide">
         <div
             v-if="isOpen"
-            class="absolute right-0 top-0 flex h-screen w-full flex-col bg-white sm:w-1/2 md:w-1/3"
+            class="absolute right-0 top-0 flex h-screen w-full flex-col bg-white sm:w-1/2 md:w-1/3 z-50"
             id="drawer"
         >
             <!-- header -->
