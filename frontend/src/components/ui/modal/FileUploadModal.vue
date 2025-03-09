@@ -80,6 +80,16 @@ const uploadFile = () => {
         return;
     }
 
+    // only allow pdf, txt, md, csv files (check file extension)
+    const fileExtension = fileName.value.split('.').pop();
+    if (!['pdf', 'txt', 'md', 'csv'].includes(fileExtension)) {
+        push.error({
+            title: 'Error',
+            message: 'Only PDF, TXT, MD, and CSV files are allowed.',
+        });
+        return;
+    }
+
     isLoading.value = true;
     const formData = new FormData();
     formData.append('file', fileInputRef.value.files[0]);
