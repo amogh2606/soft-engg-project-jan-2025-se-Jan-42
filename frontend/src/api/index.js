@@ -83,6 +83,10 @@ export const getVideoById = (videoId) => {
     return client.get(`/videos/${videoId}`);
 };
 
+export const giveRatingToVideo = (videoId, rating) => {
+    return client.post(`/videos/${videoId}/rate`, { rating });
+};
+
 export const getAssignmentById = (assignmentId) => {
     return client.get(`/assignments/${assignmentId}`);
 };
@@ -97,6 +101,14 @@ export const getChatbotSession = (sessionId = null) => {
 
 export const createChatbotSession = () => {
     return client.post('/chats');
+};
+
+export const createChatbotSessionForQuestionHelp = (courseId, assignmentId, questionId) => {
+    return client.post('/assignments/help', {
+        course_id: courseId,
+        assignment_id: assignmentId,
+        question_id: questionId,
+    });
 };
 
 export const updateChatbotSession = (sessionId, title, bookmarked) => {

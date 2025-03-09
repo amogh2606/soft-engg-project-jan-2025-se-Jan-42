@@ -99,6 +99,7 @@ const handleAccordionItemClick = (item, uniqueId) => {
                 v-else-if="contentView === 'activity_questions'"
                 :key="'aq' + selectedAccordionItem"
                 :assignmentId="selectedAccordionItem.split('-')[2]"
+                :courseId="course.id"
             />
             <CourseOverview v-else :course="course" />
         </template>

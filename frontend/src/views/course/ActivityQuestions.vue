@@ -42,6 +42,11 @@
                             <span>{{ question[`option_${optionNum}`] }}</span>
                         </label>
                     </div>
+                    <div class="flex justify-end">
+                        <Button varient="light" :rounded="true">
+                            <HelpIcon class="h-4 w-4" />
+                        </Button>
+                    </div>
                 </div>
             </div>
             <div class="flex justify-start gap-4">
@@ -61,10 +66,15 @@ import { getAssignmentById } from '@/api';
 import Button from '@/components/ui/buttons/Button.vue';
 import { push } from 'notivue';
 import { onMounted, reactive, ref } from 'vue';
+import HelpIcon from '@/components/icons/HelpIcon.vue';
 
 const props = defineProps({
     assignmentId: {
         type: String,
+        required: true,
+    },
+    courseId: {
+        type: Number,
         required: true,
     },
 });
