@@ -25,6 +25,24 @@ onMounted(() => {
             push.error('Error fetching chats !');
         });
 });
+
+const downloadChats = () => {
+    getAllChats(true)
+        .then((response) => {
+            // save as csv
+            const blob = new Blob([response.data], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'chats.csv';
+            a.click();
+            push.success('Chats downloaded successfully !');
+        })
+        .catch((error) => {
+            console.error(error);
+            push.error('Error downloading chats !');
+        });
+};
 </script>
 <template>
     <BaseView>
@@ -46,7 +64,7 @@ onMounted(() => {
                             />
                             <Button varient="primary">Search</Button>
 
-                            <Button varient="primary">
+                            <Button varient="primary" @click="downloadChats">
                                 <ExportIcon :is-solid="false" class="h-6 w-auto" />
                             </Button>
                         </div>

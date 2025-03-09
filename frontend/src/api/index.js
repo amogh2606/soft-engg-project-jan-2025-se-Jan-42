@@ -24,7 +24,10 @@ export const getUserChats = () => {
     return client.get('/chats/user');
 };
 
-export const getAllChats = () => {
+export const getAllChats = (download = false) => {
+    if (download) {
+        return client.get('/chats/all?export=true');
+    }
     return client.get('/chats/all');
 };
 

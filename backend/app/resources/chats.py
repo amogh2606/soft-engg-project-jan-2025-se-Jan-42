@@ -1,5 +1,5 @@
 import io, csv
-from flask_restful import Resource, reqparse, marshal_with, fields, abort
+from flask_restful import Resource, reqparse, marshal_with, fields, abort, marshal
 from flask_security import current_user, roles_accepted, auth_required
 from flask import request, send_file
 from app.models import db, Chat, Message
@@ -116,20 +116,21 @@ class UserChats(Resource):
 class AllChats(Resource):
     # Get entire chat history
     @roles_accepted('admin')
-    @marshal_with(chat_list_fields)
     def get(self):
         if request.args.get('export') in ('true', '1'):
             return self.export_chats()
         
         chats = db.session.scalars(db.select(Chat)).all() 
-        return chats
+        return marshal(chats, chat_list_fields)
 
 
     # Export chats as CSV
     def export_chats(self):
-        all_chats = db.session.scalars(db.select(Message))
-        output = io.StringIO()
-        writer = csv.writer(output)
+        all_chats = db.session.scalars(db.select(Message)).all()
+        
+        # Create StringIO first to write content
+        output_text = io.StringIO()
+        writer = csv.writer(output_text)
         writer.writerow(['msg_id', 'chat_id', 'message', 'timestamp', 'sender']) # header row
 
         for msg in all_chats:
@@ -138,6 +139,9 @@ class AllChats(Resource):
             else:
                 writer.writerow([msg.id, msg.chat_id, msg.text, msg.timestamp, 'User'])
 
-        output.seek(0)
+        # Convert to BytesIO for send_file
+        output_bytes = io.BytesIO()
+        output_bytes.write(output_text.getvalue().encode('utf-8'))
+        output_bytes.seek(0)
 
-        return send_file(output, mimetype='text/csv', attachment_filename='chats.csv', as_attachment=True)
+        return send_file(output_bytes, mimetype='text/csv', download_name='chats.csv', as_attachment=True)
