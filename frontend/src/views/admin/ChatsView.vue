@@ -3,6 +3,7 @@ import { getAllChats } from '@/api';
 import ExportIcon from '@/components/icons/ExportIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
+import EyeIcon from '@/components/icons/EyeIcon.vue';
 import BaseView from '@/views/admin/BaseView.vue';
 import { push } from 'notivue';
 import { computed, onMounted, ref } from 'vue';
@@ -11,6 +12,7 @@ const headers = [
     { key: 'id', label: 'Id' },
     { key: 'title', label: 'Title' },
     { key: 'created', label: 'Created At' },
+    { key: 'actions', label: 'Actions' },
 ];
 const chats = ref([]);
 const filteredChats = computed(() => chats.value);
@@ -68,7 +70,17 @@ const downloadChats = () => {
                                 <ExportIcon :is-solid="false" class="h-6 w-auto" />
                             </Button>
                         </div>
-                        <TableComponent :headers="headers" :rows="filteredChats" />
+                        <TableComponent :headers="headers" :rows="filteredChats">
+                            <template #actions="{ row }">
+                                <Button
+                                    varient="light"
+                                    :rounded="true"
+                                    @click="openChat(row.id)"
+                                >
+                                    <EyeIcon :is-solid="false" class="h-6 w-6" />
+                                </Button>
+                            </template>
+                        </TableComponent>
                     </div>
                 </div>
             </div>
