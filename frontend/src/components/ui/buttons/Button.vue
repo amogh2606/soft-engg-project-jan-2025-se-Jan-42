@@ -1,11 +1,22 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <button :class="`${rounded ? roundedBaseClasses : baseClasses} ${btnVarients[varient]}`">
+    <button
+        :class="[
+            rounded ? roundedBaseClasses : baseClasses,
+            btnVarients[varient],
+            { 'cursor-not-allowed opacity-50': disabled },
+            { 'flex items-center justify-center gap-2': loading },
+        ]"
+        :disabled="disabled"
+    >
+        <SpinnerIcon v-if="loading" variant="primary" class="animate-spin" />
         <slot></slot>
     </button>
 </template>
 
 <script setup>
+import SpinnerIcon from '@/components/icons/SpinnerIcon.vue';
+
 const baseClasses = 'px-4 py-2 rounded cursor-pointer transition-colors font-medium';
 const roundedBaseClasses = 'rounded-full p-1.5 cursor-pointer transition-colors font-medium';
 const btnVarients = {
@@ -27,6 +38,14 @@ defineProps({
             ),
     },
     rounded: {
+        type: Boolean,
+        default: false,
+    },
+    disabled: {
+        type: [Boolean, Number],
+        default: false,
+    },
+    loading: {
         type: Boolean,
         default: false,
     },

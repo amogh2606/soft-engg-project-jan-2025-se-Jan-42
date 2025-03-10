@@ -1,27 +1,76 @@
 <script setup>
+import { getAllChats } from '@/api';
+import ChatbotDrawer from '@/components/ChatbotDrawer.vue';
 import ExportIcon from '@/components/icons/ExportIcon.vue';
+import EyeIcon from '@/components/icons/EyeIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
 import BaseView from '@/views/admin/BaseView.vue';
-import { ref } from 'vue';
+import { push } from 'notivue';
+import { computed, ref, watch } from 'vue';
 
-const headers = ref([
-    { key: 'id', label: 'ID' },
-    { key: 'query', label: 'Query' },
-    { key: 'response', label: 'Response' },
-]);
-const chats = ref([
-    { id: 1, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 2, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 3, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 4, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 5, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 6, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 7, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 8, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 9, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-    { id: 10, query: 'Your Query ...?', response: 'Bot Response Here ...' },
-]);
+const headers = [
+    { key: 'id', label: 'Id' },
+    { key: 'title', label: 'Title' },
+    { key: 'created', label: 'Created At' },
+    { key: 'actions', label: 'Actions' },
+];
+const searchInput = ref('');
+const chats = ref([]);
+const filteredChats = computed(() =>
+    chats.value.filter((chat) => chat.title.toLowerCase().includes(searchInput.value?.toLowerCase())),
+);
+const selectedChatId = ref(null);
+const isDrawerOpen = ref(false);
+
+const openChat = (chatId) => {
+    selectedChatId.value = chatId;
+    isDrawerOpen.value = true;
+};
+
+const closeDrawer = () => {
+    isDrawerOpen.value = false;
+    selectedChatId.value = null;
+};
+
+const syncChats = () => {
+    getAllChats()
+        .then((response) => {
+            chats.value = response.data;
+        })
+        .catch((error) => {
+            console.error(error);
+            push.error('Error fetching chats !');
+        });
+};
+
+watch(
+    isDrawerOpen,
+    (newVal) => {
+        if (!newVal) {
+            syncChats();
+        }
+    },
+    { immediate: true },
+);
+
+const downloadChats = () => {
+    getAllChats(true)
+        .then((response) => {
+            // save as csv
+            const blob = new Blob([response.data], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'chats.csv';
+            a.click();
+            push.success('Chats downloaded successfully !');
+        })
+        .catch((error) => {
+            console.error(error);
+            push.error('Error downloading chats !');
+        });
+};
 </script>
 <template>
     <BaseView>
@@ -40,17 +89,30 @@ const chats = ref([
                                 type="text"
                                 class="w-full rounded border p-2"
                                 placeholder="Search..."
+                                v-model="searchInput"
                             />
                             <Button varient="primary">Search</Button>
 
-                            <Button varient="primary">
+                            <Button varient="primary" @click="downloadChats">
                                 <ExportIcon :is-solid="false" class="h-6 w-auto" />
                             </Button>
                         </div>
-                        <TableComponent :headers="headers" :rows="chats" />
+                        <TableComponent :headers="headers" :rows="filteredChats">
+                            <template #actions="{ row }">
+                                <Button varient="light" :rounded="true" @click="openChat(row.id)">
+                                    <EyeIcon :is-solid="false" class="h-6 w-6" />
+                                </Button>
+                            </template>
+                        </TableComponent>
                     </div>
                 </div>
             </div>
         </template>
     </BaseView>
+    <ChatbotDrawer
+        :is-open="isDrawerOpen"
+        :close-drawer="closeDrawer"
+        :read-only="true"
+        :chat-id="selectedChatId"
+    />
 </template>

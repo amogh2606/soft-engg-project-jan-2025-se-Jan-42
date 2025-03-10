@@ -1,21 +1,30 @@
 <script setup>
-import { useAuthStore } from '@/stores/auth';
-import { push } from 'notivue';
-import { useRouter } from 'vue-router';
+import { logoutUser } from '@/api';
 import Button from '@/components/ui/buttons/Button.vue';
+import { useAuthStore } from '@/stores/auth';
+import { redirectToLogin } from '@/utils/routerHelper';
+import { push } from 'notivue';
 
-const authStore = useAuthStore();
-const router = useRouter();
+const { clearUser } = useAuthStore();
 
-function logout() {
-    authStore.logout();
-    router.push('/auth/login');
-    push.success({
-        message: 'Logged out successfully',
-    });
+async function logout() {
+    try {
+        await logoutUser();
+        clearUser();
+        redirectToLogin();
+
+        push.success({
+            message: 'Logged out successfully',
+        });
+    } catch (error) {
+        console.error(error);
+        push.error({
+            message: error.message || 'An unexpected error occurred during logout.',
+        });
+    }
 }
 </script>
 
 <template>
-    <Button @click="logout" class="w-full" varient="outlineRed"> Logout </Button>
+    <Button @click="logout" class="w-full" varient="outlineRed">Logout</Button>
 </template>

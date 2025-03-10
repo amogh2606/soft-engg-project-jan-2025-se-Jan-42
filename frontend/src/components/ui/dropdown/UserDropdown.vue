@@ -1,8 +1,9 @@
 <script setup>
 import UserIcon from '@/components/icons/UserIcon.vue';
-import LogoutButton from '@/components/ui/buttons/LogoutButton.vue';
 import Button from '@/components/ui/buttons/Button.vue';
+import LogoutButton from '@/components/ui/buttons/LogoutButton.vue';
 import { useAuthStore } from '@/stores/auth';
+import { getRouteBasedOnRole } from '@/utils/routerHelper';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
@@ -16,22 +17,12 @@ const props = defineProps({
 // Auth state
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
-const isLoggedIn = computed(() => authStore.isLoggedIn());
+const isLoggedIn = computed(() => authStore.isLoggedIn);
 
 // Dashboard route based on user role
 const dashboardRoute = computed(() => {
     if (!isLoggedIn.value) return '/';
-
-    switch (user.value?.role) {
-        case 'admin':
-            return '/admin/courses';
-        case 'instructor':
-            return '/instructor/faqs';
-        case 'student':
-            return '/student/courses';
-        default:
-            return '/';
-    }
+    return getRouteBasedOnRole(authStore.userRole);
 });
 
 // Dropdown state
@@ -65,7 +56,7 @@ onUnmounted(() => {
                 v-if="isLoggedIn && showUserName"
                 class="hidden text-sm font-medium text-gray-700 md:block"
             >
-                Logged in as <span class="font-bold capitalize">{{ user.role }}</span>
+                Logged in as <span class="font-bold capitalize">{{ authStore.userRole }}</span>
             </span>
             <Button varient="light" :rounded="true" @click.stop="toggleDropdown">
                 <UserIcon :is-solid="false" :with-border="false" class="h-6 w-full" />

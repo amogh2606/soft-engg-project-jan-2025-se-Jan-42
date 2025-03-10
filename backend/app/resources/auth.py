@@ -20,6 +20,9 @@ class Login(Resource):
 
         user = security.datastore.find_user(email=email)
         if user and user.verify_and_update_password(password):
+            if user.has_role('instructor') and not user.courses:
+                abort(400, message="No courses have been assigned to you yet")
+                
             if login_user(user):
                 return {"message": "Logged in successfully"}
             else:

@@ -7,7 +7,7 @@ from app.models import db, Feedback, Course
 feedback_fields = {
     'id': fields.Integer,
     'course_id': fields.Integer,
-    'created': fields.DateTime('iso8601'),
+    'created': fields.String,
     'title': fields.String,
     'text': fields.String
 }
@@ -22,7 +22,7 @@ class FeedbackResource(Resource):
             abort(400, message="Course not enrolled")
         
         stmt = db.select(Feedback).filter_by(course_id=course_id)
-        feedbacks = db.session.scalars(stmt)
+        feedbacks = db.session.scalars(stmt).all()
 
         return feedbacks
 

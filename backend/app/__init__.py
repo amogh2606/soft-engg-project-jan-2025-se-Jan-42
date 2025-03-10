@@ -4,6 +4,7 @@ from app.models import db
 from app.security import security
 from app.resources import api
 from app.seed import seed_db, store_initial_embeddings
+from app.scheduler import start_scheduler
 from werkzeug.exceptions import HTTPException
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -14,11 +15,12 @@ def create_app():
     db.init_app(app)
     security.init_app(app)
     api.init_app(app)
-    CORS(app)
+    CORS(app, supports_credentials=True)
 
     with app.app_context():
         seed_db()
-        store_initial_embeddings()
+        # store_initial_embeddings()
+        start_scheduler()
 
     return app
 

@@ -1,5 +1,5 @@
 import io, csv
-from flask_restful import Resource, reqparse, marshal_with, fields, abort
+from flask_restful import Resource, reqparse, marshal_with, fields, abort, marshal
 from flask_security import current_user, roles_accepted, auth_required
 from flask import request, send_file
 from app.models import db, Chat, Message
@@ -9,14 +9,15 @@ from app.models import db, Chat, Message
 # Response fields for chat session
 chat_fields = {
     'id': fields.Integer,
+    'user_id': fields.Integer,
     'title': fields.String,
-    'created': fields.DateTime('iso8601'),
+    'created': fields.String,
     'active': fields.Boolean,
     'bookmarked': fields.Boolean,
     'messages': fields.List(fields.Nested({
         'id': fields.Integer,
         'text': fields.String,
-        'timestamp': fields.DateTime('iso8601'),
+        'timestamp': fields.String,
         'is_response': fields.Boolean
     }))
 }
@@ -33,8 +34,6 @@ class ChatSession(Resource):
                 abort(404, message="Chat not found")
         else:
             # get the active chat session
-            if current_user.has_role('admin'):
-                abort(404, message="Admin cannot have active chat session")
             stmt = db.select(Chat).filter_by(user_id=current_user.id, active=True)
             chat = db.session.scalar(stmt)
             if not chat:
@@ -44,7 +43,7 @@ class ChatSession(Resource):
     
 
     # Create new chat session
-    @roles_accepted('student', 'instructor')
+    @auth_required('session')
     @marshal_with(chat_fields)
     def post(self):
         stmt = db.select(Chat).filter_by(user_id=current_user.id, active=True)
@@ -61,7 +60,7 @@ class ChatSession(Resource):
     
 
     # Bookmark or rename chat
-    @roles_accepted('student', 'instructor')
+    @auth_required('session')
     @marshal_with(chat_fields)
     def put(self, chat_id):
         chat = db.session.get(Chat, chat_id)
@@ -96,40 +95,54 @@ class ChatSession(Resource):
 
 
 # Response fields for chat list
-chat_list_fields = chat_fields.copy()
-chat_list_fields.pop('messages')
+chat_list_fields = {
+    'id': fields.Integer,
+    'title': fields.String,
+    'created': fields.String,
+    'active': fields.Boolean,
+    'bookmarked': fields.Boolean,
+}
 
 
 class UserChats(Resource):
     # Get chat history for current user
-    @roles_accepted('student', 'instructor')
+    @auth_required('session')
     @marshal_with(chat_list_fields)
     def get(self):
         stmt = db.select(Chat).filter_by(user_id=current_user.id)
-        return db.session.scalars(stmt)
+        chats = db.session.scalars(stmt).all()
+        return chats
 
 
 class AllChats(Resource):
     # Get entire chat history
     @roles_accepted('admin')
-    @marshal_with(chat_list_fields)
     def get(self):
         if request.args.get('export') in ('true', '1'):
             return self.export_chats()
         
-        return db.session.scalars(db.select(Chat))
+        chats = db.session.scalars(db.select(Chat)).all() 
+        return marshal(chats, chat_list_fields)
 
 
     # Export chats as CSV
     def export_chats(self):
-        all_chats = db.session.scalars(db.select(Message))
-        output = io.StringIO()
-        writer = csv.writer(output)
-        writer.writerow(['id', 'chat_id', 'text', 'timestamp', 'is_response']) # header row
+        all_chats = db.session.scalars(db.select(Message)).all()
+        
+        # Create StringIO first to write content
+        output_text = io.StringIO()
+        writer = csv.writer(output_text)
+        writer.writerow(['msg_id', 'chat_id', 'message', 'timestamp', 'sender']) # header row
 
         for msg in all_chats:
-            writer.writerow([msg.id, msg.chat_id, msg.text, msg.timestamp, msg.is_response])
+            if msg.is_response:
+                writer.writerow([msg.id, msg.chat_id, msg.text, msg.timestamp, 'AI'])
+            else:
+                writer.writerow([msg.id, msg.chat_id, msg.text, msg.timestamp, 'User'])
 
-        output.seek(0)
+        # Convert to BytesIO for send_file
+        output_bytes = io.BytesIO()
+        output_bytes.write(output_text.getvalue().encode('utf-8'))
+        output_bytes.seek(0)
 
-        return send_file(output, mimetype='text/csv', attachment_filename='chats.csv', as_attachment=True)
+        return send_file(output_bytes, mimetype='text/csv', download_name='chats.csv', as_attachment=True)

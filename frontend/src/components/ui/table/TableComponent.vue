@@ -32,7 +32,11 @@ defineProps({
             </thead>
 
             <tbody class="divide-y bg-white">
+                <tr v-if="rows.length === 0">
+                    <td colspan="100%" class="py-4 text-sm text-center">No data found !</td>
+                </tr>
                 <tr
+                    v-else
                     v-for="(row, rowIndex) in rows"
                     :key="rowIndex"
                     class="cursor-pointer divide-x hover:bg-gray-50"

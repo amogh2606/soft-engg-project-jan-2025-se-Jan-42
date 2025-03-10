@@ -46,6 +46,7 @@ def process_document(file_path, course_id=None):
             'created': datetime.now(timezone.utc).isoformat()
         }
     store_vectors(split_docs, course_id)
+    return True
 
 
 def store_vectors(documents, course_id=None):

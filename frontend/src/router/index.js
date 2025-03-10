@@ -15,11 +15,10 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     // Get auth state from store
     const authStore = useAuthStore();
-    const isAuthenticated = authStore.isLoggedIn();
-    const userRole = isAuthenticated ? authStore.user.role : null;
+    const userRole = authStore.isLoggedIn ? authStore.userRole : null;
 
     // If route requires authentication and user is not authenticated, redirect to login
-    if (to.meta.requiresAuth && !isAuthenticated) {
+    if (to.meta.requiresAuth && !authStore.isLoggedIn) {
         next({ name: 'auth-LoginView' });
         return;
     }

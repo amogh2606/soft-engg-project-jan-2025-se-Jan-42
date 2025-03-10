@@ -10,11 +10,11 @@
         >
             <ContextIcon :is-solid="selectedOption ? true : false" class="h-5 w-auto" />
             <span class="text-sm">
-                {{ selectedOption || 'Context' }}
+                {{ selectedOption || 'Course Context' }}
             </span>
         </button>
         <div
-            v-if="isOpen"
+            v-if="isOpen && options.length > 0"
             class="absolute bottom-9 left-0 flex w-48 flex-col gap-1 rounded-lg border bg-white p-2 text-sm shadow"
         >
             <button
@@ -44,7 +44,7 @@
 
 <script setup>
 import ContextIcon from '@/components/icons/ContextIcon.vue';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, watchEffect } from 'vue';
 
 const props = defineProps({
     options: {
@@ -66,6 +66,10 @@ const emit = defineEmits(['update:modelValue']);
 const isOpen = ref(false);
 const selectedOption = ref(props.modelValue);
 const dropdown = ref(null);
+
+watchEffect(() => {
+    selectedOption.value = props.modelValue;
+});
 
 const updateSelectedOption = (option) => {
     selectedOption.value = option;

@@ -4,28 +4,31 @@ from app.models import db, Video, Course, VideoRating
 
 
 
-video_fields = {
-    'id': fields.Integer,
-    'course_id': fields.Integer,
-    'week': fields.Integer,
-    'lecture': fields.Integer,
-    'title': fields.String,
-    'url': fields.String,
-    'rating': fields.Float
-}
-
 class VideoResource(Resource):
     # Get a specific video
     @auth_required('session')
-    @marshal_with(video_fields)
     def get(self, video_id):
         video = db.get_or_404(Video, video_id, description='Video not found')
-
         if not current_user.has_role('admin'):
             if video.course not in current_user.courses:
                 abort(400, message="Course not enrolled")
+        
+        # get the user rating for the video
+        stmt = db.select(VideoRating.rating).filter_by(video_id=video_id, user_id=current_user.id)
+        user_rating = db.session.scalar(stmt)
+
+        video_details = {
+            'id': video.id,
+            'course_id': video.course_id,
+            'week': video.week,
+            'lecture': video.lecture,
+            'title': video.title,
+            'url': video.url,
+            'avg_rating': video.avg_rating,
+            'user_rating': user_rating
+        }
                    
-        return video
+        return video_details
 
 
     # Add a new video
@@ -111,7 +114,7 @@ class AllVideos(Resource):
     @roles_required('admin')
     @marshal_with(video_list_fields)
     def get(self):
-        all_videos = db.session.scalars(db.select(Video))
+        all_videos = db.session.scalars(db.select(Video)).all()
         return all_videos
 
 
@@ -147,5 +150,5 @@ class RateVideo(Resource):
         stmt = db.select(VideoRating.rating).filter_by(video_id=video_id)
         ratings = db.session.scalars(stmt).all()
         avg_rating = sum(ratings) / len(ratings)
-        video.rating = round(avg_rating, 1)
+        video.avg_rating = round(avg_rating, 1)
         

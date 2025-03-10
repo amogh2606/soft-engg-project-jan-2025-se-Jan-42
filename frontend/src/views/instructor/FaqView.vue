@@ -1,133 +1,33 @@
 <script setup>
 import Button from '@/components/ui/buttons/Button.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import BaseView from './BaseView.vue';
+import { getFaqs } from '@/api';
+import { push } from 'notivue';
 
 const headers = ref([
+    { label: 'Rank', key: 'rank' },
     { label: 'Question', key: 'question' },
-    { label: 'Category', key: 'category' },
-    { label: 'Created At', key: 'createdAt' },
+    { label: 'Updated At', key: 'last_updated' },
 ]);
-const faqs = ref([
-    {
-        id: 1,
-        question: 'Software Eng...',
-        createdAt: '2021-09-01 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 2,
-        question: 'Data Struct...',
-        createdAt: '2021-09-02 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 3,
-        question: 'Operating Systems',
-        createdAt: '2021-09-03 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 4,
-        question: 'Computer Networks',
-        createdAt: '2021-09-04 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 5,
-        question: 'Database Mana...',
-        createdAt: '2021-09-05 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 6,
-        question: 'Computer Archi...',
-        createdAt: '2021-09-06 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 7,
-        question: 'Artificial Int...',
-        createdAt: '2021-09-07 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 8,
-        question: 'Machine Learn...',
-        createdAt: '2021-09-08 12:00:00',
-        category: 'category...',
-    },
-    { id: 9, question: 'Deep Learning', createdAt: '2021-09-09 12:00:00', category: 'category...' },
-    {
-        id: 10,
-        question: 'Natural Langu...',
-        createdAt: '2021-09-10 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 11,
-        question: 'Software Eng...',
-        createdAt: '2021-09-11 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 12,
-        question: 'Data Struct...',
-        createdAt: '2021-09-12 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 13,
-        question: 'Operating Systems',
-        createdAt: '2021-09-13 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 14,
-        question: 'Computer Networks',
-        createdAt: '2021-09-14 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 15,
-        question: 'Database Mana...',
-        createdAt: '2021-09-15 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 16,
-        question: 'Computer Archi...',
-        createdAt: '2021-09-16 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 17,
-        question: 'Artificial Int...',
-        createdAt: '2021-09-17 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 18,
-        question: 'Machine Learn...',
-        createdAt: '2021-09-18 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 19,
-        question: 'Deep Learning',
-        createdAt: '2021-09-19 12:00:00',
-        category: 'category...',
-    },
-    {
-        id: 20,
-        question: 'Natural Langu...',
-        createdAt: '2021-09-20 12:00:00',
-        category: 'category...',
-    },
-]);
+
+const searchInput = ref('');
+const faqs = ref([]);
 const filteredFaqs = computed(() => {
-    return faqs.value;
+    return faqs.value.filter((faq) =>
+        faq.question.toLowerCase().includes(searchInput.value?.toLowerCase()),
+    );
+});
+
+onMounted(() => {
+    getFaqs()
+        .then((res) => {
+            faqs.value = res?.data?.faqs || [];
+        })
+        .catch((error) => {
+            push.error(error?.response?.data?.message || 'Something went wrong fetching FAQs !');
+        });
 });
 </script>
 <template>
@@ -147,6 +47,7 @@ const filteredFaqs = computed(() => {
                                 type="text"
                                 class="w-full rounded border p-2"
                                 placeholder="Search..."
+                                v-model="searchInput"
                             />
                             <Button varient="primary">Search</Button>
                         </div>

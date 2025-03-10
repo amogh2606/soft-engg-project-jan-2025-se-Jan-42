@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse, marshal_with, fields, abort
-from flask_security import roles_required, auth_required, current_user
+from flask_security import roles_accepted, auth_required, current_user
 from app.models import db, Course, User
 
 
@@ -13,6 +13,10 @@ course_fields = {
         'title': fields.String,
         'week': fields.Integer,
         'lecture': fields.Integer
+    })),
+    'assignments': fields.List(fields.Nested({
+        'id': fields.Integer,
+        'week': fields.Integer,
     }))
 }
 
@@ -31,7 +35,7 @@ class CourseResource(Resource):
 
 
     # Create a new course
-    @roles_required('admin')
+    @roles_accepted('admin')
     @marshal_with(course_fields)
     def post(self):
         parser = reqparse.RequestParser(trim=True)
@@ -54,45 +58,35 @@ class CourseResource(Resource):
 
 
     # Update a specific course
-    @roles_required('admin')
+    @roles_accepted('admin')
     def put(self, course_id):
         parser = reqparse.RequestParser(trim=True)
         parser.add_argument('name')
         parser.add_argument('description')
-        parser.add_argument('user_id', type=int)
 
         course = db.get_or_404(Course, course_id, description="Course not found")
         
         args = parser.parse_args()
         name = args.get('name')
         description = args.get('description')
-        user_id = args.get('user_id')
 
         if name:
             name = name.lower()
             stmt = db.select(Course).filter_by(name=name)
             if db.session.scalar(stmt):
-                abort(400, message="Course already exists")
+                abort(400, message="Course name already exists")
             else:
                 course.name = name
         
         if description:
             course.description = description
         
-        # enroll user to course
-        if user_id:
-            user = db.get_or_404(User, user_id, description="User not found")
-            if user in course.users:
-                abort(400, message="User already enrolled")
-            
-            course.users.append(user)
-
         db.session.commit()
         return {"message": "Updated successfully"}
 
 
     # Delete a specific course
-    @roles_required('admin')
+    @roles_accepted('admin')
     def delete(self, course_id):
         course = db.get_or_404(Course, course_id, description="Course not found")
         db.session.delete(course)
@@ -102,15 +96,66 @@ class CourseResource(Resource):
 
 
 course_list_fields = {
-    'course_id': fields.Integer,
-    'course_name': fields.String
+    'id': fields.Integer,
+    'name': fields.String
 }
 
 class AllCourses(Resource):
     # Get all courses
-    @roles_required('admin')
+    @roles_accepted('admin','student')
     @marshal_with(course_list_fields)
     def get(self):
-        all_courses = db.session.scalars(db.select(Course))
+        all_courses = db.session.scalars(db.select(Course)).all()
         return all_courses
+
+
+user_fields = {
+    'id': fields.Integer,
+    'email': fields.String,
+    'name': fields.String,
+    'roles': fields.List(fields.String(attribute='name')),
+    'courses': fields.List(fields.Nested({
+        'id': fields.Integer,
+        'name': fields.String
+    }))
+}
+
+class CourseEnrollment(Resource):
+    # Get users enrolled in a course
+    @roles_accepted('admin')
+    @marshal_with(user_fields, envelope='enrolled_users')
+    def get(self, course_id):
+        course = db.get_or_404(Course, course_id, description="Course not found")
+        users = course.users
+        return users
     
+
+    # Enroll a user to a course
+    @roles_accepted('student', 'admin')
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('course_id', type=int, required=True, nullable=False)
+        parser.add_argument('user_id', type=int, required=True, nullable=False)
+
+        args = parser.parse_args()
+        course_id = args.get('course_id')
+        user_id = args.get('user_id')
+
+        # check if student is not enrolling themselves
+        if current_user.has_role('student') and current_user.id != user_id:
+            abort(403)
+        
+        course = db.get_or_404(Course, course_id, description="Course not found")
+        user = db.get_or_404(User, user_id, description="User not found")
+        if course in user.courses:
+            abort(400, message="User already enrolled")
+
+        # instructor can be assigned to only one course
+        if user.has_role('instructor') and user.courses:
+            abort(400, message="Instructor already assigned to a course")
+
+        course.users.append(user)
+        db.session.commit()
+
+        return {"message": "Enrolled successfully"}, 201
+

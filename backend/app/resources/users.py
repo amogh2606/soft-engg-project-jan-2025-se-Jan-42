@@ -7,6 +7,7 @@ import re
 
 
 user_fields = {
+    'id': fields.Integer,
     'email': fields.String,
     'name': fields.String,
     'roles': fields.List(fields.String(attribute='name')),
@@ -15,7 +16,6 @@ user_fields = {
         'name': fields.String
     }))
 }
-
 
 class UserResource(Resource):
     # get user details
@@ -96,4 +96,22 @@ class UserResource(Resource):
     
         if security.datastore.find_user(email=email):
             abort(400, message="Email already exists")
-            
+
+
+# users endpoint for admin to view all users 
+# users can be filtered by role
+class UsersResource(Resource):
+    @roles_required('admin')
+    @marshal_with(user_fields)
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('role', type=str, location='args')
+        args = parser.parse_args()
+        role = args.get('role')
+
+        if role:
+            users = User.query.filter(User.roles.any(name=role)).all()
+        else:
+            users = User.query.all()
+
+        return users

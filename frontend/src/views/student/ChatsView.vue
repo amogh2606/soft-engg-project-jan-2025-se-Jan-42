@@ -1,32 +1,61 @@
 <script setup>
+import { getUserChats } from '@/api';
+import ChatbotDrawer from '@/components/ChatbotDrawer.vue';
+import EyeIcon from '@/components/icons/EyeIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
 import BaseView from '@/views/student/BaseView.vue';
-import { computed, ref } from 'vue';
+import { push } from 'notivue';
+import { computed, ref, watch } from 'vue';
 
 const headers = [
     { key: 'id', label: 'Id' },
     { key: 'title', label: 'Title' },
-    { key: 'createdAt', label: 'Created At' },
+    { key: 'created', label: 'Created At' },
+    { key: 'actions', label: 'Actions' },
 ];
-const chats = ref([
-    { id: 1, title: 'Software Eng...', createdAt: '2021-09-01 12:00:00', isBookmarked: true },
-    { id: 2, title: 'Data Struct...', createdAt: '2021-09-02 12:00:00', isBookmarked: false },
-    { id: 3, title: 'Operating Systems', createdAt: '2021-09-03 12:00:00', isBookmarked: true },
-    { id: 4, title: 'Software Eng...', createdAt: '2021-09-01 12:00:00', isBookmarked: true },
-    { id: 5, title: 'Data Struct...', createdAt: '2021-09-02 12:00:00', isBookmarked: false },
-    { id: 6, title: 'Operating Systems', createdAt: '2021-09-03 12:00:00', isBookmarked: true },
-    { id: 7, title: 'Software Eng...', createdAt: '2021-09-01 12:00:00', isBookmarked: true },
-    { id: 8, title: 'Data Struct...', createdAt: '2021-09-02 12:00:00', isBookmarked: false },
-    { id: 9, title: 'Operating Systems', createdAt: '2021-09-03 12:00:00', isBookmarked: true },
-    { id: 10, title: 'Software Eng...', createdAt: '2021-09-01 12:00:00', isBookmarked: true },
-    { id: 11, title: 'Data Struct...', createdAt: '2021-09-02 12:00:00', isBookmarked: false },
-    { id: 12, title: 'Operating Systems', createdAt: '2021-09-03 12:00:00', isBookmarked: true },
-]);
+const searchInput = ref('');
+const chats = ref([]);
+const filterBookmarked = ref(false);
+const selectedChatId = ref(null);
+const isDrawerOpen = ref(false);
 
-const bookmarkOnly = ref(false);
-const filteredChats = computed(() =>
-    bookmarkOnly.value ? chats.value.filter((chat) => chat.isBookmarked) : chats.value,
+const filteredChats = computed(() => {
+    const filteredChats = chats.value.filter((chat) =>
+        chat.title.toLowerCase().includes(searchInput.value?.toLowerCase()),
+    );
+    return filterBookmarked.value ? filteredChats.filter((chat) => chat.bookmarked) : filteredChats;
+});
+
+const openChat = (chatId) => {
+    selectedChatId.value = chatId;
+    isDrawerOpen.value = true;
+};
+
+const closeDrawer = () => {
+    isDrawerOpen.value = false;
+    selectedChatId.value = null;
+};
+
+const syncUserChats = () => {
+    getUserChats()
+        .then((response) => {
+            chats.value = response.data;
+        })
+        .catch((error) => {
+            console.error(error);
+            push.error('Error fetching chats !');
+        });
+};
+
+watch(
+    isDrawerOpen,
+    (newVal) => {
+        if (!newVal) {
+            syncUserChats();
+        }
+    },
+    { immediate: true },
 );
 </script>
 
@@ -47,6 +76,7 @@ const filteredChats = computed(() =>
                                     type="text"
                                     class="w-full rounded border p-2"
                                     placeholder="Search..."
+                                    v-model="searchInput"
                                 />
                                 <Button varient="primary">Search</Button>
                             </div>
@@ -56,7 +86,7 @@ const filteredChats = computed(() =>
                                         type="checkbox"
                                         id="toggle"
                                         class="peer sr-only"
-                                        v-model="bookmarkOnly"
+                                        v-model="filterBookmarked"
                                     />
                                     <div
                                         class="block h-6 w-12 rounded-full bg-gray-300 transition-all peer-checked:bg-blue-500"
@@ -68,10 +98,22 @@ const filteredChats = computed(() =>
                                 <span class="text-gray-700">Bookmark Only</span>
                             </label>
                         </div>
-                        <TableComponent :headers="headers" :rows="filteredChats" />
+                        <TableComponent :headers="headers" :rows="filteredChats">
+                            <template #actions="{ row }">
+                                <Button varient="light" :rounded="true" @click="openChat(row.id)">
+                                    <EyeIcon :is-solid="false" class="h-6 w-6" />
+                                </Button>
+                            </template>
+                        </TableComponent>
                     </div>
                 </div>
             </div>
         </template>
     </BaseView>
+    <ChatbotDrawer
+        :is-open="isDrawerOpen"
+        :close-drawer="closeDrawer"
+        :read-only="true"
+        :chat-id="selectedChatId"
+    />
 </template>

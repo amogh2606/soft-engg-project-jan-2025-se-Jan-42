@@ -1,11 +1,14 @@
 <script setup>
+import { getAllCourses } from '@/api';
 import EyeIcon from '@/components/icons/EyeIcon.vue';
 import PlusIcon from '@/components/icons/PlusIcon.vue';
 import StackIcon from '@/components/icons/StackIcon.vue';
 import StudentIcon from '@/components/icons/StudentIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
+import AddCourseModal from '@/components/ui/modal/AddCourseModal.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
-import { computed, ref } from 'vue';
+import { push } from 'notivue';
+import { computed, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 import BaseView from './BaseView.vue';
 
@@ -14,23 +17,36 @@ const headers = ref([
     { label: 'Course Name', key: 'name' },
     { label: 'Actions', key: 'actions' },
 ]);
+const searchInput = ref('');
+const courses = ref([]);
+const filteredCourses = computed(() =>
+    courses.value.filter((c) => c.name.toLowerCase().includes(searchInput.value?.toLowerCase())),
+);
+const isAddCourseModalOpen = ref(false);
+const toggleAddCourseModal = () => {
+    isAddCourseModalOpen.value = !isAddCourseModalOpen.value;
+};
 
-const courses = ref([
-    { id: 1, name: 'Software Engineering' },
-    { id: 2, name: 'Data Structures and Algorithms' },
-    { id: 3, name: 'Operating Systems' },
-    { id: 4, name: 'Computer Networks' },
-    { id: 5, name: 'Database Management Systems' },
-    { id: 6, name: 'Computer Architecture' },
-    { id: 7, name: 'Artificial Intelligence' },
-    { id: 8, name: 'Machine Learning' },
-    { id: 9, name: 'Deep Learning' },
-    { id: 10, name: 'Natural Language Processing' },
-]);
+const fetchCourses = () => {
+    getAllCourses()
+        .then((response) => {
+            courses.value = response.data;
+        })
+        .catch((error) => {
+            console.error(error);
+            push.error('Error fetching courses !');
+        });
+};
 
-const filteredCourses = computed(() => {
-    return courses.value;
-});
+watch(
+    isAddCourseModalOpen,
+    () => {
+        if (!isAddCourseModalOpen.value) {
+            fetchCourses();
+        }
+    },
+    { immediate: true },
+);
 </script>
 <template>
     <BaseView>
@@ -49,9 +65,10 @@ const filteredCourses = computed(() => {
                                 type="text"
                                 class="w-full rounded border p-2"
                                 placeholder="Search..."
+                                v-model="searchInput"
                             />
                             <Button varient="primary">Search</Button>
-                            <Button varient="primary">
+                            <Button varient="primary" @click="toggleAddCourseModal">
                                 <PlusIcon class="h-6 w-auto" />
                             </Button>
                         </div>
@@ -69,7 +86,7 @@ const filteredCourses = computed(() => {
                                             <StackIcon class="h-6 w-6" />
                                         </Button>
                                     </RouterLink>
-                                    <RouterLink :to="`/course/${row.id}`">
+                                    <RouterLink :to="`/course?course_id=${row.id}`">
                                         <Button varient="light" :rounded="true">
                                             <EyeIcon class="h-6 w-6" />
                                         </Button>
@@ -80,6 +97,7 @@ const filteredCourses = computed(() => {
                     </div>
                 </div>
             </div>
+            <AddCourseModal v-model="isAddCourseModalOpen" />
         </template>
     </BaseView>
 </template>

@@ -1,130 +1,75 @@
 <script setup>
+import { deleteDocumentFromKnowledgeStack, getKnowledgeStackByCourseId } from '@/api';
 import DeleteIcon from '@/components/icons/DeleteIcon.vue';
 import PlusIcon from '@/components/icons/PlusIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import FileUploadModal from '@/components/ui/modal/FileUploadModal.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
-import { computed, ref } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+import { push } from 'notivue';
+import { computed, ref, watch } from 'vue';
 import BaseView from './BaseView.vue';
 
+const { courseIdOfInstructor } = useAuthStore();
 const headers = ref([
     { label: 'ID', key: 'id' },
     { label: 'File Name', key: 'fileName' },
-    { label: 'Created At', key: 'createdAt' },
     { label: 'Actions', key: 'actions' },
 ]);
-
-const files = ref([
-    {
-        id: 1,
-        fileName: 'Software Eng...',
-        createdAt: '2021-09-01 12:00:00',
-    },
-    {
-        id: 2,
-        fileName: 'Data Struct...',
-        createdAt: '2021-09-02 12:00:00',
-    },
-    {
-        id: 3,
-        fileName: 'Operating Systems',
-        createdAt: '2021-09-03 12:00:00',
-    },
-    {
-        id: 4,
-        fileName: 'Computer Networks',
-        createdAt: '2021-09-04 12:00:00',
-    },
-    {
-        id: 5,
-        fileName: 'Database Mana...',
-        createdAt: '2021-09-05 12:00:00',
-    },
-    {
-        id: 6,
-        fileName: 'Computer Archi...',
-        createdAt: '2021-09-06 12:00:00',
-    },
-    {
-        id: 7,
-        fileName: 'Artificial Int...',
-        createdAt: '2021-09-07 12:00:00',
-    },
-    {
-        id: 8,
-        fileName: 'Machine Learn...',
-        createdAt: '2021-09-08 12:00:00',
-    },
-    {
-        id: 9,
-        fileName: 'Machine Learn...',
-        createdAt: '2021-09-08 12:00:00',
-    },
-    {
-        id: 10,
-        fileName: 'Natural Langu...',
-        createdAt: '2021-09-10 12:00:00',
-    },
-    {
-        id: 11,
-        fileName: 'Software Eng...',
-        createdAt: '2021-09-11 12:00:00',
-    },
-    {
-        id: 12,
-        fileName: 'Data Struct...',
-        createdAt: '2021-09-12 12:00:00',
-    },
-    {
-        id: 13,
-        fileName: 'Operating Systems',
-        createdAt: '2021-09-13 12:00:00',
-    },
-    {
-        id: 14,
-        fileName: 'Computer Networks',
-        createdAt: '2021-09-14 12:00:00',
-    },
-    {
-        id: 15,
-        fileName: 'Database Mana...',
-        createdAt: '2021-09-15 12:00:00',
-    },
-    {
-        id: 16,
-        fileName: 'Computer Archi...',
-        createdAt: '2021-09-16 12:00:00',
-    },
-    {
-        id: 17,
-        fileName: 'Artificial Int...',
-        createdAt: '2021-09-17 12:00:00',
-    },
-    {
-        id: 18,
-        fileName: 'Machine Learn...',
-        createdAt: '2021-09-18 12:00:00',
-    },
-    {
-        id: 19,
-        fileName: 'Deep Learning',
-        createdAt: '2021-09-19 12:00:00',
-    },
-    {
-        id: 20,
-        fileName: 'Natural Langu...',
-        createdAt: '2021-09-20 12:00:00',
-    },
-]);
-
-const filteredFiles = computed(() => {
-    return files.value;
-});
-
+const searchInput = ref('');
+const files = ref([]);
+const filteredFiles = computed(() =>
+    files.value.filter((file) =>
+        file.fileName.toLowerCase().includes(searchInput.value?.toLowerCase()),
+    ),
+);
 const isFileUploadModalOpen = ref(false);
 const toggleFileUploadModal = () => {
     isFileUploadModalOpen.value = !isFileUploadModalOpen.value;
 };
+
+const deleteDocument = (fileName) => {
+    deleteDocumentFromKnowledgeStack(courseIdOfInstructor, fileName)
+        .then((response) => {
+            push.success('File deleted successfully');
+            loadKnowledgeStack();
+        })
+        .catch((error) => {
+            if (error?.response?.status === 404) {
+                push.error('File not found !');
+            } else {
+                push.error(error?.response?.data?.message || 'Failed to delete file !');
+            }
+        });
+};
+
+const loadKnowledgeStack = () => {
+    getKnowledgeStackByCourseId(courseIdOfInstructor)
+        .then((response) => {
+            files.value = response.data.documents.map((file, index) => ({
+                fileName: file,
+                id: index + 1,
+            }));
+        })
+        .catch((error) => {
+            console.error(error);
+            if (error?.response?.status === 404) {
+                push.error('No knowledge stack found for this course !');
+            } else {
+                push.error(error?.response?.data?.message || 'Error fetching knowledge stack !');
+            }
+        });
+};
+
+watch(
+    isFileUploadModalOpen,
+    () => {
+        if (!isFileUploadModalOpen.value) {
+            loadKnowledgeStack();
+        }
+    },
+    { immediate: true },
+);
 </script>
 <template>
     <BaseView>
@@ -143,6 +88,7 @@ const toggleFileUploadModal = () => {
                                 type="text"
                                 class="w-full rounded border p-2"
                                 placeholder="Search..."
+                                v-model="searchInput"
                             />
                             <Button varient="primary">Search</Button>
                             <Button varient="primary" @click="toggleFileUploadModal">
@@ -151,7 +97,11 @@ const toggleFileUploadModal = () => {
                         </div>
                         <TableComponent :headers="headers" :rows="filteredFiles">
                             <template #actions="{ row }">
-                                <Button varient="outlineRed" :rounded="true">
+                                <Button
+                                    varient="outlineRed"
+                                    :rounded="true"
+                                    @click="deleteDocument(row.fileName)"
+                                >
                                     <DeleteIcon :isSolid="false" class="h-6 w-auto" />
                                 </Button>
                             </template>
@@ -159,7 +109,10 @@ const toggleFileUploadModal = () => {
                     </div>
                 </div>
             </div>
-            <FileUploadModal v-model="isFileUploadModalOpen" />
+            <FileUploadModal
+                v-model="isFileUploadModalOpen"
+                :course-id="courseIdOfInstructor.toString()"
+            />
         </template>
     </BaseView>
 </template>

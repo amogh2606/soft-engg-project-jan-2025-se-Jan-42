@@ -2,6 +2,7 @@ import AdminChatsView from '@/views/admin/ChatsView.vue';
 import AdminCoursesListView from '@/views/admin/CoursesListView.vue';
 import AdminEnrollmentsView from '@/views/admin/EnrollmentsView.vue';
 import AdminKnowledgeStackView from '@/views/admin/KnowledgeStackView.vue';
+import AdminInstructorsListView from '@/views/admin/InstructorsListView.vue';
 
 export default [
     {
@@ -35,6 +36,15 @@ export default [
         path: '/admin/chats',
         name: 'admin-ChatsView',
         component: AdminChatsView,
+        meta: {
+            requiresAuth: true,
+            role: 'admin',
+        },
+    },
+    {
+        path: '/admin/instructors',
+        name: 'admin-InstructorsListView',
+        component: AdminInstructorsListView,
         meta: {
             requiresAuth: true,
             role: 'admin',
