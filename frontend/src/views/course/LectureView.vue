@@ -3,7 +3,7 @@
         <div class="flex flex-col gap-4 p-4">
             <iframe
                 height="315"
-                :src="video?.url.replace('watch?v=', 'embed/')"
+                :src="getYoutubeEmbedUrlFromUrl(video?.url)"
                 title="YouTube video player"
                 frameborder="0"
                 class="w-full max-w-[560px] rounded"
@@ -148,6 +148,7 @@ import Button from '@/components/ui/buttons/Button.vue';
 import SubmitVideoRatingModal from '@/components/ui/modal/SubmitVideoRatingModal.vue';
 import { push } from 'notivue';
 import { onMounted, ref } from 'vue';
+import { getYoutubeEmbedUrlFromUrl } from '@/utils/youtubeHelper';
 
 // https://www.youtube.com/embed/lEMtlAqlJww
 const props = defineProps({
