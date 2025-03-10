@@ -57,7 +57,11 @@ def populate_sample_data():
 
     # add course data from csv files
     for course in courses:
-        course_folder = os.path.join(os.path.dirname(__file__), 'data', f'course_{course.id}')
+        # course_folder = os.path.join(os.path.dirname(__file__), 'data', f'course_{course.id}')
+        course_folder = os.path.join(os.getcwd(), 'data', f'course_{course.id}')
+        if not os.path.exists(course_folder):
+            raise Exception(f"Course folder not found: {course_folder}")
+
         # add lecture videos
         file_path = os.path.join(course_folder, 'videos.csv')
         if os.path.exists(file_path):
