@@ -1,11 +1,13 @@
 <script setup>
 import { getAllCourses } from '@/api';
+import EditIcon from '@/components/icons/EditIcon.vue';
 import EyeIcon from '@/components/icons/EyeIcon.vue';
 import PlusIcon from '@/components/icons/PlusIcon.vue';
 import StackIcon from '@/components/icons/StackIcon.vue';
 import StudentIcon from '@/components/icons/StudentIcon.vue';
 import Button from '@/components/ui/buttons/Button.vue';
 import AddCourseModal from '@/components/ui/modal/AddCourseModal.vue';
+import UpdateCourseModal from '@/components/ui/modal/UpdateCourseModal.vue';
 import TableComponent from '@/components/ui/table/TableComponent.vue';
 import { push } from 'notivue';
 import { computed, ref, watch } from 'vue';
@@ -23,8 +25,14 @@ const filteredCourses = computed(() =>
     courses.value.filter((c) => c.name.toLowerCase().includes(searchInput.value?.toLowerCase())),
 );
 const isAddCourseModalOpen = ref(false);
+const isUpdateCourseModalOpen = ref(false);
+const updateCourse = ref(null);
 const toggleAddCourseModal = () => {
     isAddCourseModalOpen.value = !isAddCourseModalOpen.value;
+};
+const openUpdateCourseModal = (course) => {
+    updateCourse.value = course;
+    isUpdateCourseModalOpen.value = true;
 };
 
 const fetchCourses = () => {
@@ -39,9 +47,9 @@ const fetchCourses = () => {
 };
 
 watch(
-    isAddCourseModalOpen,
+    [isAddCourseModalOpen, isUpdateCourseModalOpen],
     () => {
-        if (!isAddCourseModalOpen.value) {
+        if (!isAddCourseModalOpen.value && !isUpdateCourseModalOpen.value) {
             fetchCourses();
         }
     },
@@ -91,6 +99,13 @@ watch(
                                             <EyeIcon class="h-6 w-6" />
                                         </Button>
                                     </RouterLink>
+                                    <Button
+                                        varient="light"
+                                        :rounded="true"
+                                        @click="openUpdateCourseModal(row)"
+                                    >
+                                        <EditIcon class="h-6 w-6" />
+                                    </Button>
                                 </div>
                             </template>
                         </TableComponent>
@@ -98,6 +113,7 @@ watch(
                 </div>
             </div>
             <AddCourseModal v-model="isAddCourseModalOpen" />
+            <UpdateCourseModal v-model="isUpdateCourseModalOpen" :course="updateCourse" />
         </template>
     </BaseView>
 </template>

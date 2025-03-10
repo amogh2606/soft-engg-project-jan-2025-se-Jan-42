@@ -47,6 +47,10 @@ export const addCourse = (name, description) => {
     return client.post('/courses', { name, description });
 };
 
+export const updateCourse = (courseId, name, description) => {
+    return client.put(`/courses/${courseId}`, { name, description });
+};
+
 export const getKnowledgeStackByCourseId = (courseId) => {
     return client.get(`/documents/${courseId}`);
 };
