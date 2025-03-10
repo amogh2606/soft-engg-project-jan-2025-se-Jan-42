@@ -14,95 +14,117 @@
                 <h1 class="text-2xl font-semibold">{{ video?.title }}</h1>
             </div>
 
-            <div class="mt-2 flex items-center gap-6">
-                <div class="flex items-center">
-                    <span class="mr-2 text-sm text-gray-600">Average Rating:</span>
-                    <div class="flex">
-                        <template v-for="i in 5" :key="`avg-${i}`">
-                            <svg
-                                class="h-5 w-5"
-                                :class="
-                                    i <= (video?.avg_rating || 0)
-                                        ? 'text-yellow-400'
-                                        : 'text-gray-300'
-                                "
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                            >
-                                <path
-                                    d="M12 1.5l3.09 6.83 7.91.95-5.82 5.23 1.42 7.99L12 18.75l-6.6 3.75 1.42-7.99L1 9.28l7.91-.95L12 1.5z"
-                                />
-                            </svg>
-                        </template>
-                        <span class="ml-1 text-sm text-gray-600">
-                            ({{ video?.avg_rating?.toFixed(1) || '0.0' }})
-                        </span>
+            <!-- Tabs Navigation -->
+            <div class="border-b border-gray-200">
+                <nav class="-mb-px flex space-x-8">
+                    <button
+                        v-for="tab in tabs"
+                        :key="tab.id"
+                        @click="activeTab = tab.id"
+                        :class="[
+                            activeTab === tab.id
+                                ? 'border-blue-500 text-blue-600'
+                                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                            'whitespace-nowrap border-b-2 px-1 py-4 font-medium',
+                        ]"
+                    >
+                        {{ tab.name }}
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="mt-4 rounded-lg bg-white p-4 shadow">
+                <!-- Ratings Tab -->
+                <div v-if="activeTab === 'ratings'" class="flex flex-col gap-6">
+                    <div class="flex items-center justify-center gap-6">
+                        <div class="flex items-center">
+                            <span class="mr-2 text-sm text-gray-600">Average Rating:</span>
+                            <div class="flex">
+                                <template v-for="i in 5" :key="`avg-${i}`">
+                                    <svg
+                                        class="h-5 w-5"
+                                        :class="
+                                            i <= (video?.avg_rating || 0)
+                                                ? 'text-yellow-400'
+                                                : 'text-gray-300'
+                                        "
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                    >
+                                        <path
+                                            d="M12 1.5l3.09 6.83 7.91.95-5.82 5.23 1.42 7.99L12 18.75l-6.6 3.75 1.42-7.99L1 9.28l7.91-.95L12 1.5z"
+                                        />
+                                    </svg>
+                                </template>
+                                <span class="ml-1 text-sm text-gray-600">
+                                    ({{ video?.avg_rating?.toFixed(1) || '0.0' }})
+                                </span>
+                            </div>
+                        </div>
+                        <div class="h-full w-0.5 bg-gray-300">&nbsp;</div>
+                        <div class="flex items-center">
+                            <span class="mr-2 text-sm text-gray-600">Your Rating:</span>
+                            <div class="flex">
+                                <template v-for="i in 5" :key="`user-${i}`">
+                                    <svg
+                                        class="h-5 w-5"
+                                        :class="
+                                            i <= (video?.user_rating || 0)
+                                                ? 'text-yellow-400'
+                                                : 'text-gray-300'
+                                        "
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                    >
+                                        <path
+                                            d="M12 1.5l3.09 6.83 7.91.95-5.82 5.23 1.42 7.99L12 18.75l-6.6 3.75 1.42-7.99L1 9.28l7.91-.95L12 1.5z"
+                                        />
+                                    </svg>
+                                </template>
+                                <span class="ml-1 text-sm text-gray-600">
+                                    ({{ video?.user_rating?.toFixed(1) || '0.0' }})
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <Button
+                        varient="secondary"
+                        @click="toggleRatingModal"
+                        :disabled="video?.user_rating"
+                        >Rate Video</Button
+                    >
+                </div>
+
+                <!-- Summary Tab -->
+                <div v-if="activeTab === 'summary'">
+                    <div v-if="summary" class="whitespace-pre-line text-gray-700">
+                        {{ summary }}
+                    </div>
+                    <div v-else class="flex justify-center">
+                        <Button
+                            varient="secondary"
+                            @click="generateSummary"
+                            :loading="isSummaryLoading"
+                        >
+                            Generate Summary
+                        </Button>
                     </div>
                 </div>
-                <div class="flex items-center">
-                    <span class="mr-2 text-sm text-gray-600">Your Rating:</span>
-                    <div class="flex">
-                        <template v-for="i in 5" :key="`user-${i}`">
-                            <svg
-                                class="h-5 w-5"
-                                :class="
-                                    i <= (video?.user_rating || 0)
-                                        ? 'text-yellow-400'
-                                        : 'text-gray-300'
-                                "
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                            >
-                                <path
-                                    d="M12 1.5l3.09 6.83 7.91.95-5.82 5.23 1.42 7.99L12 18.75l-6.6 3.75 1.42-7.99L1 9.28l7.91-.95L12 1.5z"
-                                />
-                            </svg>
-                        </template>
-                        <span class="ml-1 text-sm text-gray-600">
-                            ({{ video?.user_rating || '0.0' }})
-                        </span>
+
+                <!-- Quiz Tab -->
+                <div v-if="activeTab === 'quiz'">
+                    <div v-if="quiz" class="whitespace-pre-line text-gray-700">
+                        {{ quiz }}
+                    </div>
+                    <div v-else class="flex justify-center">
+                        <Button varient="secondary" @click="generateQuiz" :loading="isQuizLoading"
+                            >Generate Quiz</Button
+                        >
                     </div>
                 </div>
-            </div>
-
-            <div class="mt-4 flex gap-4">
-                <Button
-                    :varient="showSummary ? 'secondary' : 'light'"
-                    @click="generateSummary"
-                    :disabled="isSummaryLoading"
-                    :loading="isSummaryLoading"
-                >
-                    {{ showSummary ? 'Hide Summary' : 'Show Summary' }}
-                </Button>
-                <Button
-                    :varient="showQuiz ? 'secondary' : 'light'"
-                    @click="generateQuiz"
-                    :disabled="isQuizLoading"
-                    :loading="isQuizLoading"
-                >
-                    {{ showQuiz ? 'Hide Quiz' : 'Show Quiz' }}
-                </Button>
-                <Button
-                    :varient="ratingInput ? 'secondary' : 'light'"
-                    @click="toggleRatingModal"
-                    :disabled="video?.user_rating"
-                >
-                    Rate Video
-                </Button>
-            </div>
-
-            <!-- Summary Section -->
-            <div v-if="showSummary" class="mt-4 rounded-lg bg-white p-4 shadow">
-                <h2 class="mb-2 text-xl font-semibold">Video Summary</h2>
-                <p class="whitespace-pre-line text-gray-700">{{ summary }}</p>
-            </div>
-
-            <!-- Quiz Section -->
-            <div v-if="showQuiz" class="mt-4 rounded-lg bg-white p-4 shadow">
-                <h2 class="mb-4 text-xl font-semibold">Quiz</h2>
-                <p class="whitespace-pre-line text-gray-700">{{ quiz }}</p>
             </div>
         </div>
     </div>
@@ -139,6 +161,12 @@ const isSummaryLoading = ref(false);
 const isQuizLoading = ref(false);
 const ratingInput = ref(0);
 const isRatingModalOpen = ref(false);
+const activeTab = ref('ratings');
+const tabs = [
+    { id: 'ratings', name: 'Ratings' },
+    { id: 'summary', name: 'Summary' },
+    { id: 'quiz', name: 'Quiz' },
+];
 
 const toggleRatingModal = () => {
     isRatingModalOpen.value = !isRatingModalOpen.value;

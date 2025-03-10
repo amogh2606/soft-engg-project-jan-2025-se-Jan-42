@@ -42,7 +42,7 @@ defineProps({
         default: false,
     },
     disabled: {
-        type: Boolean,
+        type: [Boolean, Number],
         default: false,
     },
     loading: {
