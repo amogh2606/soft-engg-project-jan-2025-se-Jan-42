@@ -1,4 +1,4 @@
-import os
+import os, csv
 from datetime import datetime
 from flask import current_app
 from flask_security import hash_password
@@ -31,13 +31,13 @@ def seed_db():
         email='instructor@example.com',
         password=hash_password('password'),
         roles=['instructor'],
-        name='instructor'
+        name='Instructor 1'
     )
     security.datastore.create_user(
         email='student@example.com',
         password=hash_password('password'),
         roles=['student'],
-        name='student'
+        name='Student 1'
     )
     
     populate_sample_data()
@@ -45,100 +45,68 @@ def seed_db():
 
 
 def populate_sample_data():
-    # create a course
-    course = Course(name="Software Engineering", description="Degree Level course")
-    db.session.add(course)
-
-    # create 3 more courses
-    db.session.add(Course(name="Data Structures", description="Degree Level course"))
-    db.session.add(Course(name="Machine Learning", description="Degree Level course"))
-    db.session.add(Course(name="Web Development", description="Degree Level course"))
-
-    db.session.commit()
-
-    course_id = course.id
-    # add videos for a week
-    videos = [  
-        ("1.1 Deconstructing the Software Development Process - Introduction", "https://www.youtube.com/watch?v=hKm_rh1RTJQ"),  
-        ("1.2 Thinking of Software in terms of Components", "https://www.youtube.com/watch?v=81BaOIrfvJA"),  
-        ("1.3 Software Development Process - Requirement Specification", "https://www.youtube.com/watch?v=SU2CBhSFUUA"),  
-        ("1.4 Software Development Process - Software Design and Development", "https://www.youtube.com/watch?v=iNqfWUN_hrc"),  
-        ("1.5 Testing and Maintenance", "https://www.youtube.com/watch?v=3uokL_BdoiU"),  
-        ("1.6 Software Development Models - Waterfall (Plan and Document) Model", "https://www.youtube.com/watch?v=938T0bC7ls0"),  
-        ("1.7 Software Development - Agile", "https://www.youtube.com/watch?v=nQzRUGuEDXs"), 
+    # create courses
+    courses = [
+        Course(name="Software Engineering", description="Degree Level course"),
+        Course(name="Software Testing", description="Degree Level course"),
+        Course(name="Machine Learning Pratice", description="Diploma Level course"),
+        Course(name="English I", description="Foundation Level course")
     ]
-    for i, (title, url) in enumerate(videos, start=1):
-        db.session.add(
-            Video(course_id=course_id, week=1, lecture=i, title=title, url=url)
-        )
-    db.session.commit()
+    db.session.add_all(courses)
+    db.session.flush()
 
-    # add an assignment
-    assignment = Assignment(course_id=course_id, week=1, due_date=datetime(2025, 12, 31))
-    db.session.add(assignment)
-    db.session.commit()
+    # add course data from csv files
+    for course in courses:
+        course_folder = os.path.join(os.path.dirname(__file__), 'data', f'course_{course.id}')
+        # add lecture videos
+        file_path = os.path.join(course_folder, 'videos.csv')
+        if os.path.exists(file_path):
+            with open(file_path) as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    video = Video(
+                        course_id=course.id,
+                        week=int(row.get('week')),
+                        lecture=int(row.get('lecture')),
+                        title=row.get('title'),
+                        url=row.get('url')
+                    )
+                    db.session.add(video)
 
-    assignment_id = assignment.id
-    # add questions to assignment
-    questions = [  
-        {  
-            'text': "A software company wants to build a website for employee welfare to cater services to its own employees, and thus requires to interact with the employees from different departments. In this case which type of clients are we dealing with?",  
-            'option_1': "external users",  
-            'option_2': "internal users",  
-            'option_3': "software or software components",  
-            'option_4': "developers",  
-            'correct_option': 2  
-        },  
-        {  
-            'text': "Which of the following tests ensures that the requirements given by the clients are actually met?",  
-            'option_1': "Unit testing",  
-            'option_2': "Modular testing",  
-            'option_3': "Integration testing",  
-            'option_4': "Acceptance testing",  
-            'correct_option': 4  
-        },  
-        {  
-            'text': "The acceptance testing conducted by a group of selected end users in a real-live environment is called: ",  
-            'option_1': "Unit testing",  
-            'option_2': "Integration testing",  
-            'option_3': "Alpha testing",  
-            'option_4': "Beta testing",  
-            'correct_option': 4  
-        },  
-        {  
-            'text': "Consider X is a software developer working in a renowned software company. **X** is given responsibility to develop a particular component of a big software. After finishing the coding X wants to test the developed component. Identify the type of testing X wants to perform.",  
-            'option_1': "Unit testing",  
-            'option_2': "Integration testing",  
-            'option_3': "Alpha testing",  
-            'option_4': "Beta testing",  
-            'correct_option': 1  
-        },  
-        {  
-            'text': "An EdTech company got a contract to build an E-learning system for a school. It decides to first focus on the key feature that the school requires - i.e. to create an online attendance module. The team develops, tests and delivers this module to the school, and then starts working on the next module. The software development process followed in this case is similar to",  
-            'option_1': "Waterfall model",  
-            'option_2': "V-model",  
-            'option_3': "Prototype model",  
-            'option_4': "Agile model",  
-            'correct_option': 4  
-        }  
-    ]
-    for i, q in enumerate(questions, start=1):
-        question = Question(
-            assignment_id=assignment_id,
-            qno=i,
-            text=q.get('text'),
-            option_1=q.get('option_1'),
-            option_2=q.get('option_2'),
-            option_3=q.get('option_3'),
-            option_4=q.get('option_4'),
-            correct_option=q.get('correct_option')
-        )
-        db.session.add(question)
+        # create assignments
+        n_weeks = 2
+        assignments = {}
+        for i in range(1, n_weeks+1):
+            assignments[i] = Assignment(course_id=course.id, week=i, due_date=datetime(2025, 12, 31))
+            db.session.add(assignments[i])
+        
+        db.session.flush()
+        # add questions to assignments
+        file_path = os.path.join(course_folder, 'questions.csv')
+        if os.path.exists(file_path):
+            with open(file_path) as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    week = int(row.get('week'))
+                    if week not in assignments:
+                        continue
+                    assignment_id = assignments[week].id
+                    question = Question(
+                        assignment_id=assignment_id,
+                        qno=int(row.get('qno')),
+                        text=row.get('text'),
+                        option_1=row.get('option_1'),
+                        option_2=row.get('option_2'),
+                        option_3=row.get('option_3'),
+                        option_4=row.get('option_4'),
+                        correct_option=int(row.get('correct_option'))
+                    )
+                    db.session.add(question)
+
+        db.session.commit()
+  
     
-    db.session.commit()
-
-
-# store embeddings for sample data
+# store embeddings for course data
 def store_initial_embeddings():
     print("Processing embeddings...")
     docs_folder = os.path.join(os.path.dirname(__file__), 'ai_agent', 'documents')

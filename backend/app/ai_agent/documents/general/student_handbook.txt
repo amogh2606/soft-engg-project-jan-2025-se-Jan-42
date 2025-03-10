@@ -1,0 +1,69 @@
+IITM BS Degree Programme - Student Handbook
+
+Programme Overview:
+- BS in Data Science & Applications by IIT Madras
+- Online course delivery with in-person exams
+- Multiple exit options: Certificate, Diploma, BSc, BS Degree
+- Open to learners of all backgrounds, no age/geographic restrictions
+
+Programme Structure:
+- Foundation Level (32 credits): English, Mathematics, Statistics, Computational Thinking, Python
+- Diploma Level (54 credits): Programming & Data Science diplomas (6 courses + 2 projects each)
+- BSc Level (28 credits): Software Engineering, Software Testing, AI, Deep Learning, Professional Growth
+- BS Level (28 credits): Higher-level courses, optional apprenticeship (4-12 credits)
+
+Admissions & Eligibility:
+- Qualifier Exam Entry: Requires Class 10 Mathematics & English
+- JEE-Based Entry: Direct admission for JEE Advanced qualifiers (valid for 3 terms)
+- Direct Diploma Entry: Available for UG students with 2+ years completed
+
+Fees & Financial Aid:
+- Entry fee: Rs. 3000 (qualifier exam, non-refundable)
+- Fee waivers based on category & family income
+- Loans available via SBI (8.1% interest, no collateral)
+
+Credit Transfer:
+- From NPTEL: Up to 4 credits for BSc, additional for BS
+- From IITM Campus: Max 24 credits (graded + non-graded)
+- Fees for transfer: Rs. 1000/credit (NPTEL), Rs. 2500/credit (IITM campus)
+
+Academic Policies:
+- 3 terms per year: Jan-Apr, May-Aug, Sep-Dec
+- Completion deadlines: 3 years per level, 8 years max for full programme
+- Pass Criteria: Min 40/100 in course assessments
+- Grading Scale: S (>=90), A (80-89), B (70-79), C (60-69), D (50-59), E (40-49), U (<40, fail)
+- Makeup exams & course repeats: Available with conditions
+
+Examinations & Assessments:
+- Weekly assignments: Online, minimum score required for eligibility
+- Quizzes: In-person, must attend at least one
+- Final exam: In-person, contributes 50% of course score
+- Project evaluations: Graded via viva, resubmissions possible
+
+Learner Lifecycle & Status:
+- Active: Registered & enrolled in courses
+- On Academic Probation: Skipped 2 terms, email access retained with RKA fee (Rs. 1000/term)
+- Struck Off: Inactive for 3+ terms, re-admission fee Rs. 2500
+- Alumnus: Completed program, email switched to personal
+- Quit Programme: Official exit, no reactivation
+
+Additional Learning & Certifications:
+- SWAYAM/NPTEL approved elective courses
+- Minor in Economics & Finance (BS level only)
+- Microsoft & AWS certifications available at a discount
+
+Upgrade Path to MS:
+- BS graduates with CGPA >= 8.0 may apply for MS (Research) at IITM
+- Must complete 106 credits before application
+- Selection via written test/interview
+
+Policies on Dropping Courses:
+- Allowed within 4 weeks of term start
+- Refund policy: Rs. 2000 deduction (Foundation), Rs. 4000 (Diploma/Degree)
+- Refund credited to student wallet for future use
+
+Project & Research Options:
+- 4-month & 8-month apprenticeship options (up to 12 credits)
+- Research projects available for BS-level students
+
+This summary captures key policies and requirements in a structured, concise format optimized for vector embeddings & retrieval.
