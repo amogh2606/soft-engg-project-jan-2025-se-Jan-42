@@ -92,6 +92,7 @@
                     </div>
                     <Button
                         varient="secondary"
+                        class="mx-auto w-auto"
                         @click="toggleRatingModal"
                         :disabled="video?.user_rating"
                         >Rate Video</Button
@@ -108,6 +109,7 @@
                             varient="secondary"
                             @click="generateSummary"
                             :loading="isSummaryLoading"
+                            :disabled="isSummaryLoading"
                         >
                             Generate Summary
                         </Button>
@@ -120,9 +122,14 @@
                         {{ quiz }}
                     </div>
                     <div v-else class="flex justify-center">
-                        <Button varient="secondary" @click="generateQuiz" :loading="isQuizLoading"
-                            >Generate Quiz</Button
+                        <Button
+                            varient="secondary"
+                            @click="generateQuiz"
+                            :loading="isQuizLoading"
+                            :disabled="isQuizLoading"
                         >
+                            Generate Quiz
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -133,14 +140,12 @@
         v-model="isRatingModalOpen"
         @rating-submitted="syncVideoData"
     />
-    <LoadingOverlay :show="isSummaryLoading || isQuizLoading" message="Loading..." />
 </template>
 
 <script setup>
 import { generateQuizOfVideo, generateSummaryOfVideo, getVideoById } from '@/api';
 import Button from '@/components/ui/buttons/Button.vue';
 import SubmitVideoRatingModal from '@/components/ui/modal/SubmitVideoRatingModal.vue';
-import LoadingOverlay from '@/components/ui/overlays/LoadingOverlay.vue';
 import { push } from 'notivue';
 import { onMounted, ref } from 'vue';
 
