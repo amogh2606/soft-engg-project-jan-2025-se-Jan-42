@@ -1,6 +1,6 @@
 <script setup>
+import { getUser, loginUser } from '@/api';
 import Button from '@/components/ui/buttons/Button.vue';
-import { performLogin } from '@/services/authService';
 import { useAuthStore } from '@/stores/auth';
 import { redirectBasedOnRole } from '@/utils/routerHelper';
 import BaseView from '@/views/auth/BaseView.vue';
@@ -20,33 +20,37 @@ onMounted(() => {
     }
 });
 
-async function submit(event) {
-    // Prevent the form from submitting
+const validateLoginForm = () => {
+    if (!email.value || !password.value) {
+        throw new Error('Please enter an email and password');
+    }
+};
+
+const submit = async (event) => {
     event.preventDefault();
 
+
     try {
-        // Validate the email and password
-        if (!email.value || !password.value) {
-            throw new Error('Please enter an email and password');
-        }
+        validateLoginForm();
 
-        // Perform login and fetch user data.
-        const userData = await performLogin(email.value, password.value);
-        authStore.setUser(userData);
+        await loginUser(email.value, password.value);
+        const userResponse = await getUser();
 
-        // Notify and redirect.
+        authStore.setUser(userResponse.data);
         push.success({ message: `Login successful as ${authStore.userRole}` });
         redirectBasedOnRole(authStore.userRole);
     } catch (error) {
         if (error.message === 'Already logged in') {
-            redirectBasedOnRole(authStore.userRole);
-        } else {
-            push.error({
-                message: error.message || 'An unexpected error occurred during login.',
-            });
+            return redirectBasedOnRole(authStore.userRole);
         }
+
+        const errorMessage =
+            error.response?.data?.message ||
+            error.message ||
+            'An unexpected error occurred during login.';
+        push.error({ message: errorMessage });
     }
-}
+};
 </script>
 
 <template>

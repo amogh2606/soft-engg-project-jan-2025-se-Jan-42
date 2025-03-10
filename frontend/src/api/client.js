@@ -15,7 +15,7 @@ export const client = axios.create({
 client.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response.status === 401) {
+        if (error.response?.status === 401) {
             const { clearUser } = useAuthStore();
             clearUser();
             redirectToLogin();
