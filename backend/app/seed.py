@@ -40,11 +40,11 @@ def seed_db():
         name='Student 1'
     )
     
-    populate_sample_data()
+    populate_course_data()
     db.session.commit()
 
 
-def populate_sample_data():
+def populate_course_data():
     # create courses
     courses = [
         Course(name="Software Engineering", description="Degree Level course"),
@@ -57,10 +57,11 @@ def populate_sample_data():
 
     # add course data from csv files
     for course in courses:
-        # course_folder = os.path.join(os.path.dirname(__file__), 'data', f'course_{course.id}')
         course_folder = os.path.join(os.getcwd(), 'data', f'course_{course.id}')
+        # if course data folder does not exist, remove the course
         if not os.path.exists(course_folder):
-            raise Exception(f"Course folder not found: {course_folder}")
+            db.session.delete(course)
+            continue
 
         # add lecture videos
         file_path = os.path.join(course_folder, 'videos.csv')
@@ -111,7 +112,7 @@ def populate_sample_data():
   
     
 # store embeddings for course data
-def store_initial_embeddings():
+def process_embeddings():
     print("Processing embeddings...")
     docs_folder = os.path.join(os.path.dirname(__file__), 'ai_agent', 'documents')
     for folder in os.listdir(docs_folder):

@@ -3,7 +3,7 @@ from flask_cors import CORS
 from app.models import db
 from app.security import security
 from app.resources import api
-from app.seed import seed_db, store_initial_embeddings
+from app.seed import seed_db, process_embeddings
 from app.scheduler import start_scheduler
 from werkzeug.exceptions import HTTPException
 from sqlalchemy.exc import SQLAlchemyError
@@ -19,7 +19,7 @@ def create_app():
 
     with app.app_context():
         seed_db()
-        # store_initial_embeddings()
+        process_embeddings()
         start_scheduler()
 
     return app
