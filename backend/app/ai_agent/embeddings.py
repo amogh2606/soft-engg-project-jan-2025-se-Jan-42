@@ -2,6 +2,7 @@ import os, uuid
 from datetime import datetime, timezone
 
 import chromadb
+from chromadb.config import Settings
 from langchain_chroma import Chroma
 from langchain_community.document_loaders import PyPDFLoader, TextLoader, CSVLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -10,7 +11,9 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 
 # Initialize ChromaDB
-client = chromadb.PersistentClient()
+client = chromadb.PersistentClient(
+    settings=Settings(allow_reset=True)
+)
 embedding_function = GoogleGenerativeAIEmbeddings(model='models/text-embedding-004')
 
 
@@ -33,7 +36,12 @@ def process_document(file_path, course_id=None):
     if is_processed(file_path, course_id):
         return False
 
-    document = loader.load()
+    try:
+        document = loader.load()
+    except:
+        print(f"Error loading document: {file_path}")
+        return False
+
     # Splitting the document
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     split_docs = text_splitter.split_documents(document)

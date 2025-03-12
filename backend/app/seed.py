@@ -4,7 +4,7 @@ from flask import current_app
 from flask_security import hash_password
 from app.security import security
 from app.models import db, Course, Video, Assignment, Question
-from app.ai_agent.embeddings import process_document
+from app.ai_agent.embeddings import client, process_document
 
 
 
@@ -89,7 +89,7 @@ def populate_course_data():
         # add questions to assignments
         file_path = os.path.join(course_folder, 'questions.csv')
         if os.path.exists(file_path):
-            with open(file_path) as csvfile:
+            with open(file_path, encoding='utf-8') as csvfile:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
                     week = int(row.get('week'))
@@ -114,6 +114,8 @@ def populate_course_data():
 # store embeddings for course data
 def process_embeddings():
     print("Processing embeddings...")
+    client.reset()
+
     docs_folder = os.path.join(os.path.dirname(__file__), 'ai_agent', 'documents')
     for folder in os.listdir(docs_folder):
         course_id = None

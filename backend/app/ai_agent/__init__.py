@@ -1,4 +1,4 @@
-import os
+import os, warnings
 from getpass import getpass
 from langchain_core.globals import set_llm_cache
 from langchain_core.caches import InMemoryCache
@@ -11,3 +11,5 @@ if 'GOOGLE_API_KEY' not in os.environ:
 # set LLM cache
 set_llm_cache(InMemoryCache(maxsize=100))
 
+# ignore user warnings
+warnings.filterwarnings('ignore', category=UserWarning)
