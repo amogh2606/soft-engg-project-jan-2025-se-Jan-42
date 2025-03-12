@@ -37,7 +37,7 @@ class GenerateQuiz(Resource):
         try:
             loader = YoutubeLoader.from_youtube_url(video.url)
             docs = loader.load()
-            transcript = '\n'.join([doc.page_content for doc in docs])
+            transcript = ' '.join([doc.page_content for doc in docs])
         except Exception as e:
             print(e)
             abort(400, message="Failed to load video transcript")

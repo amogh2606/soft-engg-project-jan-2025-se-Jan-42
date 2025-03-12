@@ -9,6 +9,7 @@ from werkzeug.exceptions import HTTPException
 from sqlalchemy.exc import SQLAlchemyError
 
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')

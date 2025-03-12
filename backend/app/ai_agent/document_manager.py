@@ -10,7 +10,6 @@ from app.ai_agent.embeddings import process_document, remove_vectors
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'documents')
 
-
 class KnowledgeStack(Resource):
     # fetch all documents for a specific course
     @roles_accepted('instructor', 'admin')
@@ -50,7 +49,8 @@ class KnowledgeStack(Resource):
         file.save(file_path)
         # store embeddings in vector db
         if not process_document(file_path, course_id):
-            abort(400, message="Supported formats: pdf, txt, md, csv")
+            os.remove(file_path)
+            abort(400, message="Could not process document")
 
         return {"message": "File uploaded and processed successfully"}, 201
 
