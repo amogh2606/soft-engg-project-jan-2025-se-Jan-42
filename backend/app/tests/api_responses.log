@@ -1,0 +1,1036 @@
+Endpoint: http://127.0.0.1:5000/api/user
+Status Code: 201
+Response Body: {
+  "message": "Registered successfully"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/login
+Status Code: 200
+Response Body: {
+  "message": "Logged in successfully"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/login
+Status Code: 401
+Response Body: {
+  "message": "Invalid credentials"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/user
+Status Code: 200
+Response Body: {
+  "id": 11,
+  "email": "testing@example.com",
+  "name": "Tester Kumar",
+  "roles": [
+    "student"
+  ],
+  "courses": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/user
+Status Code: 200
+Response Body: {
+  "message": "Updated successfully"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/user
+Status Code: 200
+Response Body: {
+  "id": 11,
+  "email": "updated_email@example.com",
+  "name": "Updated Name",
+  "roles": [
+    "student"
+  ],
+  "courses": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/user/8
+Status Code: 200
+Response Body: {
+  "message": "Deleted successfully"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/all
+Status Code: 403
+Response Body: {
+  "meta": {
+    "code": 403
+  },
+  "response": {
+    "errors": [
+      "You do not have permission to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/all
+Status Code: 200
+Response Body: [
+  {
+    "id": 1,
+    "name": "Software Engineering"
+  },
+  {
+    "id": 2,
+    "name": "Software Testing"
+  },
+  {
+    "id": 3,
+    "name": "Machine Learning Pratice"
+  },
+  {
+    "id": 4,
+    "name": "English I"
+  }
+]
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/enroll
+Status Code: 201
+Response Body: {
+  "message": "Enrolled successfully"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/enrollments/1
+Status Code: 200
+Response Body: {
+  "enrolled_users": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/enrollments/2
+Status Code: 200
+Response Body: {
+  "enrolled_users": [
+    {
+      "id": 5,
+      "email": "testuser_1741845109@example.com",
+      "name": "Tester Kumar",
+      "roles": [
+        "instructor"
+      ],
+      "courses": [
+        {
+          "id": 2,
+          "name": "Software Testing"
+        }
+      ]
+    }
+  ]
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/enroll
+Status Code: 400
+Response Body: {
+  "message": "Instructor already assigned to a course"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/2
+Status Code: 200
+Response Body: {
+  "message": "Deleted successfully"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/enroll
+Status Code: 404
+Response Body: {
+  "message": "Course not found"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/enroll
+Status Code: 404
+Response Body: {
+  "message": "Course not found"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/enroll
+Status Code: 201
+Response Body: {
+  "message": "Enrolled successfully"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/enroll
+Status Code: 201
+Response Body: {
+  "message": "Enrolled successfully"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/enroll
+Status Code: 404
+Response Body: {
+  "message": "Course not found"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/enroll
+Status Code: 400
+Response Body: {
+  "message": "User already enrolled"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/enroll
+Status Code: 400
+Response Body: {
+  "message": "Instructor already assigned to a course"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/1
+Status Code: 200
+Response Body: {
+  "message": "Deleted successfully"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/1
+Status Code: 404
+Response Body: {
+  "message": "Course not found"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses
+Status Code: 403
+Response Body: {
+  "meta": {
+    "code": 403
+  },
+  "response": {
+    "errors": [
+      "You do not have permission to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses
+Status Code: 403
+Response Body: {
+  "meta": {
+    "code": 403
+  },
+  "response": {
+    "errors": [
+      "You do not have permission to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses
+Status Code: 403
+Response Body: {
+  "meta": {
+    "code": 403
+  },
+  "response": {
+    "errors": [
+      "You do not have permission to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/videos/1/summary
+Status Code: 401
+Response Body: {
+  "meta": {
+    "code": 401
+  },
+  "response": {
+    "errors": [
+      "You must sign in to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/videos/1/summary
+Status Code: 200
+Response Body: {
+  "video_url": "https://www.youtube.com/watch?v=hKm_rh1RTJQ",
+  "summary": "This lecture introduces a software engineering course designed to teach the fundamentals of building software systems. The course covers software processes (like Waterfall and Agile), tools used in software development (for requirements capture, planning, development, and testing), and best practices for writing clean and effective code. The course uses a learner-centric MOOC model, interleaving lectures, activities, reflection spots, and discussion forums to maintain engagement and encourage active learning. A key component is a course project where students apply the learned concepts and tools to build a software product, progressing through the entire software development lifecycle with weekly milestones. The expected time commitment is at least six hours per week."
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/videos/1/summary
+Status Code: 401
+Response Body: {
+  "meta": {
+    "code": 401
+  },
+  "response": {
+    "errors": [
+      "You must sign in to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/assignments/2
+Status Code: 404
+Response Body: {
+  "message": "Assignment not found"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/assignments/2
+Status Code: 401
+Response Body: {
+  "meta": {
+    "code": 401
+  },
+  "response": {
+    "errors": [
+      "You must sign in to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/enroll
+Status Code: 404
+Response Body: {
+  "message": "Course not found"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/enroll
+Status Code: 201
+Response Body: {
+  "message": "Enrolled successfully"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/assignments/7
+Status Code: 401
+Response Body: {
+  "meta": {
+    "code": 401
+  },
+  "response": {
+    "errors": [
+      "You must sign in to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/assignments/7
+Status Code: 200
+Response Body: {
+  "id": 7,
+  "course_id": 4,
+  "week": 1,
+  "due_date": "2025-12-31 00:00:00",
+  "questions": [
+    {
+      "id": 31,
+      "qno": 1,
+      "type": "MCQ",
+      "text": "Mark the appropriate response. Deepthi is not here. Could you please ----------",
+      "option_1": "Speak Up",
+      "option_2": "Hang Up",
+      "option_3": "Hang On",
+      "option_4": "Ring her later",
+      "correct_option": 4
+    },
+    {
+      "id": 32,
+      "qno": 2,
+      "type": "MCQ",
+      "text": "Geetha, while speaking to Mary (on the phone) hears vibrating noise. Choose the best appropriate sentence that Geeta should use to convey the problem",
+      "option_1": "Your voice is echoing.",
+      "option_2": "Your voice is jarring.",
+      "option_3": "You have to speak up.",
+      "option_4": "You are not audible.",
+      "correct_option": 2
+    },
+    {
+      "id": 33,
+      "qno": 3,
+      "type": "MCQ",
+      "text": "Acquisition of language is _________ .",
+      "option_1": "A subconscious process of learning",
+      "option_2": "Automatic",
+      "option_3": "Requires effort",
+      "option_4": "Both a and b",
+      "correct_option": 4
+    },
+    {
+      "id": 34,
+      "qno": 4,
+      "type": "MCQ",
+      "text": "In language learning the input from the immediate environment is ______________ .",
+      "option_1": "Systematic",
+      "option_2": "Infinite",
+      "option_3": "Grammatical",
+      "option_4": "Random",
+      "correct_option": 4
+    },
+    {
+      "id": 35,
+      "qno": 5,
+      "type": "MCQ",
+      "text": "Learning of a language ___________ .",
+      "option_1": "Helps establish the underlying patterns in the language.",
+      "option_2": "Applying the underlying patterns of the language",
+      "option_3": "Only b",
+      "option_4": "Both a and b",
+      "correct_option": 4
+    }
+  ]
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 1,
+  "user_id": 12,
+  "title": "Untitled Chat",
+  "created": "2025-03-13 16:45:09",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 2,
+  "user_id": 12,
+  "title": "Untitled Chat",
+  "created": "2025-03-13 16:45:59",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chatbot
+Status Code: 200
+Response Body: {
+  "chat_id": 2,
+  "timestamp": "2025-03-13 16:50:14",
+  "message": "Software Engineering is a course in the BSc level of the BS in Data Science & Applications program by IIT Madras."
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chatbot
+Status Code: 200
+Response Body: {
+  "chat_id": 2,
+  "timestamp": "2025-03-13 16:51:18",
+  "message": "I do not have access to your personal enrollment information. Please check your account on the e-learning platform or contact the support team to confirm your enrollment in the Software Engineering course."
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chatbot
+Status Code: 200
+Response Body: {
+  "chat_id": 2,
+  "timestamp": "2025-03-13 17:51:32",
+  "message": "This course covers basic English concepts, focusing on improving speaking, writing, reading, and listening skills. It also aims to help you understand how language works and how it relates to data, which can be useful for data science and computer programming."
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chatbot
+Status Code: 200
+Response Body: {
+  "chat_id": 2,
+  "timestamp": "2025-03-13 17:52:06",
+  "message": "This course focuses on the practical aspects of machine learning using the scikit-learn (sklearn) Python library. It covers steps in a typical machine learning project, including data preparation and implementation of various machine learning algorithms. The goal is to make you industry-ready by enabling you to design machine learning algorithms for practical situations."
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chatbot
+Status Code: 200
+Response Body: {
+  "chat_id": 2,
+  "timestamp": "2025-03-14 06:37:47",
+  "message": "I'm here to help! Could you please clarify what you're having trouble understanding? Providing more details will allow me to give you a more accurate and helpful response."
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chatbot
+Status Code: 200
+Response Body: {
+  "chat_id": 2,
+  "timestamp": "2025-03-14 06:39:06",
+  "message": "I'm designed to provide helpful and informative responses. If you have any specific questions about the e-learning platform, course content, or any other topic, feel free to ask, and I'll do my best to assist you."
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chatbot
+Status Code: 200
+Response Body: {
+  "chat_id": 2,
+  "timestamp": "2025-03-14 06:40:15",
+  "message": "I need a bit more context to help you out. Could you please tell me which topic you're referring to? Once I know the topic, I can provide a clear and concise explanation."
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chatbot
+Status Code: 200
+Response Body: {
+  "chat_id": 2,
+  "timestamp": "2025-03-14 06:40:54",
+  "message": "I am happy to help! Could you please specify which topic you would like me to explain?"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/user
+Status Code: 201
+Response Body: {
+  "message": "Registered successfully"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/login
+Status Code: 200
+Response Body: {
+  "message": "Logged in successfully"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/login
+Status Code: 401
+Response Body: {
+  "message": "Invalid credentials"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/user
+Status Code: 401
+Response Body: {
+  "meta": {
+    "code": 401
+  },
+  "response": {
+    "errors": [
+      "You must sign in to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/user
+Status Code: 401
+Response Body: {
+  "meta": {
+    "code": 401
+  },
+  "response": {
+    "errors": [
+      "You must sign in to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/all
+Status Code: 403
+Response Body: {
+  "meta": {
+    "code": 403
+  },
+  "response": {
+    "errors": [
+      "You do not have permission to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/enroll
+Status Code: 201
+Response Body: {
+  "message": "Enrolled successfully"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/enrollments/1
+Status Code: 200
+Response Body: {
+  "enrolled_users": [
+    {
+      "id": 4,
+      "email": "testing3@example.com",
+      "name": "Tester Kumar",
+      "roles": [
+        "student"
+      ],
+      "courses": [
+        {
+          "id": 1,
+          "name": "Software Engineering"
+        }
+      ]
+    }
+  ]
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses
+Status Code: 403
+Response Body: {
+  "meta": {
+    "code": 403
+  },
+  "response": {
+    "errors": [
+      "You do not have permission to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/videos/1/summary
+Status Code: 401
+Response Body: {
+  "meta": {
+    "code": 401
+  },
+  "response": {
+    "errors": [
+      "You must sign in to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/assignments/7
+Status Code: 401
+Response Body: {
+  "meta": {
+    "code": 401
+  },
+  "response": {
+    "errors": [
+      "You must sign in to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 401
+Response Body: {
+  "meta": {
+    "code": 401
+  },
+  "response": {
+    "errors": [
+      "You must sign in to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chatbot
+Status Code: 401
+Response Body: {
+  "meta": {
+    "code": 401
+  },
+  "response": {
+    "errors": [
+      "You must sign in to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chatbot
+Status Code: 401
+Response Body: {
+  "meta": {
+    "code": 401
+  },
+  "response": {
+    "errors": [
+      "You must sign in to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chatbot
+Status Code: 401
+Response Body: {
+  "meta": {
+    "code": 401
+  },
+  "response": {
+    "errors": [
+      "You must sign in to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/documents/2
+Status Code: 403
+Response Body: {
+  "meta": {
+    "code": 403
+  },
+  "response": {
+    "errors": [
+      "You do not have permission to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/documents/2
+Status Code: 200
+Response Body: {
+  "collection": "course_2",
+  "documents": [
+    "1.1 Software Testing Motivation.txt",
+    "1.2 Software Development Life Cycle.txt",
+    "1.3 Software Testing Terminologies.txt",
+    "1.4 Software Testing Terminologies and Processes.txt",
+    "1.5 Software Test Automation JUnit as an example.txt",
+    "2.1 Basics of Graphs.txt",
+    "2.2 Fundamental Graph Algorithms.txt",
+    "2.3 Elementary Graph Algorithms.txt",
+    "2.4 Structural Graph Coverage Criteria.txt",
+    "2.5 Algorithms Structural Graph Coverage Criteria.txt"
+  ]
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/faqs
+Status Code: 200
+Response Body: {
+  "faqs": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/faqs
+Status Code: 403
+Response Body: {
+  "meta": {
+    "code": 403
+  },
+  "response": {
+    "errors": [
+      "You do not have permission to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/courses/enroll
+Status Code: 201
+Response Body: {
+  "message": "Enrolled successfully"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/documents/2
+Status Code: 403
+Response Body: {
+  "message": "Access denied"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/documents/1
+Status Code: 200
+Response Body: {
+  "collection": "course_1",
+  "documents": [
+    "1.1 Deconstructing the Software Development Process - Introduction.txt",
+    "1.2 Thinking of Software in terms of Components.txt",
+    "1.3 Software Development Process - Requirement Specification.txt",
+    "1.4 Software Development Process - Software Design and Development.txt",
+    "1.5 Testing and Maintenance.txt",
+    "1.6 Software Development Models - Waterfall.txt",
+    "1.7 Software Development - Agile.txt",
+    "2.1 Software Requirements - Requirements Gathering and Analysis.txt",
+    "2.2 Identifying Users and Requirements.txt",
+    "2.3 Functional and Non-functional Requirements.txt",
+    "2.4 Software Requirement Specification.txt",
+    "2.5 Behaviour Driven Design - User Stories.txt"
+  ]
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 401
+Response Body: {
+  "meta": {
+    "code": 401
+  },
+  "response": {
+    "errors": [
+      "You must sign in to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 401
+Response Body: {
+  "meta": {
+    "code": 401
+  },
+  "response": {
+    "errors": [
+      "You must sign in to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 401
+Response Body: {
+  "meta": {
+    "code": 401
+  },
+  "response": {
+    "errors": [
+      "You must sign in to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 1,
+  "user_id": 4,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:05:43",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 2,
+  "user_id": 4,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:05:43",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 3,
+  "user_id": 4,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:07:37",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 4,
+  "user_id": 4,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:07:37",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 5,
+  "user_id": 4,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:07:37",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 6,
+  "user_id": 4,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:09:37",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 7,
+  "user_id": 4,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:09:37",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 8,
+  "user_id": 4,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:12:38",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/faqs
+Status Code: 200
+Response Body: {
+  "faqs": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 9,
+  "user_id": 4,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:18:26",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 10,
+  "user_id": 4,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:18:26",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 11,
+  "user_id": 4,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:18:26",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 12,
+  "user_id": 4,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:18:26",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 13,
+  "user_id": 4,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:18:26",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/faqs
+Status Code: 200
+Response Body: {
+  "faqs": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 401
+Response Body: {
+  "meta": {
+    "code": 401
+  },
+  "response": {
+    "errors": [
+      "You must sign in to view this resource."
+    ]
+  }
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 14,
+  "user_id": 3,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:21:17",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 15,
+  "user_id": 3,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:30:48",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats
+Status Code: 200
+Response Body: {
+  "id": 16,
+  "user_id": 3,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:30:48",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats/17
+Status Code: 200
+Response Body: {
+  "id": 17,
+  "user_id": 3,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:41:32",
+  "active": false,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/chats/18
+Status Code: 200
+Response Body: {
+  "id": 18,
+  "user_id": 3,
+  "title": "Untitled Chat",
+  "created": "2025-03-14 08:41:32",
+  "active": true,
+  "bookmarked": false,
+  "messages": []
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/feedback/1
+Status Code: 201
+Response Body: {
+  "message": "Feedback submitted successfully"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/feedback/1
+Status Code: 200
+Response Body: [
+  {
+    "id": 1,
+    "course_id": 1,
+    "created": "2025-03-14 08:52:13",
+    "title": "Great course!",
+    "text": "The lectures were very informative and engaging."
+  }
+]
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/feedback/3
+Status Code: 400
+Response Body: {
+  "message": "Course not enrolled"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/logout
+Status Code: 200
+Response Body: {
+  "message": "Logged out successfully"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/user
+Status Code: 400
+Response Body: {
+  "message": "Mininmum password length is 6 characters"
+}
+--------------------------------------------------
+Endpoint: http://127.0.0.1:5000/api/login
+Status Code: 401
+Response Body: {
+  "message": "Invalid credentials"
+}
+--------------------------------------------------
