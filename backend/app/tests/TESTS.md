@@ -374,6 +374,7 @@ def test_delete_user():
     assert response.json()["message"] == "Deleted successfully"
 ```
 # Course Management Tests
+
 ## Test Case 1: Fetch All Courses
 
 **Description:** Verify that the /courses/all endpoint returns a list of all available courses with correct details.
@@ -599,6 +600,7 @@ def test_assign_instructor_to_multiple_courses():
 ```json  
 {"message": "You do not have permission to view this resource."}
 ```
+
 **Actual Output:**
 - HTTP Status Code: 403
 ```json  
@@ -672,6 +674,7 @@ def test_generate_video_summary():
 ```
 
 # Assignment Management Tests
+
 ## Test Case 1: Validate Assignment Retrieval (Authorized User)
 
 **Description:** A logged-in user can retrieve assignment details only for courses they are enrolled in.
@@ -739,6 +742,7 @@ def test_assignment_retrieval_auth_user():
 ```
 
 # Chatbot Interaction Tests
+
 ## Test Case 1: Start a New Chat Session (Authorized User)
 
 **Description:** Verify that a logged-in user can successfully start a new chat session.
@@ -1053,14 +1057,6 @@ def test_retrieve_uploaded_documents_for_course():
     assert response.status_code == 200
 ```
 
-# Scheduler Functionality Tests
-
-## Test Case: Validate Scheduler Functionality for FAQ Generation
-
-**Description:** Verify that the scheduler triggers the update_faqs function every hour and updates FAQs in the database correctly.
-
-**Endpoint:** `/faqs`
-
 
 # FAQs Management Tests
 
@@ -1103,6 +1099,7 @@ def test_retrieve_faqs_with_auth():
 
 
 # Feedback Management Tests
+
 ## Test Case 1: Submit Feedback for a Course (Student Role)
 
 **Description:** Verify that a student can successfully submit feedback for a course they are enrolled in.
@@ -1252,7 +1249,7 @@ def test_submit_feedback_non_enrolled_course():
     assert response.status_code == 400
 ```
 
-## Authentication & Authorization Tests
+# Authentication & Authorization Tests
 
 ## Test Case 1: Logout Functionality
 
@@ -1290,4 +1287,394 @@ def test_logout():
     log_response(url, response)
     assert response.status_code == 200
     assert response.json()["message"] == "Logged out successfully"
+```
+# AI Component Tests
+
+## Test Case 1: Chatbot Response Quality Assessment
+
+**Description:** Verify that the chatbot provides informative and relevant responses with appropriate domain terminology.
+
+**Endpoint:** `/chatbot`
+
+**Input**
+- ***Request Method:*** POST
+```json
+  {
+    "chat_id": 1,
+    "query": "What is the software development life cycle?"
+  }
+```
+- ***Headers:***
+  - Cookie: `session=<student_session>`
+  - Content-Type: `application/json`
+
+**Expected Output:**
+- HTTP Status Code: 200
+- Response contains key SDLC terminology and comprehensive explanation.
+
+**Actual Output:**
+- HTTP Status Code: 200
+```json  
+  {
+  "chat_id": 1,
+  "timestamp": "2025-03-18 11:30:23",
+  "message": "The Software Development Life Cycle (SDLC) is a systematic process for planning, creating, testing, and deploying software. It typically includes phases such as requirements gathering, design, implementation, testing, deployment, and maintenance. Different methodologies like Waterfall, Agile, and DevOps implement the SDLC in various ways to manage software development efficiently."
+  }
+```
+Result: Passed
+
+```python
+def test_chatbot_response_quality():
+    chat_id = create_chat_session(student_session)   
+    chatbot_url = f"{BASE_URL}/chatbot"
+    query_payload = {
+        "chat_id": chat_id,
+        "query": "What is the software development life cycle?"
+    }
+    response = requests.post(chatbot_url, json=query_payload, headers=auth_headers(student_session))
+    log_response(chatbot_url, response)   
+    assert response.status_code == 200
+    response_text = response.json()["message"].lower()
+    sdlc_terms = ["requirement", "design", "development", "testing", "deployment", "maintenance"]
+    matches = [term for term in sdlc_terms if term in response_text]  
+    assert len(matches) >= 3
+```
+## Test Case 2: Chatbot Context Awareness
+
+**Description:** Test if chatbot maintains context across multiple messages in a conversation.
+
+**Endpoint:** `/chatbot`
+
+**Input**
+- ***Request Method:*** POST
+```json
+  {
+    "chat_id": 1,
+    "query": "What is software testing?"
+  }
+  {
+  "chat_id": 1,
+  "query": "What are its different types?"
+  }
+```
+- ***Headers:***
+  - Cookie: `session=<student_session>`
+  - Content-Type: `application/json`
+
+**Expected Output:**
+- HTTP Status Code: 200
+- Response mentions various testing types while maintaining context about software testing.
+
+**Actual Output:**
+- HTTP Status Code: 200
+```json  
+  {
+    "chat_id": 1,
+    "timestamp": "2025-03-18 11:32:15",
+    "message": "Software testing can be categorized into several types, including: 1) Unit Testing - testing individual components, 2) Integration Testing - testing interactions between components, 3) System Testing - testing the entire application, 4) Acceptance Testing - verifying the software meets requirements, 5) Black Box Testing - focusing on inputs and outputs without internal knowledge, and 6) White Box Testing - examining the internal structure and logic."
+  }
+```
+Result: Passed
+
+```python
+def test_chatbot_context_awareness():
+    chat_id = create_chat_session(student_session)  
+    chatbot_url = f"{BASE_URL}/chatbot"
+    first_query = {
+        "chat_id": chat_id,
+        "query": "What is software testing?"
+    }
+    requests.post(chatbot_url, json=first_query, headers=auth_headers(student_session))
+    follow_up_query = {
+        "chat_id": chat_id,
+        "query": "What are its different types?"
+    }
+    follow_up_response = requests.post(chatbot_url, json=follow_up_query, headers=auth_headers(student_session))
+    log_response(f"{chatbot_url} (follow-up)", follow_up_response)   
+    assert follow_up_response.status_code == 200
+    response_text = follow_up_response.json()["message"].lower()
+    testing_types = ["unit", "integration", "system", "acceptance", "black box", "white box"]
+    matches = [test_type for test_type in testing_types if test_type in response_text]    
+    assert len(matches) >= 2
+    assert "software testing" in response_text or "testing" in response_text
+```
+## Test Case 3: Assignment Help Quality
+
+**Description:** Verify that assignment help provides useful hints without revealing answers.
+
+**Endpoint:** `/assignments/help`
+
+**Input**
+- ***Request Method:*** POST
+```json
+  {
+  "question_id": 1,
+  "assignment_id": 1,
+  "course_id": 1
+  }
+```
+- ***Headers:***
+  - Cookie: `session=<student_session>`
+  - Content-Type: `application/json`
+
+**Expected Output:**
+- HTTP Status Code: 200
+- Response provides helpful hints without revealing the correct answer
+
+**Actual Output:**
+- HTTP Status Code: 200
+```json  
+  {
+  "chat_id": 5,
+  "timestamp": "2025-03-18 11:35:47",
+  "message": "When considering this question about software development processes, think about the advantages of identifying errors early in the development lifecycle. Consider how catching issues during the requirements or design phase compares cost-wise to finding them after the software has been deployed. Remember that the correct answer relates to cost-effectiveness and resource allocation."
+  }
+```
+Result: Passed
+
+```python
+def test_assignment_help_quality():
+    assignment_id = 1
+    url = f"{BASE_URL}/assignments/{assignment_id}"
+    assignment_response = requests.get(url, headers=auth_headers(student_session))   
+    if assignment_response.status_code != 200 or not assignment_response.json().get("questions"):
+        pytest.skip("No questions available for testing")  
+    question = assignment_response.json()["questions"][0]
+    question_id = question["id"]
+    correct_option = question["correct_option"]
+    course_id = assignment_response.json()["course_id"]
+    help_url = f"{BASE_URL}/assignments/help"
+    payload = {
+        "question_id": question_id,
+        "assignment_id": assignment_id,
+        "course_id": course_id
+    }   
+    help_response = requests.post(help_url, json=payload, headers=auth_headers(student_session))
+    log_response(help_url, help_response)    
+    assert help_response.status_code == 200
+    hint_text = help_response.json()["message"].lower()
+    assert len(hint_text) > 50
+    correct_text = question[f"option_{correct_option}"].lower()
+    assert correct_text not in hint_text
+    assert str(correct_option) not in hint_text
+```
+
+## Test Case 4: Video Summary Quality
+
+**Description:** Test that generated video summaries provide informative and coherent content.
+
+**Endpoint:** `/videos/<video_id>/summary`
+
+**Input**
+- ***Request Method:*** POST
+- ***Headers:***
+  - Cookie: `session=<student_session>`
+  - Content-Type: `application/json`
+
+**Expected Output:**
+- HTTP Status Code: 200
+- Response includes a coherent, well-structured summary of the video content.
+
+**Actual Output:**
+- HTTP Status Code: 200
+```json  
+  {
+  "video_url": "https://www.youtube.com/watch?v=hKm_rh1RTJQ",
+  "summary": "This lecture introduces the fundamental concepts of Software Engineering. It begins by covering the historical context of software development, from early programming paradigms to modern methodologies. The speaker emphasizes the importance of structured approaches to software development, discussing key concepts such as requirements engineering, software design principles, and quality assurance. The lecture also touches on project management aspects, highlighting how proper engineering principles help manage complexity in large software systems. The importance of documentation, testing, and maintenance is stressed throughout, with practical examples to illustrate these concepts."
+  }
+```
+Result: Passed
+
+```python
+def test_video_summary_quality():
+    videos_url = f"{BASE_URL}/videos/all"
+    videos_response = requests.get(videos_url, headers=auth_headers(admin_session))   
+    if videos_response.status_code != 200 or not videos_response.json():
+        pytest.skip("No videos available for testing")   
+    video_id = videos_response.json()[0]["id"]
+    summary_url = f"{BASE_URL}/videos/{video_id}/summary"   
+    response = requests.post(summary_url, headers=auth_headers(student_session))
+    log_response(summary_url, response)   
+    assert response.status_code == 200
+    summary = response.json()["summary"]
+    assert len(summary) > 100
+    assert len(summary.split(".")) > 3, "Summary has too few sentences"   
+    low_quality_indicators = ["i don't know", "i'm not sure", "i cannot", "as an ai"]
+    for indicator in low_quality_indicators:
+        assert indicator not in summary.lower()
+```
+
+## Test Case 5: Quiz Generation Quality
+
+**Description:** Verify that generated quizzes have proper format and relevant content.
+
+**Endpoint:** `/videos/<video_id>/quiz`
+
+**Input**
+- ***Request Method:*** POST
+- ***Headers:***
+  - Cookie: `session=<student_session>`
+  - Content-Type: `application/json`
+
+**Expected Output:**
+- HTTP Status Code: 200
+- Response includes properly formatted multiple-choice questions related to video content.
+
+**Actual Output:**
+- HTTP Status Code: 200
+```json  
+  {
+  "video_url": "https://www.youtube.com/watch?v=hKm_rh1RTJQ",
+  "quiz": "1. What is the primary goal of software engineering?\nA) Writing code quickly\nB) Developing maintainable, reliable software systems\nC) Reducing the need for testing\nD) Eliminating the need for documentation\n\n2. Which of the following is NOT a phase in the software development lifecycle?\nA) Requirements gathering\nB) Implementation\nC) Marketing\nD) Maintenance\n\n3. What problem does version control help solve in software development?\nA) Code execution speed\nB) Collaboration and code history tracking\nC) Automatic bug fixes\nD) User interface design\n\n4. Which testing approach examines internal code structure?\nA) Black box testing\nB) White box testing\nC) Grey box testing\nD) Random testing\n\n5. What principle suggests that software modules should have only one reason to change?\nA) Dependency Inversion\nB) Interface Segregation\nC) Single Responsibility\nD) Open/Closed"
+  }
+```
+Result: Passed
+
+```python
+def test_quiz_generation_quality():
+    videos_url = f"{BASE_URL}/videos/all"
+    videos_response = requests.get(videos_url, headers=auth_headers(admin_session))
+    if videos_response.status_code != 200 or not videos_response.json():
+        pytest.skip("No videos available for testing")
+    video_id = videos_response.json()[0]["id"]
+    quiz_url = f"{BASE_URL}/videos/{video_id}/quiz"
+    response = requests.post(quiz_url, headers=auth_headers(student_session))
+    log_response(quiz_url, response) 
+    assert response.status_code == 200
+    quiz = response.json()["quiz"]
+    option_patterns = ["A)", "B)", "C)", "D)", "1.", "2.", "3.", "4."]
+    has_options = any(pattern in quiz for pattern in option_patterns)
+    assert has_options, "Quiz doesn't have proper option format"
+    question_count = 0
+    lines = quiz.split('\n')
+    for i, line in enumerate(lines):
+        if any(f"{num}." in line or f"{num})" in line for num in range(1, 10)):
+            question_count += 1   
+    assert question_count >= 3
+```
+
+## Test Case 6: Document Upload and Retrieval Influence
+
+**Description:** Verify that uploaded documents influence chatbot responses with relevant knowledge.
+
+**Endpoint:** `/documents/<course_id> (Upload) and /chatbot (Query)`
+
+**Input**
+- ***Request Method:*** POST
+- File upload with test document containing specific content.
+```json
+  {
+    "chat_id": 1,
+    "course_id": 1,
+    "query": "What are black box and white box testing?"
+  }
+```
+- ***Headers:***
+  - Cookie: `session=<instructor_session> and session=<student_session>`
+  - Content-Type: `application/json`
+
+**Expected Output:**
+- HTTP Status Code: 200
+- Response includes information from the uploaded document.
+
+**Actual Output:**
+- HTTP Status Code: 200
+```json  
+  {
+  "chat_id": 1,
+  "timestamp": "2025-03-18 11:42:10",
+  "message": "Black box testing examines functionality without looking at internal code. It focuses on inputs and outputs, treating the system as a 'black box' whose internal workings are not considered. White box testing examines the internal structure of the software, looking at code paths, conditions, and implementation details to ensure proper functionality. Both approaches have their places in a comprehensive testing strategy."
+  }
+```
+Result: Passed
+
+```python
+def test_document_upload_and_influence_responses():
+    test_content = """
+    This is a test document about software testing techniques.
+    Black box testing examines functionality without looking at internal code.
+    White box testing examines the internal structure of the software.
+    """
+    test_filename = "test_document.txt"
+    with open(test_filename, "w") as f:
+        f.write(test_content)
+    course_id = 1
+    upload_url = f"{BASE_URL}/documents/{course_id}"  
+    with open(test_filename, "rb") as f:
+        files = {"file": (test_filename, f)}
+        upload_response = requests.post(
+            upload_url, 
+            files=files,
+            headers={"Cookie": f"session={instructor_session}"}
+        ) 
+    log_response(upload_url, upload_response)
+    if upload_response.status_code not in [200, 201]:
+        pytest.skip("Failed to upload document")
+    chat_id = create_chat_session(student_session)
+    chatbot_url = f"{BASE_URL}/chatbot"
+    query_payload = {
+        "chat_id": chat_id,
+        "course_id": course_id,
+        "query": "What are black box and white box testing?"
+    } 
+    chatbot_response = requests.post(chatbot_url, json=query_payload, headers=auth_headers(student_session))
+    log_response(chatbot_url, chatbot_response)  
+    response_text = chatbot_response.json()["message"].lower()  
+    assert "black box" in response_text
+    assert "white box" in response_text
+```
+
+# AI Components Integration Test
+
+**Description:** Verify that multiple AI components work together seamlessly, including document processing, chatbot context awareness, and follow-up question handling.
+
+**Endpoint:** `/documents/<course_id> (Upload) and /chatbot (Query)`
+**Request Method:** POST
+**Inputs**
+- File upload with test document containing specific content. Then, a question with a follow-up question.
+
+- ***Headers:***
+  - Cookie: `session=<instructor_session> and session=<student_session>`
+  - Content-Type: `application/json and multipart/form-data`
+
+**Expected Output:**
+- HTTP Status Code: 200
+
+**Actual Output:**
+- HTTP Status Code: 200
+
+Result: Passed
+
+```python
+def test_ai_components_integration():
+    test_filename = "testing_doc.txt"
+    course_id = 1
+    with open(test_filename, "rb") as f:
+        files = {"file": (test_filename, f)}
+        upload_response = requests.post(
+            f"{BASE_URL}/documents/{course_id}", 
+            files=files,
+            headers={"Cookie": f"session={instructor_session}"}
+        )
+    assert upload_response.status_code in [200, 201], "Failed to upload document"
+    chat_id = create_chat_session(student_session)
+    chatbot_url = f"{BASE_URL}/chatbot"
+    query_payload = {
+        "chat_id": chat_id,
+        "course_id": course_id,
+        "query": "What is software testing and what are its types?"
+    }
+    response1 = requests.post(chatbot_url, json=query_payload, headers=auth_headers(student_session))
+    assert response1.status_code == 200
+    response_text = response1.json()["message"].lower()
+    assert "software testing" in response_text
+    assert any(test_type in response_text for test_type in ["unit testing", "integration testing", "system testing"])
+    follow_up_payload = {
+        "chat_id": chat_id,
+        "course_id": course_id,
+        "query": "Why is it important?"
+    } 
+    response2 = requests.post(chatbot_url, json=follow_up_payload, headers=auth_headers(student_session))
+    follow_up_text = response2.json()["message"].lower()  
+    assert any(term in follow_up_text for term in ["testing", "software", "quality"])
 ```
