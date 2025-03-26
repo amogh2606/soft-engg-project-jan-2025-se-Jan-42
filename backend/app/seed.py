@@ -39,8 +39,9 @@ def seed_db():
         roles=['student'],
         name='Student 1'
     )
-    
+    db.session.flush()
     populate_course_data()
+
     db.session.commit()
 
 
@@ -108,7 +109,7 @@ def populate_course_data():
                     )
                     db.session.add(question)
 
-        db.session.commit()
+        db.session.flush()
   
     
 # store embeddings for course data
