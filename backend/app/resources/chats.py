@@ -1,5 +1,5 @@
 import io, csv
-from flask_restful import Resource, reqparse, marshal_with, fields, abort
+from flask_restful import Resource, reqparse, marshal_with, fields, abort, marshal
 from flask_security import current_user, roles_accepted, auth_required
 from flask import request, send_file
 from app.models import db, Chat, Message
@@ -117,13 +117,12 @@ class UserChats(Resource):
 class AllChats(Resource):
     # Get entire chat history
     @roles_accepted('admin')
-    @marshal_with(chat_list_fields)
     def get(self):
         if request.args.get('export') in ('true', '1'):
             return self.export_chats()
         
         chats = db.session.scalars(db.select(Chat)).all() 
-        return chats
+        return marshal(chats, chat_list_fields)
 
 
     # Export chats as CSV
