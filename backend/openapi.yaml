@@ -582,6 +582,154 @@ paths:
           description: Already rated or invalid rating.
 
   # ---------------------------
+  # Assignment Endpoints
+  # ---------------------------
+
+  /assignments/{assignment_id}:
+    get:
+      summary: Get an assignment by ID
+      tags:
+        - Assignments
+      parameters:
+        - name: assignment_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successfully retrieved the assignment.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  course_id:
+                    type: integer
+                  week:
+                    type: integer
+                  due_date:
+                    type: string
+                    format: date-time
+                  questions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        qno:
+                          type: integer
+                        type:
+                          type: string
+                        text:
+                          type: string
+                        option_1:
+                          type: string
+                        option_2:
+                          type: string
+                        option_3:
+                          type: string
+                        option_4:
+                          type: string
+                        correct_option:
+                          type: integer
+        400:
+          description: User not enrolled in the course.
+        404:
+          description: Assignment not found.
+
+    put:
+      summary: Update an assignment
+      tags:
+        - Assignments
+      parameters:
+        - name: assignment_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                course_id:
+                  type: integer
+                week:
+                  type: integer
+                  minimum: 1
+                  maximum: 12
+                due_date:
+                  type: string
+                  format: date-time
+      responses:
+        200:
+          description: Assignment updated successfully.
+        404:
+          description: Assignment or course not found.
+
+    delete:
+      summary: Delete an assignment
+      tags:
+        - Assignments
+      parameters:
+        - name: assignment_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Assignment deleted successfully.
+        404:
+          description: Assignment not found.
+
+  /assignments/help:
+    post:
+      summary: Get AI assistance for questions
+      tags:
+        - Assignments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - question_id
+                - assignment_id
+                - course_id
+              properties:
+                question_id:
+                  type: integer
+                assignment_id:
+                  type: integer
+                course_id:
+                  type: integer
+      responses:
+        200:
+          description: Successfully retrieved help response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chat_id:
+                    type: integer
+                  timestamp:
+                    type: string
+                    format: date-time
+                  message:
+                    type: string
+        404:
+          description: Question or course not found.
+
+  # ---------------------------
   # Chatbot Service Endpoint
   # ---------------------------
   /chatbot:
