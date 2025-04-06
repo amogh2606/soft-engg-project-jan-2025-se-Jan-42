@@ -81,8 +81,9 @@ class ChatbotService(Resource):
             ("system", """You are a chatbot in an e-learning platform. 
                 Provide a concise friendly response based on the conversation.
                 If the chat started with an assignment question, follow the first system message
-                and donot reveal the answer.
-                You can also point to external sources of information if required.
+                and donot reveal the answer or confirm whether a answer is correct/wrong.
+                You can also point to external learning sources if required.
+                Only answer questions that make sense and related to academics.
                 You may use the given context if required: \n\n{context}"""),
 
             ("placeholder", "{messages}"),

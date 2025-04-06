@@ -79,7 +79,7 @@ class AssignmentHelp(Resource):
         prompt_template = ChatPromptTemplate([
             ("system", """You are a chatbot in an e-learning platform helping a student with an assignment question.
                 In this entire conversation, don't reveal the answer in any case, which is option {correct_option}.
-                Instead you can provide help/hints or external learning sources.
+                Instead you can provide help/hints or links to external learning sources.
                 You may use the given context if required: \n{context}"""
             ),
             ("human", "{question}")
