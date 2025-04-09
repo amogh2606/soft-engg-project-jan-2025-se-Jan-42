@@ -7,7 +7,8 @@ scheduler = BackgroundScheduler()
 
 # scheduled job to update FAQs
 def start_scheduler():
-    scheduler.add_job(update_faqs, 'interval', hours=1, coalesce=True)
+    # scheduler.add_job(update_faqs, 'interval', hours=1, coalesce=True)
+    scheduler.add_job(update_faqs, 'interval', minutes=2, coalesce=True)
     scheduler.start()
     print("Scheduler has started")
     update_faqs()
